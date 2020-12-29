@@ -2,7 +2,7 @@
 
 basedir=$(cd `dirname $0`;pwd)
 scriptdir=$basedir/scripts
-installdir=/opt/phala/
+installdir=/opt/phala
 source $scriptdir/utils.sh
 
 help()
