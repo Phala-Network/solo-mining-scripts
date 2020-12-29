@@ -14,7 +14,7 @@ EOF
 exit 0
 }
 
-install_phala_command()
+install_phala_scripts()
 {
     log_info "--------------Install phala node-------------"
 
@@ -43,17 +43,13 @@ fi
 case "$1" in
     help)
         help
-        break;
         ;;
     "")
-        shift ;
-        break;
+        install_phala_scripts
         ;;
     *)
         help
-        break;
         ;;
 esac
 
-install_phala_command
 exit 0
