@@ -130,7 +130,7 @@ install_dcap()
         exit 1
     fi
 
-    log_info "Clear resource"
+    log_success "Clear resource"
     rm $driverbin
 }
 
@@ -159,7 +159,7 @@ install_isgx()
         exit 1
     fi
 
-    log_info "Clear resource"
+    log_success "Clear resource"
     rm $driverbin
 }
 
