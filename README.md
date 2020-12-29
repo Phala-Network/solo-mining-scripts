@@ -1,4 +1,4 @@
-### Readme for Phala Network solo minning scripts
+## Readme
 
 #### Get to Ready
 
@@ -11,7 +11,6 @@
 -   Run the **egx_enable** if your SGX setting in BIOS is  **Software Controlled**
 
 ```bash
-wget https://github.com/Phala-Network/sgx-tools/releases/download/0.1/sgx_enable 
 sudo chmod +x sgx_enable
 sudo ./sgx_enable
 ```
