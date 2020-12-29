@@ -1,5 +1,7 @@
 ## Readme
 
+EN | [中文](./README.cn.md)
+
 #### Get to Ready
 
 -   #### BIOS Setting
@@ -13,6 +15,7 @@
 ```bash
 sudo chmod +x sgx_enable
 sudo ./sgx_enable
+sudo reboot
 ```
 
 #### Install the Phala Scripts
