@@ -95,7 +95,7 @@ sudo phala config show
 sudo phala config set
 ```
 
-3.8 运行自我诊断程序
+##### 3.8 运行自我诊断程序
 
 ```bash
 sudo phala sgx-test
