@@ -3,7 +3,7 @@
 install_depenencies()
 {
     log_info "------------Apt update--------------"
-    apt-get update > /dev/null
+    apt-get update
     if [ $? -ne 0 ]; then
         log_err "Apt update failed"
         exit 1

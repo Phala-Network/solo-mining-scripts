@@ -98,3 +98,9 @@ sudo phala config show
 sudo phala config set
 ```
 
+##### Check the board support
+
+```bash
+sudo phala sgx-test
+```
+

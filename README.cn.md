@@ -95,6 +95,12 @@ sudo phala config show
 sudo phala config set
 ```
 
+3.8 运行自我诊断程序
+
+```bash
+sudo phala sgx-test
+```
+
 #### 四、最简安装步骤
 
 一台全新矿机配置步骤
