@@ -14,6 +14,7 @@ logs()
             ;;
         *)
             log_err "----------Parameter error----------"
+			log_err "----------参数错误----------"
 			exit 1
 	esac
 }

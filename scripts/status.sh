@@ -34,7 +34,7 @@ status()
 
     cat << EOF
 -----------------------------------------------------------------------
-    Service                    Status				CurrentBlock
+    Service   服务               Status	状态         CurrentBlock 本地节点区块高度
 -----------------------------------------------------------------------
     phala-node                  ${node_status}		${node_block}
     phala-pruntime              ${pruntime_status}
