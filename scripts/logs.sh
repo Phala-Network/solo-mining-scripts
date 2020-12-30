@@ -13,7 +13,7 @@ logs()
 			docker logs phala-phost
             ;;
         *)
-            log_err "Parameter error"
+            log_err "----------Parameter error----------"
 			exit 1
 	esac
 }

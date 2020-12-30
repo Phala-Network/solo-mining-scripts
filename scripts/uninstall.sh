@@ -22,4 +22,4 @@ fi
 
 rm -rf $installdir
 
-log_info "---------------Uninstall phala node sucess---------------"
+log_success "---------------Uninstall phala node sucess---------------"

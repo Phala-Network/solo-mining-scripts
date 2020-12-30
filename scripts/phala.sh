@@ -30,21 +30,21 @@ exit 0
 
 sgx_test()
 {
-	docker -v
-	if [ $? -ne 0 ]; then
-        log_err "docker not install"
+	docker v
+	if [ $? ne 0 ]; then
+        log_err "----------docker not install----------"
         exit 1
     fi
 
     local res=$(ls /dev | grep sgx)
     if [ x"$res" == x"sgx" ]; then
-        docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect
+        docker run ti rm name phalasgx_detect device /dev/sgx/enclave device /dev/sgx/provision phalanetwork/phalasgx_detect
     else
 		res=$(ls /dev | grep isgx)
 		if [ x"$res" == x"isgx" ];then
-			docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect
+			docker run ti rm name phalasgx_detect device /dev/isgx phalanetwork/phalasgx_detect
 		else
-			log_err "sgx driver not install"
+			log_err "----------sgx driver not install----------"
 			exit 1
 		fi
 	fi
@@ -77,7 +77,7 @@ case "$1" in
 	uninstall)
 		$scriptdir/uninstall.sh
 		;;
-	sgx-test)
+	sgxtest)
 		sgx_test
 		;;
 	help)

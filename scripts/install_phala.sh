@@ -2,14 +2,14 @@
 
 install_depenencies()
 {
-    log_info "------------Apt update--------------"
+    log_info "----------Apt update----------"
     apt-get update
     if [ $? -ne 0 ]; then
         log_err "Apt update failed"
         exit 1
     fi
 
-    log_info "------------Install depenencies--------------"
+    log_info "----------Install depenencies----------"
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     apt-get install -y docker-ce docker-ce-cli containerd.io jq
@@ -22,7 +22,7 @@ install_depenencies()
 
 download_docker_images()
 {
-    log_info "-------Download phala docker images----------"
+    log_info "----------Download phala docker images----------"
     local res=0
 
     docker pull phalanetwork/phala-poc3-node
@@ -33,20 +33,20 @@ download_docker_images()
     res=$(($?|$res))
 
     if [ $res -ne 0 ]; then
-        log_err "Download docker images failed"
+        log_err "----------Download docker images failed----------"
         exit 1
     fi
 }
 
 remove_dirver()
 {
-    log_info "Remove dcap/isgx driver"
+    log_info "----------Remove dcap/isgx driver----------"
     local res_isgx=$(ls /dev | grep isgx)
     local res_sgx=$(ls /dev | grep sgx)
     if [ x"$res_isgx" == x"isgx" ] || [ x"$res_sgx" == x"sgx" ]; then
         /opt/intel/sgxdriver/uninstall.sh
         if [ $? -ne 0 ]; then
-            log_info "Remove dcap/isgx driver failed"
+            log_info "----------Remove dcap/isgx driver failed----------"
             exit 1
         fi
     fi
@@ -55,111 +55,111 @@ remove_dirver()
 install_driver()
 {
     remove_dirver
-    log_info "Download dcap driver"
+    log_info "----------Download dcap driver----------"
     local driverbin=sgx_linux_x64_driver_1.36.2.bin
     local driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
     wget $driverurl
 
     if [ $? -ne 0 ]; then
-        log_err "Download dcap dirver failed"
+        log_err "----------Download dcap dirver failed----------"
         exit 1
     fi
 
-    log_info "Give dcap driver executable permission"
+    log_info "----------Give dcap driver executable permission----------"
     chmod +x $driverbin
 
-    log_info "Installing dcap driver..."
+    log_info "----------Installing dcap driver----------"
     ./$driverbin
 
     local res_dcap=$(ls /dev | grep sgx)
     if [ x"$res_dcap" == x"" ]; then
-        log_err "Install dcap dirver bin failed"
+        log_err "----------Install dcap dirver bin failed----------"
         remove_dirver
-        log_info "Download isgx driver"
+        log_info "----------Download isgx driver----------"
         driverbin=sgx_linux_x64_driver_2.6.0_b0a445b.bin
         driverurl=https://download.01.org/intel-sgx/sgx-linux/2.11/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.6.0_b0a445b.bin
         wget $driverurl
         
         if [ $? -ne 0 ]; then
-            log_err "Download isgx dirver failed"
+            log_err "----------Download isgx dirver failed----------"
             exit 1
         fi
 
-        log_info "Give isgx driver executable permission"
+        log_info "----------Give isgx driver executable permission----------"
         chmod +x $driverbin
 
-        log_info "Installing isgx driver..."
+        log_info "----------Installing isgx driver----------"
         ./$driverbin
 
         local res_sgx=$(ls /dev | grep isgx)
         if [ x"$res_sgx" == x"" ]; then
-            log_err "Install isgx dirver bin failed"
+            log_err "----------Install isgx dirver bin failed----------"
             exit 1
         fi
 
-        log_info "Clear resource"
+        log_info "----------Clear resource----------"
         rm $driverbin
     fi
 
-    log_info "Clear resource"
+    log_success "----------Clear resource----------"
     rm $driverbin
 }
 
 install_dcap()
 {
     remove_dirver
-    log_info "Download dcap driver"
+    log_info "----------Download dcap driver----------"
     local driverbin=sgx_linux_x64_driver_1.36.2.bin
     local driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
     wget $driverurl
 
     if [ $? -ne 0 ]; then
-        log_err "Download isgx dirver failed"
+        log_err "----------Download isgx dirver failed----------"
         exit 1
     fi
 
-    log_info "Give dcap driver executable permission"
+    log_info "----------Give dcap driver executable permission----------"
     chmod +x $driverbin
 
-    log_info "Installing dcap driver..."
+    log_info "----------Installing dcap driver----------"
     ./$driverbin
 
     local res_dcap=$(ls /dev | grep sgx)
     if [ x"$res_sgx" == x"" ]; then
-        log_err "Install dcap dirver bin failed"
+        log_err "----------Install dcap dirver bin failed----------"
         exit 1
     fi
 
-    log_success "Clear resource"
+    log_success "----------Clear resource----------"
     rm $driverbin
 }
 
 install_isgx()
 {
     remove_dirver
-    log_info "Download isgx driver"
+    log_info "----------Download isgx driver----------"
     local driverbin=sgx_linux_x64_driver_2.6.0_b0a445b.bin
     local driverurl=https://download.01.org/intel-sgx/sgx-linux/2.11/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.6.0_b0a445b.bin
     wget $driverurl
     
     if [ $? -ne 0 ]; then
-        log_err "Download isgx dirver failed"
+        log_err "----------Download isgx dirver failed----------"
         exit 1
     fi
 
-    log_info "Give isgx driver executable permission"
+    log_info "----------Give isgx driver executable permission----------"
     chmod +x $driverbin
 
-    log_info "Installing isgx driver..."
+    log_info "----------Installing isgx driver----------"
     ./$driverbin
 
     local res_sgx=$(ls /dev | grep isgx)
     if [ x"$res_sgx" == x"" ]; then
-        log_err "Install isgx dirver bin failed"
+        log_err "----------Install isgx dirver bin failed----------"
         exit 1
     fi
 
-    log_success "Clear resource"
+    log_success "----------Clear resource----------"
     rm $driverbin
 }
 
@@ -179,7 +179,7 @@ install()
 			install_isgx
 			;;
 		*)
-            log_err "Parameter error"
+            log_err "----------Parameter error----------"
 			exit 1
             ;;
 	esac

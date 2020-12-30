@@ -29,8 +29,9 @@ config_set_all()
 	local ipaddr=""
 	read -p "Enter your local IP address : " ipaddr
 	ipaddr=`echo "$ipaddr"`
-	if [ x"$ipaddr" == x"" ]; then
+	if [ x"$ipaddr" == x"" ] || [ `echo $ipaddr | awk -F . '{print NF}'` -ne 4 ]; then
 		log_err "Set IP address faild"
+		exit 1
 	fi
 	sed -i "3c \\  \"ipaddr\" : \"$ipaddr\"," $basedir/config.json &>/dev/null
 	log_success "Set IP address: '$ipaddr' successfully"
@@ -40,6 +41,7 @@ config_set_all()
 	mnemonic=`echo "$mnemonic"`
 	if [ x"$mnemonic" == x"" ]; then
 		log_err "Mnemonic can not be empty"
+		exit 1
 	fi
 	sed -i "4c \\  \"mnemonic\" : \"$mnemonic\"" $basedir/config.json &>/dev/null
 	log_success "Set your controllor mnemonic: '$mnemonic' successfully"

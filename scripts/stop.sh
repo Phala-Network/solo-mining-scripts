@@ -2,33 +2,33 @@
 
 stop_phala_node()
 {
-    log_info "--------------Stop phala node-------------"
-    docker kill phala-node
+    log_info "----------Stop phala node----------"
+    docker kill phalanode
 
-    if [ $? -ne 0 ]; then
-        log_success "------------Stop success-------------"
-        exit 0
+    if [ $? ne 0 ]; then
+        log_err "----------Stop failed----------"
+        exit 1
     fi
 }
 
 stop_phala_pruntime()
 {
-    log_info "--------------Stop phala pruntime-------------"
-    docker kill phala-pruntime
+    log_info "----------Stop phala pruntime----------"
+    docker kill phalapruntime
 
-    if [ $? -ne 0 ]; then
-        log_success "------------Stop success-------------"
-        exit 0
+    if [ $? ne 0 ]; then
+        log_success "----------Stop failed----------"
+        exit 1
     fi
 }
 
 stop_phala_phost()
 {
-    log_info "--------------Stop phala phost-------------"
-    docker kill phala-phost
+    log_info "----------Stop phala phost----------"
+    docker kill phalaphost
 
-    if [ $? -ne 0 ]; then
-        log_success "------------Stop success-------------"
+    if [ $? ne 0 ]; then
+        log_success "----------Stop failed----------"
         exit 0
     fi
 }
@@ -52,6 +52,6 @@ stop()
             break
             ;;
         *)
-            log_err "Parameter error"
+            log_err "----------Parameter error----------"
 	esac
 }
