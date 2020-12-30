@@ -17,7 +17,7 @@ stop_phala_pruntime()
     docker kill phalapruntime
 
     if [ $? ne 0 ]; then
-        log_success "----------Stop failed----------"
+        log_err "----------Stop failed----------"
         exit 1
     fi
 }
@@ -28,7 +28,7 @@ stop_phala_phost()
     docker kill phalaphost
 
     if [ $? ne 0 ]; then
-        log_success "----------Stop failed----------"
+        log_err "----------Stop failed----------"
         exit 0
     fi
 }

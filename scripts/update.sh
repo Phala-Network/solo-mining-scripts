@@ -7,11 +7,11 @@ clean()
     docker kill phalaphost
     docker kill phalapruntime
     docker kill phalanode
-    docker image prune a
+    docker image prune -a
 
     log_info "----------Clean data----------"
-    rm r $HOME/phalanodedata
-    rm r $HOME/phalapruntimedata
+    rm -r $HOME/phalanodedata
+    rm -r $HOME/phalapruntimedata
 
     local res=0
     docker pull phalanetwork/phala-poc3-node
@@ -35,7 +35,7 @@ update_noclean()
     docker kill phalaphost
     docker kill phalapruntime
     docker kill phalanode
-    docker image prune a
+    docker image prune -a
 
     local res=0
     docker pull phalanetwork/phala-poc3-node
