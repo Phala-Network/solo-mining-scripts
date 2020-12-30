@@ -118,7 +118,7 @@ install_dcap()
         exit 1
     fi
 
-    log_info "----------Give dcap driver executable permission----------"
+    log_info "----------Give dcap driver executable permission----------" 
     chmod +x $driverbin
 
     log_info "----------Installing dcap driver----------"
