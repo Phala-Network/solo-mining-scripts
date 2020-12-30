@@ -19,16 +19,16 @@ install_phala_scripts()
     log_info "--------------Install phala node-------------"
 
     if [ -f "$installdir/scripts/uninstall.sh" ]; then
-        echo "Uninstall old phala node"
+        log_info "Uninstall old phala node"
         $installdir/scripts/uninstall.sh
     fi
-    echo "Install new phala node"
+    log_info "Install new phala node"
     mkdir -p $installdir
     cp $basedir/config.json $installdir/
     cp -r $basedir/scripts $installdir/
     chmod 777 -R $installdir
 
-    echo "Install phala command line tool"
+    log_info "Install phala command line tool"
     cp $scriptdir/phala.sh /usr/bin/phala
     chmod 777 /usr/bin/phala
 
