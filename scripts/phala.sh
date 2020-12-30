@@ -75,7 +75,7 @@ case "$1" in
 		logs $2
 		;;
 	uninstall)
-		$installdir/scripts/uninstall.sh
+		$scriptdir/uninstall.sh
 		;;
 	sgx-test)
 		sgx_test

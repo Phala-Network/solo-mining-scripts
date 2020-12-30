@@ -3,7 +3,8 @@
 installdir=/opt/phala
 bin_file=/usr/bin/phala
 
-source $installdir/update
+source $installdir/update.sh
+source $installdir/utils.sh
 
 if [ $(id -u) -ne 0 ]; then
     echo "Please run with sudo!"
