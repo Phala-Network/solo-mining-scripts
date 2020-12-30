@@ -14,9 +14,9 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 if [ -f "$bin_file" ]; then
-    docker kill phalaphost
-    docker kill phalapruntime
-    docker kill phalanode
+    docker kill phala-phost
+    docker kill phala-pruntime
+    docker kill phala-node
     docker image prune -a
     rm -r $HOME/phala-node-data
     rm -r $HOME/phala-pruntime-data
