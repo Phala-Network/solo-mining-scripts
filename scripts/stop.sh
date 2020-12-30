@@ -4,7 +4,7 @@ stop_phala_node()
 {
     log_info "----------Stop phala node----------"
     log_info "----------停止 phala node----------"
-    docker kill phalanode
+    docker kill phala-node
 
     if [ $? ne 0 ]; then
         log_err "----------Stop failed----------"
@@ -17,7 +17,7 @@ stop_phala_pruntime()
 {
     log_info "----------Stop phala pruntime----------"
     log_info "----------停止 phala pruntime----------"
-    docker kill phalapruntime
+    docker kill phala-pruntime
 
     if [ $? ne 0 ]; then
         log_err "----------Stop failed----------"
@@ -30,7 +30,7 @@ stop_phala_phost()
 {
     log_info "----------Stop phala phost----------"
     log_info "----------停止 phala phost----------"
-    docker kill phalaphost
+    docker kill phala-phost
 
     if [ $? ne 0 ]; then
         log_err "----------Stop failed----------"
