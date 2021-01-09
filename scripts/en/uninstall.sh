@@ -9,7 +9,6 @@ source $scriptdir/utils.sh
 
 if [ $(id -u) -ne 0 ]; then
     echo "Please run with sudo!"
-    echo "请使用sudo运行!"
     exit 1
 fi
 
@@ -27,4 +26,3 @@ fi
 rm -rf $installdir
 
 log_success "---------------Uninstall phala node sucess---------------"
-log_success "---------------删除 phala 挖矿套件成功---------------"

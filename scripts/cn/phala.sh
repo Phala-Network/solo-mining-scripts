@@ -16,14 +16,15 @@ help()
 {
 cat << EOF
 Usage:
-    help                            show help information ｜ 展示帮助信息
-    install {init|isgx|dcap}        install your phala node ｜ 安装Phala挖矿套件
-    start {node|pruntime|phost}     start your node module ｜ 启动挖矿
-    stop {node|pruntime|phost}		use docker kill to stop module ｜ 停止挖矿程序
-	config							configure your phala node ｜ 配置
-    status							show module configurations ｜ 查看挖矿套件运行状态
-    update {clean}					update phala node ｜ 升级
-    logs {node|pruntime|phost}		show node module logs ｜ 打印log信息
+    help                            展示帮助信息
+    install {init|isgx|dcap}        安装Phala挖矿套件
+	uninstall						删除phala脚本
+    start {node|pruntime|phost}     启动挖矿
+    stop {node|pruntime|phost}		停止挖矿程序
+	config							配置
+    status							查看挖矿套件运行状态
+    update {clean}					升级
+    logs {node|pruntime|phost}		打印log信息
 EOF
 exit 0
 }
@@ -32,8 +33,7 @@ sgx_test()
 {
 	docker -v
 	if [ $? -ne 0 ]; then
-        log_err "----------docker not install----------"
-		log_err "----------docker 没有安装----------"
+		log_err "----------docker 没有安装----------" 
         exit 1
     fi
 
@@ -45,7 +45,6 @@ sgx_test()
 		if [ x"$res" == x"isgx" ];then
 			docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect
 		else
-			log_err "----------sgx driver not install----------"
 			log_err "----------sgx 驱动没有安装----------"
 			exit 1
 		fi

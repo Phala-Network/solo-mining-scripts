@@ -24,7 +24,7 @@ sudo reboot
 
 ```bash
 chmod +x install.sh
-sudo ./install.sh
+sudo ./install.sh cn
 ```
 
 #### 三、使用方法

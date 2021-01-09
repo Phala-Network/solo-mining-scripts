@@ -2,18 +2,15 @@
 
 start_phala_node()
 {
-    log_info "----------Start phala node----------"
     log_info "---------启动 phala node----------"
     local node_name=$(cat $basedir/config.json | jq -r '.nodename')
     docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc3-node
 
     if [ $? -ne 0 ]; then
-        log_err "----------Start phala node failed-------------"
         log_err "----------启动 phala node 失败-------------"
         exit 1
     fi
 
-    log_info "Wait for sync"
     log_info "等待node节点同步区块高度"
     sleep 30
     while true ; do
@@ -22,18 +19,16 @@ start_phala_node()
         local node_block=$(echo $block_json | jq -r '.result.currentBlock')
         local hightest_block=$(echo $block_json | jq -r '.result.highestBlock')
         if [ x"$node_block" == x"$hightest_block" ] && [ x"$hightest_block" > x"10" ]; then
-            log_success "phala-node complete synchronously"
             log_success "phala-node 同步完成"
             break
         fi
-        log_info "snycing 同步进度 $node_block of $hightest_block"
+        log_info "同步进度： 节点高度（$node_block），网络高度（$hightest_block）"
         sleep 30
     done
 }
 
 start_phala_pruntime()
 {
-    log_info "----------Start phala pruntime----------"
     log_info "----------启动pruntime----------"
     
     res=$(ls /dev | grep sgx)
@@ -44,7 +39,6 @@ start_phala_pruntime()
     fi
 
     if [ $? -ne 0 ]; then
-        log_err "----------Start phala pruntime failed----------"
         log_err "----------启动pruntime失败----------"
         exit 1
     fi
@@ -52,14 +46,12 @@ start_phala_pruntime()
 
 start_phala_phost()
 {
-    log_info "----------Start phala phost----------"
     log_info "----------启动phost----------"
     local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
     local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
     docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
 
     if [ $? -ne 0 ]; then
-        log_err "----------Start phala phost failed----------"
         log_err "----------启动phost失败----------"
         exit 1
     fi
@@ -84,7 +76,6 @@ start()
             start_phala_phost
             ;;
         *)
-            log_err "----------Parameter error----------"
             log_err "----------参数错误----------"
             exit 1
 	esac

@@ -24,7 +24,7 @@ Go to the **Phala** folder
 
 ```bash
 chmod +x install.sh
-sudo ./install.sh
+sudo ./install.sh en
 ```
 
 #### How to use
