@@ -20,7 +20,6 @@ if [ -f "$bin_file" ]; then
     docker image prune -a
     rm -r $HOME/phala-node-data
     rm -r $HOME/phala-pruntime-data
-    docker image prune -a
     rm $bin_file
 fi
 
