@@ -4,9 +4,9 @@ config_help()
 {
 cat << EOF
 Usage:
-    help                                  show help information
-    show                                  show configurations
-    set                                   set configurations
+    help								show help information
+    show								show configurations
+    set									set configurations
 EOF
 }
 

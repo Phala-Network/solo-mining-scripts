@@ -34,9 +34,9 @@ status()
 
     cat << EOF
 -----------------------------------------------------------------------
-    Service              		Status         CurrentBlock
+    Service              		Status					CurrentBlock
 -----------------------------------------------------------------------
-    phala-node                  ${node_status}		${node_block}
+    phala-node                  ${node_status}			${node_block}
     phala-pruntime              ${pruntime_status}
     phala-phost                 ${phost_status}
 ------------------------------------------------------------------------
