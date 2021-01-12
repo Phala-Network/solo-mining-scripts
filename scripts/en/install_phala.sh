@@ -57,9 +57,7 @@ install_driver()
 {
 	remove_dirver
 	log_info "----------Download dcap driver----------"
-	local driverbin=sgx_linux_x64_driver_1.36.2.bin
-	local driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
-	wget $driverurl
+	wget $dcap_driverurl
 
 	if [ $? -ne 0 ]; then
 		log_err "----------Download dcap dirver failed----------"
@@ -67,19 +65,17 @@ install_driver()
 	fi
 
 	log_info "----------Give dcap driver executable permission----------"
-	chmod +x $driverbin
+	chmod +x $dcap_driverbin
 
 	log_info "----------Installing dcap driver----------"
-	./$driverbin
+	./$dcap_driverbin
 
 	local res_dcap=$(ls /dev | grep sgx)
 	if [ x"$res_dcap" == x"" ]; then
 		log_err "----------Install dcap dirver bin failed----------"
 		remove_dirver
 		log_info "----------Download isgx driver----------"
-		driverbin=sgx_linux_x64_driver_2.6.0_b0a445b.bin
-		driverurl=https://download.01.org/intel-sgx/sgx-linux/2.11/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.6.0_b0a445b.bin
-		wget $driverurl
+		wget $isgx_driverurl
 		
 		if [ $? -ne 0 ]; then
 			log_err "----------Download isgx dirver failed----------"
@@ -87,10 +83,10 @@ install_driver()
 		fi
 
 		log_info "----------Give isgx driver executable permission----------"
-		chmod +x $driverbin
+		chmod +x $isgx_driverbin
 
 		log_info "----------Installing isgx driver----------"
-		./$driverbin
+		./$isgx_driverbin
 
 		local res_sgx=$(ls /dev | grep isgx)
 		if [ x"$res_sgx" == x"" ]; then
@@ -99,20 +95,18 @@ install_driver()
 		fi
 
 		log_info "----------Clean resource----------"
-		rm $driverbin
+		rm $isgx_driverbin
 	fi
 
 	log_success "----------Clean resource----------"
-	rm $driverbin
+	rm $dcap_driverbin
 }
 
 install_dcap()
 {
 	remove_dirver
 	log_info "----------Download dcap driver----------"
-	local driverbin=sgx_linux_x64_driver_1.36.2.bin
-	local driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
-	wget $driverurl
+	wget $dcap_driverurl
 
 	if [ $? -ne 0 ]; then
 		log_err "----------Download isgx dirver failed----------"
@@ -120,10 +114,10 @@ install_dcap()
 	fi
 
 	log_info "----------Give dcap driver executable permission----------" 
-	chmod +x $driverbin
+	chmod +x $dcap_driverbin
 
 	log_info "----------Installing dcap driver----------"
-	./$driverbin
+	./$dcap_driverbin
 
 	local res_dcap=$(ls /dev | grep sgx)
 	if [ x"$res_sgx" == x"" ]; then
@@ -132,16 +126,14 @@ install_dcap()
 	fi
 
 	log_success "----------Clean resource----------"
-	rm $driverbin
+	rm $dcap_driverbin
 }
 
 install_isgx()
 {
 	remove_dirver
 	log_info "----------Download isgx driver----------"
-	local driverbin=sgx_linux_x64_driver_2.6.0_b0a445b.bin
-	local driverurl=https://download.01.org/intel-sgx/sgx-linux/2.11/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.6.0_b0a445b.bin
-	wget $driverurl
+	wget $isgx_driverurl
 	
 	if [ $? -ne 0 ]; then
 		log_err "----------Download isgx dirver failed----------"
@@ -149,10 +141,10 @@ install_isgx()
 	fi
 
 	log_info "----------Give isgx driver executable permission----------"
-	chmod +x $driverbin
+	chmod +x $isgx_driverbin
 
 	log_info "----------Installing isgx driver----------"
-	./$driverbin
+	./$isgx_driverbin
 
 	local res_sgx=$(ls /dev | grep isgx)
 	if [ x"$res_sgx" == x"" ]; then
@@ -161,11 +153,27 @@ install_isgx()
 	fi
 
 	log_success "----------Clean resource----------"
-	rm $driverbin
+	rm $isgx_driverbin
 }
 
 install()
 {
+	release=$(lsb_release -r | grep -o "[0-9]*\.[0-9]*")
+	if [ x"$release" = x"18.04" ]; then
+		dcap_driverbin=sgx_linux_x64_driver_1.36.2.bin
+		dcap_driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
+		isgx_driverbin=sgx_linux_x64_driver_2.11.0_4505f07.bin
+		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.11.0_4505f07.bin
+	elif [ x"$release" = x"20.04" ]; then
+		dcap_driverbin=sgx_linux_x64_driver_1.36.2.bin
+		dcap_driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.36.2.bin
+		isgx_driverbin=sgx_linux_x64_driver_2.11.0_4505f07.bin
+		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_4505f07.bin
+	else
+		log_err "----------The system does not support----------"
+		exit 1
+	fi
+
 	case "$1" in
 		init)
 			install_depenencies
