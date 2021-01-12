@@ -8,7 +8,6 @@ source $scriptdir/update.sh
 source $scriptdir/utils.sh
 
 if [ $(id -u) -ne 0 ]; then
-    echo "Please run with sudo!"
     echo "请使用sudo运行!"
     exit 1
 fi
