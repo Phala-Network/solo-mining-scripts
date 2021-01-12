@@ -159,12 +159,12 @@ install_isgx()
 install()
 {
 	release=$(lsb_release -r | grep -o "[0-9]*\.[0-9]*")
-	if [ x"release" = x"18.04" ]; then
+	if [ x"$release" = x"18.04" ]; then
 		dcap_driverbin=sgx_linux_x64_driver_1.36.2.bin
 		dcap_driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
 		isgx_driverbin=sgx_linux_x64_driver_2.11.0_4505f07.bin
 		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.11.0_4505f07.bin
-	elif [ x"release" = x"20.04" ]; then
+	elif [ x"$release" = x"20.04" ]; then
 		dcap_driverbin=sgx_linux_x64_driver_1.36.2.bin
 		dcap_driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.36.2.bin
 		isgx_driverbin=sgx_linux_x64_driver_2.11.0_4505f07.bin
