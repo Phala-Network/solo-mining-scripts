@@ -2,7 +2,7 @@
 
 logs()
 {
-    case "$1" in
+	case "$1" in
 		node)
 			docker logs phala-node
 			;;
@@ -11,9 +11,9 @@ logs()
 			;;
 		phost)
 			docker logs phala-phost
-            ;;
-        *)
-            log_err "----------Parameter error----------"
+			;;
+		*)
+			log_err "----------Parameter error----------"
 			exit 1
 	esac
 }

@@ -12,7 +12,7 @@ EOF
 
 config_show()
 {
-    cat $basedir/config.json | jq .
+	cat $basedir/config.json | jq .
 }
 
 config_set_all()
@@ -35,7 +35,7 @@ config_set_all()
 	sed -i "3c \\  \"ipaddr\" : \"$ipaddr\"," $basedir/config.json &>/dev/null
 	log_success "Set IP address: '$ipaddr' successfully"
 
-    local mnemonic=""
+	local mnemonic=""
 	read -p "Enter your controllor mnemonic : " mnemonic
 	mnemonic=`echo "$mnemonic"`
 	if [ x"$mnemonic" == x"" ]; then

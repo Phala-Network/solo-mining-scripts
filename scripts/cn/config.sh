@@ -12,7 +12,7 @@ EOF
 
 config_show()
 {
-    cat $basedir/config.json | jq .
+	cat $basedir/config.json | jq .
 }
 
 config_set_all()
@@ -24,7 +24,7 @@ config_set_all()
 		node_name="phala-node"
 	fi
 	sed -i "2c \\  \"nodename\" : \"$node_name\"," $basedir/config.json &>/dev/null
-    log_success "设置节点名称为: '$node_name' 成功"
+	log_success "设置节点名称为: '$node_name' 成功"
 	local ipaddr=""
 	read -p "输入你的IP地址: " ipaddr
 	ipaddr=`echo "$ipaddr"`
@@ -35,7 +35,7 @@ config_set_all()
 	sed -i "3c \\  \"ipaddr\" : \"$ipaddr\"," $basedir/config.json &>/dev/null
 	log_success "设置IP地址为: '$ipaddr' 成功"
 
-    local mnemonic=""
+	local mnemonic=""
 	read -p "输入你的Controllor账号助记词 : " mnemonic
 	mnemonic=`echo "$mnemonic"`
 	if [ x"$mnemonic" == x"" ]; then

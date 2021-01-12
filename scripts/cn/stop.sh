@@ -2,35 +2,35 @@
 
 stop_phala_node()
 {
-    log_info "----------停止 phala-node 组件----------"
-    docker kill phala-node
+	log_info "----------停止 phala-node 组件----------"
+	docker kill phala-node
 
-    if [ $? ne 0 ]; then
-        log_err "----------停止 phala-node 组件失败----------"
-        exit 1
-    fi
+	if [ $? ne 0 ]; then
+		log_err "----------停止 phala-node 组件失败----------"
+		exit 1
+	fi
 }
 
 stop_phala_pruntime()
 {
-    log_info "----------停止 phala-pruntime 组件----------"
-    docker kill phala-pruntime
+	log_info "----------停止 phala-pruntime 组件----------"
+	docker kill phala-pruntime
 
-    if [ $? ne 0 ]; then
-        log_err "----------停止 phala-pruntime 组件失败----------"
-        exit 1
-    fi
+	if [ $? ne 0 ]; then
+		log_err "----------停止 phala-pruntime 组件失败----------"
+		exit 1
+	fi
 }
 
 stop_phala_phost()
 {
-    log_info "----------停止 phala-phost 组件----------"
-    docker kill phala-phost
+	log_info "----------停止 phala-phost 组件----------"
+	docker kill phala-phost
 
-    if [ $? ne 0 ]; then
-        log_err "----------停止 phala-phost 组件失败----------"
-        exit 0
-    fi
+	if [ $? ne 0 ]; then
+		log_err "----------停止 phala-phost 组件失败----------"
+		exit 0
+	fi
 }
 
 stop()
@@ -44,14 +44,14 @@ stop()
 			;;
 		phost)
 			stop_phala_phost
-            ;;
-        "")
-            stop_phala_node
-            stop_phala_pruntime
-            stop_phala_phost
-            break
-            ;;
-        *)
-            log_err "----------参数错误----------"
+			;;
+		"")
+			stop_phala_node
+			stop_phala_pruntime
+			stop_phala_phost
+			break
+			;;
+		*)
+			log_err "----------参数错误----------"
 	esac
 }
