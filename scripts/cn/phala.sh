@@ -16,15 +16,15 @@ help()
 {
 cat << EOF
 Usage:
-    help							展示帮助信息
-    install {init|isgx|dcap}		安装Phala挖矿套件
+	help							展示帮助信息
+	install {init|isgx|dcap}		安装Phala挖矿套件
 	uninstall						删除phala脚本
-    start {node|pruntime|phost}		启动挖矿
-    stop {node|pruntime|phost}		停止挖矿程序
+	start {node|pruntime|phost}		启动挖矿
+	stop {node|pruntime|phost}		停止挖矿程序
 	config							配置
-    status							查看挖矿套件运行状态
-    update {clean}					升级
-    logs {node|pruntime|phost}		打印log信息
+	status							查看挖矿套件运行状态
+	update {clean}					升级
+	logs {node|pruntime|phost}		打印log信息
 EOF
 exit 0
 }
