@@ -57,9 +57,7 @@ install_driver()
 {
 	remove_dirver
 	log_info "----------下载 DCAP 驱动----------"
-	local driverbin=sgx_linux_x64_driver_1.36.2.bin
-	local driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
-	wget $driverurl
+	wget $dcap_driverurl
 
 	if [ $? -ne 0 ]; then
 		log_err "----------下载 DCAP 驱动失败----------"
@@ -67,19 +65,17 @@ install_driver()
 	fi
 
 	log_info "----------添加运行权限----------"
-	chmod +x $driverbin
+	chmod +x $dcap_driverbin
 
 	log_info "----------尝试安装DCAP驱动----------"
-	./$driverbin
+	./$dcap_driverbin
 
 	local res_dcap=$(ls /dev | grep sgx)
 	if [ x"$res_dcap" == x"" ]; then
 		log_err "----------安装DCAP驱动失败，尝试安装isgx驱动----------"
 		remove_dirver
 		log_info "----------下载 isgx 驱动----------"
-		driverbin=sgx_linux_x64_driver_2.6.0_b0a445b.bin
-		driverurl=https://download.01.org/intel-sgx/sgx-linux/2.11/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.6.0_b0a445b.bin
-		wget $driverurl
+		wget $isgx_driverurl
 		
 		if [ $? -ne 0 ]; then
 			log_err "----------下载 isgx 驱动失败----------"
@@ -87,10 +83,10 @@ install_driver()
 		fi
 
 		log_info "----------添加运行权限----------"
-		chmod +x $driverbin
+		chmod +x $isgx_driverbin
 
 		log_info "----------安装 isgx 驱动----------"
-		./$driverbin
+		./$isgx_driverbin
 
 		local res_sgx=$(ls /dev | grep isgx)
 		if [ x"$res_sgx" == x"" ]; then
@@ -99,20 +95,18 @@ install_driver()
 		fi
 
 		log_info "----------删除临时文件----------"
-		rm $driverbin
+		rm $isgx_driverbin
 	fi
 
 	log_success "----------删除临时文件----------"
-	rm $driverbin
+	rm $dcap_driverbin
 }
 
 install_dcap()
 {
 	remove_dirver
 	log_info "----------下载 DCAP 驱动----------"
-	local driverbin=sgx_linux_x64_driver_1.36.2.bin
-	local driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
-	wget $driverurl
+	wget $dcap_driverurl
 
 	if [ $? -ne 0 ]; then
 		log_err "----------下载 DCAP 驱动失败----------"
@@ -120,10 +114,10 @@ install_dcap()
 	fi
 
 	log_info "----------添加运行权限----------" 
-	chmod +x $driverbin
+	chmod +x $dcap_driverbin
 
 	log_info "----------安装DCAP驱动----------"
-	./$driverbin
+	./$dcap_driverbin
 
 	local res_dcap=$(ls /dev | grep sgx)
 	if [ x"$res_sgx" == x"" ]; then
@@ -132,16 +126,14 @@ install_dcap()
 	fi
 
 	log_success "----------删除临时文件----------"
-	rm $driverbin
+	rm $dcap_driverbin
 }
 
 install_isgx()
 {
 	remove_dirver
 	log_info "----------下载 isgx 驱动----------"
-	local driverbin=sgx_linux_x64_driver_2.6.0_b0a445b.bin
-	local driverurl=https://download.01.org/intel-sgx/sgx-linux/2.11/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.6.0_b0a445b.bin
-	wget $driverurl
+	wget $isgx_driverurl
 	
 	if [ $? -ne 0 ]; then
 		log_err "----------下载 isgx 驱动失败----------"
@@ -149,10 +141,10 @@ install_isgx()
 	fi
 
 	log_info "----------添加运行权限----------"
-	chmod +x $driverbin
+	chmod +x $isgx_driverbin
 
 	log_info "----------安装 isgx 驱动----------"
-	./$driverbin
+	./$isgx_driverbin
 
 	local res_sgx=$(ls /dev | grep isgx)
 	if [ x"$res_sgx" == x"" ]; then
@@ -161,11 +153,27 @@ install_isgx()
 	fi
 
 	log_success "----------删除临时文件----------"
-	rm $driverbin
+	rm $isgx_driverbin
 }
 
 install()
 {
+	release=$(lsb_release -r | grep -o "[0-9]*\.[0-9]*")
+	if [ x"release" = x"18.04" ]; then
+		dcap_driverbin=sgx_linux_x64_driver_1.36.2.bin
+		dcap_driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
+		isgx_driverbin=sgx_linux_x64_driver_2.11.0_4505f07.bin
+		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.11.0_4505f07.bin
+	elif [ x"release" = x"20.04" ]
+		dcap_driverbin=sgx_linux_x64_driver_1.36.2.bin
+		dcap_driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.36.2.bin
+		isgx_driverbin=sgx_linux_x64_driver_2.11.0_4505f07.bin
+		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_4505f07.bin
+	else
+		log_err "----------系统版本不支持----------"
+		exit 1
+	fi
+	
 	case "$1" in
 		init)
 			install_depenencies
