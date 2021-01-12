@@ -36,9 +36,9 @@ status()
 -----------------------------------------------------------------------
     服务名称               		服务状态         		本地节点区块高度
 -----------------------------------------------------------------------
-    phala-node                  ${node_status}			${node_block}
-    phala-pruntime              ${pruntime_status}
-    phala-phost                 ${phost_status}
+	phala-node                  ${node_status}			${node_block}
+	phala-pruntime              ${pruntime_status}
+	phala-phost                 ${phost_status}
 ------------------------------------------------------------------------
 EOF
 }

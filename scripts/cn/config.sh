@@ -4,9 +4,9 @@ config_help()
 {
 cat << EOF
 Usage:
-    help								帮助信息
-    show								查看配置信息
-    set									重新设置
+	help								帮助信息
+	show								查看配置信息
+	set									重新设置
 EOF
 }
 

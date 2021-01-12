@@ -16,14 +16,14 @@ help()
 {
 cat << EOF
 Usage:
-    help							show help information
-    install {init|isgx|dcap}		install your phala node
-    start {node|pruntime|phost}		start your node module
-    stop {node|pruntime|phost}		use docker kill to stop module
+	help							show help information
+	install {init|isgx|dcap}		install your phala node
+	start {node|pruntime|phost}		start your node module
+	stop {node|pruntime|phost}		use docker kill to stop module
 	config							configure your phala node
-    status							show module configurations
-    update {clean}					update phala node
-    logs {node|pruntime|phost}		show node module logs
+	status							show module configurations
+	update {clean}					update phala node
+	logs {node|pruntime|phost}		show node module logs
 EOF
 exit 0
 }
