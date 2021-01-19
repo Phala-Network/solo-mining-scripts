@@ -13,7 +13,7 @@ install_depenencies()
 	apt-get install -y jq curl
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-	apt-get install -y docker-ce docker-ce-cli containerd.io
+	apt-get install -y docker-ce docker-ce-cli containerd.io dkms
 	if [ $? -ne 0 ]; then
 		log_err "Install depenencies failed"
 		exit 1
@@ -120,7 +120,7 @@ install_dcap()
 	./$dcap_driverbin
 
 	local res_dcap=$(ls /dev | grep sgx)
-	if [ x"$res_sgx" == x"" ]; then
+	if [ x"$res_dcap" == x"" ]; then
 		log_err "----------Install dcap dirver bin failed----------"
 		exit 1
 	fi
