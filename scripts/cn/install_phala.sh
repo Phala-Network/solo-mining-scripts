@@ -175,6 +175,11 @@ install()
 	fi
 
 	case "$1" in
+		"")
+			install_depenencies
+			download_docker_images
+			install_driver
+			;;
 		init)
 			install_depenencies
 			download_docker_images

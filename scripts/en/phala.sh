@@ -24,6 +24,7 @@ Usage:
 	status					show module configurations
 	update {clean}				update phala node
 	logs {node|pruntime|phost}		show node module logs
+	sgx-test				start the mining test program
 EOF
 exit 0
 }

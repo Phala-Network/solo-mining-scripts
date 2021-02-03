@@ -17,7 +17,7 @@ help()
 cat << EOF
 Usage:
 	help					展示帮助信息
-	install {init|isgx|dcap}		安装Phala挖矿套件
+	install {init|isgx|dcap}		安装Phala挖矿套件,默认无需输入IP地址、助记词
 	uninstall				删除phala脚本
 	start {node|pruntime|phost}		启动挖矿
 	stop {node|pruntime|phost}		停止挖矿程序
@@ -25,6 +25,7 @@ Usage:
 	status					查看挖矿套件运行状态
 	update {clean}				升级
 	logs {node|pruntime|phost}		打印log信息
+	sgx-test				运行挖矿测试程序
 EOF
 exit 0
 }
