@@ -46,6 +46,12 @@ sudo phala start node
 sudo phala start pruntime
 sudo phala start phost
 ```
+- Use debug parameter to output command logs
+```bash
+sudo phala start node debug
+sudo phala start pruntime debug
+sudo phala start phost debug
+```
 
 ##### Stop minner
 ```bash
@@ -86,19 +92,20 @@ sudo phala logs pruntime
 sudo phala logs phost
 ```
 
-##### Check the cofig of minner
+##### Check the config of minner
 
 
 ```bash
 sudo phala config show
 ```
-##### Setup the cofig of minner
+##### Setup the config of minner
 
 ```bash
 sudo phala config set
 ```
 
 ##### Check the board support
+- Use `sudo phala install` command to install all dependencies witout configuration
 
 ```bash
 sudo phala sgx-test

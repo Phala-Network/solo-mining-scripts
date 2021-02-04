@@ -44,6 +44,12 @@ sudo phala start node
 sudo phala start pruntime
 sudo phala start phost
 ```
+- start命令跟上debug可输出程序部署日志
+```bash
+sudo phala start node debug
+sudo phala start pruntime debug
+sudo phala start phost debug
+```
 
 ##### 3.3 停止挖矿程序
 
@@ -96,8 +102,10 @@ sudo phala config set
 ```
 
 ##### 3.8 运行自我诊断程序
+- 使用phala安装命令，可不跟任何参数（将无需输入IP地址、账户助记词等）
 
 ```bash
+sudo phala install
 sudo phala sgx-test
 ```
 
