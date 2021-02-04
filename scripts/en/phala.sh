@@ -18,7 +18,7 @@ cat << EOF
 Usage:
 	help					show help information
 	install {init|isgx|dcap}		install your phala node
-	start {node|pruntime|phost}		start your node module
+	start {node|pruntime|phost}{debug}	start your node module(debug parameter output command logs)
 	stop {node|pruntime|phost}		use docker kill to stop module
 	config					configure your phala node
 	status					display the running status of all components
@@ -51,8 +51,6 @@ sgx_test()
 	fi
 }
 
-###########################################Switch#########################################
-
 case "$1" in
 	install)
 		install $2
@@ -61,7 +59,8 @@ case "$1" in
 		config $2
 		;;
 	start)
-		start $2
+		shift 1
+		start $@
 		;;
 	stop)
 		stop $2
