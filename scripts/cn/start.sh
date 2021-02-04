@@ -4,7 +4,11 @@ start_phala_node()
 {
 	log_info "---------启动 phala node----------"
 	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
-	docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc3-node
+	if [ x"$1" == x"debug" ]; then
+		docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc3-node
+	else
+		docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc3-node
+	fi
 
 	if [ $? -ne 0 ]; then
 		log_err "----------启动 phala node 失败-------------"
@@ -33,9 +37,17 @@ start_phala_pruntime()
 	
 	res=$(ls /dev | grep sgx)
 	if [ x"$res" == x"sgx" ]; then
-		docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc3-pruntime
+		if [ x"$1" == x"debug" ]; then
+			docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc3-pruntime
+		else
+			docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc3-pruntime
+		fi
 	else
-		docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc3-pruntime
+		if [ x"$1" == x"debug" ]; then
+			docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc3-pruntime
+		else
+			docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc3-pruntime
+		fi
 	fi
 
 	if [ $? -ne 0 ]; then
@@ -49,7 +61,11 @@ start_phala_phost()
 	log_info "----------启动phost----------"
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-	docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
+	if [ x"$1" == x"debug" ]; then
+		docker run -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
+	else
+		docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
+	fi
 
 	if [ $? -ne 0 ]; then
 		log_err "----------启动phost失败----------"
@@ -59,24 +75,47 @@ start_phala_phost()
 
 start()
 {
-	case "$1" in
-		node)
-			start_phala_node
-			;;
-		pruntime)
-			start_phala_pruntime
-			;;
-		phost)
-			start_phala_phost
-			;;
-		"")
-			start_phala_node
-			start_phala_pruntime
-			sleep 30
-			start_phala_phost
-			;;
-		*)
-			log_err "----------参数错误----------"
-			exit 1
-	esac
+	if [ x"$2" == x"debug" ]; then
+		case "$1" in
+			"")
+				start_phala_node debug
+				start_phala_pruntime debug
+				sleep 30
+				start_phala_phost debug
+				;;
+			node)
+				start_phala_node debug
+				;;
+			pruntime)
+				start_phala_pruntime debug
+				;;
+			phost)
+				start_phala_phost debug
+				;;
+			*)
+				log_err "----------参数错误----------"
+				exit 1
+		esac
+	else
+		case "$1" in
+			node)
+				start_phala_node
+				;;
+			pruntime)
+				start_phala_pruntime
+				;;
+			phost)
+				start_phala_phost
+				;;
+			"")
+				start_phala_node
+				start_phala_pruntime
+				sleep 30
+				start_phala_phost
+				;;
+			*)
+				log_err "----------参数错误----------"
+				exit 1
+		esac
+	fi
 }

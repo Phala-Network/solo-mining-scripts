@@ -21,7 +21,7 @@ Usage:
 	start {node|pruntime|phost}		start your node module
 	stop {node|pruntime|phost}		use docker kill to stop module
 	config					configure your phala node
-	status					show module configurations
+	status					display the running status of all components
 	update {clean}				update phala node
 	logs {node|pruntime|phost}		show node module logs
 	sgx-test				start the mining test program

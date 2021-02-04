@@ -29,7 +29,7 @@ stop_phala_phost()
 
 	if [ $? ne 0 ]; then
 		log_err "----------停止 phala-phost 组件失败----------"
-		exit 0
+		exit 1
 	fi
 }
 
@@ -54,4 +54,5 @@ stop()
 		*)
 			log_err "----------参数错误----------"
 	esac
+	exit 0
 }
