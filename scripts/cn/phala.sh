@@ -40,7 +40,7 @@ sgx_test()
 
 	local res=$(ls /dev | grep sgx)
 	if [ x"$res" == x"sgx" ]; then
-		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect
+		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
 	else
 		res=$(ls /dev | grep isgx)
 		if [ x"$res" == x"isgx" ];then
