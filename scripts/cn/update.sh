@@ -1,6 +1,23 @@
 #!/bin/bash
 
-clean()
+update_script()
+{
+	log_info "----------更新 phala 脚本----------"
+
+	mkdir -p /tmp/phala
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/phala/main.zip
+	unzip /tmp/phala/main.zip -d /tmp/phala/solo-mining-scripts-main
+	chmod +x /tmp/phala/solo-mining-scripts-main/install.sh
+	/tmp/phala/solo-mining-scripts-main/install.sh cn
+	if [ $? -ne 0 ]; then
+		log_err "----------更新 phala 脚本失败----------"
+	fi
+
+	log_success "----------更新完成----------"
+	rm -rf /tmp/phala
+}
+
+update_clean()
 {
 	log_info "----------删除 Docker 镜像----------"
 	log_info "关闭 phala-node phala-pruntime phala-phost"
@@ -57,7 +74,10 @@ update()
 {
 	case "$1" in
 		clean)
-			clean
+			update_clean
+			;;
+		script)
+			update_script
 			;;
 		"")
 			update_noclean

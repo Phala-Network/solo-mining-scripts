@@ -1,6 +1,24 @@
 #!/bin/bash
 
-clean()
+update_script()
+{
+	log_info "----------Update phala script----------"
+
+	mkdir -p /tmp/phala
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/phala/main.zip
+	unzip /tmp/phala/main.zip -d /tmp/phala/solo-mining-scripts-main
+	chmod +x /tmp/phala/solo-mining-scripts-main/install.sh
+	/tmp/phala/solo-mining-scripts-main/install.sh en
+	if [ $? -ne 0 ]; then
+		log_err "----------Failed to update phala script----------"
+	fi
+
+	log_success "----------Update success----------"
+	rm -rf /tmp/phala
+}
+
+
+update_clean()
 {
 	log_info "----------Clean phala node images----------"
 	log_info "Kill phala-node phala-pruntime phala-phost"
@@ -57,7 +75,10 @@ update()
 {
 	case "$1" in
 		clean)
-			clean
+			update_clean
+			;;
+		script)
+			update_script
 			;;
 		"")
 			update_noclean
