@@ -9,12 +9,12 @@ update_script()
 	unzip /tmp/phala/main.zip -d /tmp/phala/solo-mining-scripts-main
 	chmod +x /tmp/phala/solo-mining-scripts-main/install.sh
 	/tmp/phala/solo-mining-scripts-main/install.sh cn
+	rm -rf /tmp/phala
 	if [ $? -ne 0 ]; then
 		log_err "----------更新 phala 脚本失败----------"
 	fi
 
 	log_success "----------更新完成----------"
-	rm -rf /tmp/phala
 }
 
 update_clean()
