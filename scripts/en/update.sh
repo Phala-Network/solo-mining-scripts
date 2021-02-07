@@ -6,9 +6,13 @@ update_script()
 
 	mkdir -p /tmp/phala
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/phala/main.zip
-	unzip /tmp/phala/main.zip -d /tmp/phala/solo-mining-scripts-main
-	chmod +x /tmp/phala/solo-mining-scripts-main/install.sh
-	/tmp/phala/solo-mining-scripts-main/install.sh en
+	unzip /tmp/phala/main.zip -d /tmp/phala
+	rm -rf /opt/phala/*
+	cp /tmp/phala/solo-mining-scripts-main/config.json /opt/phala
+	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
+	mv /opt/phala/scripts/phala.sh /usr/bin/phala
+	chmod +x /usr/bin/phala
+	chmod +x /opt/phala/scripts/*
 	if [ $? -ne 0 ]; then
 		log_err "----------Failed to update phala script----------"
 	fi
