@@ -58,11 +58,15 @@ start_phala_pruntime()
 {
 	log_info "----------Start phala pruntime----------"
 	
-	res=$(ls /dev | grep sgx)
-	if [ x"$res" == x"sgx" ]; then
+	local res_sgx=$(ls /dev | grep -w sgx)
+	local res_isgx=$(ls /dev | grep -w isgx)
+	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ]; then
 		docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc3-pruntime
-	else
+	elif [ x"$res_isgx" == x"isgx" ] && [ x"$res_sgx" == x"" ]; then
 		docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc3-pruntime
+	else
+		log_err "----------sgx/dcap driver not install----------"
+		exit 1
 	fi
 
 	if [ $? -ne 0 ]; then
@@ -73,19 +77,23 @@ start_phala_pruntime()
 
 start_phala_pruntime_debug()
 {
-        log_info "----------Start phala pruntime----------"
+	log_info "----------Start phala pruntime----------"
 
-        res=$(ls /dev | grep sgx)
-        if [ x"$res" == x"sgx" ]; then
-                docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc3-pruntime
-        else
-                docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc3-pruntime
-        fi
+	local res_sgx=$(ls /dev | grep -w sgx)
+	local res_isgx=$(ls /dev | grep -w isgx)
+	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ]; then
+		docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc3-pruntime
+	elif [ x"$res_isgx" == x"isgx" ] && [ x"$res_sgx" == x"" ]; then
+		docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc3-pruntime
+	else
+		log_err "----------sgx/dcap driver not install----------"
+		exit 1
+	fi
 
-        if [ $? -ne 0 ]; then
-                log_err "----------Start phala pruntime failed----------"
-                exit 1
-        fi
+	if [ $? -ne 0 ]; then
+		log_err "----------Start phala pruntime failed----------"
+		exit 1
+	fi
 }
 
 start_phala_phost()
