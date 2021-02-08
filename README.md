@@ -78,6 +78,12 @@ sudo phala update
 sudo phala update clean
 ```
 
+###### Now you can auto update the script 
+
+```bash
+sudo phala update script
+```
+
 ##### Check the docker status
 
 ```bash

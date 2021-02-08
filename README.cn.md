@@ -73,6 +73,12 @@ sudo phala update
 sudo phala update clean
 ```
 
+###### 3.4.3 自动更新脚本
+
+```bash
+sudo phala update script
+```
+
 ##### 3.5 检查三件套状态
 
 ```bash
