@@ -18,15 +18,15 @@ config_show()
 config_set_all()
 {
 	local node_name=""
-	read -p "Enter phala node name (default:phala-node): " node_name
+	read -p "Enter phala node name: " node_name
+	while [[ x"$node_name" =~ \ |\' ]]; do
+		read -p "The node name can't contain spaces, please re-enter：" node_name
+	done
 	node_name=`echo "$node_name"`
-	if [ x"$node_name" == x"" ]; then
-		node_name="phala-node"
-	fi
 	sed -i "2c \\  \"nodename\" : \"$node_name\"," $basedir/config.json &>/dev/null
 	log_success "Set phala node name: '$node_name' successfully"
 	local ipaddr=""
-	read -p "Enter your local IP address 输入你的IP地址: " ipaddr
+	read -p "Enter your local IP address: " ipaddr
 	ipaddr=`echo "$ipaddr"`
 	if [ x"$ipaddr" == x"" ] || [ `echo $ipaddr | awk -F . '{print NF}'` -ne 4 ]; then
 		log_err "The IP address cannot be empty or the format is wrong"

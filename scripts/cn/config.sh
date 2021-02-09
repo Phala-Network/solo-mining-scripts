@@ -18,11 +18,11 @@ config_show()
 config_set_all()
 {
 	local node_name=""
-	read -p "输入节点名称（默认：phala-node）: " node_name
+	read -p "输入节点名称: " node_name
 	node_name=`echo "$node_name"`
-	if [ x"$node_name" == x"" ]; then
-		node_name="phala-node"
-	fi
+	while [[ x"$node_name" =~ \ |\' ]]; do
+		read -p "节点名称不能包含空格，请重新输入：" node_name
+	done
 	sed -i "2c \\  \"nodename\" : \"$node_name\"," $basedir/config.json &>/dev/null
 	log_success "设置节点名称为: '$node_name' 成功"
 	local ipaddr=""
