@@ -6,7 +6,6 @@ function echo_c()
 }
 
 function log_info()
-
 {
 	echo_c 33 "$1"
 } 
@@ -30,7 +29,6 @@ check_port() {
 	fi
 }
 
-## 0 for running, 2 for error, 1 for stop
 check_docker_status()
 {
 	local exist=`docker inspect --format '{{.State.Running}}' $1 2>/dev/null`
