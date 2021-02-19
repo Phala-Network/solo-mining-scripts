@@ -88,7 +88,7 @@ start_phala_node_debug()
 
 start_phala_pruntime()
 {
-	log_info "----------Start phala pruntime----------"
+	log_info "----------Start phala-pruntime----------"
 	if [ ! -z $(docker ps -qf "name=phala-pruntime") ]; then
 		log_info "---------phala-pruntime already exists----------"
 		exit 0
@@ -106,14 +106,14 @@ start_phala_pruntime()
 	fi
 
 	if [ $? -ne 0 ]; then
-		log_err "----------Start phala pruntime failed----------"
+		log_err "----------Start phala-pruntime failed----------"
 		exit 1
 	fi
 }
 
 start_phala_pruntime_debug()
 {
-	log_info "----------Start phala pruntime----------"
+	log_info "----------Start phala-pruntime----------"
 	if [ ! -z $(docker ps -qf "name=phala-pruntime") ]; then
 		log_info "---------phala-pruntime already exists----------"
 		exit 0
@@ -131,14 +131,14 @@ start_phala_pruntime_debug()
 	fi
 
 	if [ $? -ne 0 ]; then
-		log_err "----------Start phala pruntime failed----------"
+		log_err "----------Start phala-pruntime failed----------"
 		exit 1
 	fi
 }
 
 start_phala_phost()
 {
-	log_info "----------Start phala phost----------"
+	log_info "----------Start phala-phost----------"
 	if [ ! -z $(docker ps -qf "name=phala-phost") ]; then
 		log_info "---------phala-phost already exists----------"
 		exit 0
@@ -149,14 +149,14 @@ start_phala_phost()
 	docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
 
 	if [ $? -ne 0 ]; then
-		log_err "----------Start phala phost failed----------"
+		log_err "----------Start phala-phost failed----------"
 		exit 1
 	fi
 }
 
 start_phala_phost_debug()
 {
-	log_info "----------Start phala phost----------"
+	log_info "----------Start phala-phost----------"
 	if [ ! -z $(docker ps -qf "name=phala-phost") ]; then
 		log_info "---------phala-phost already exists----------"
 		exit 0
@@ -167,7 +167,7 @@ start_phala_phost_debug()
 	docker run -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
 
 	if [ $? -ne 0 ]; then
-		log_err "----------Start phala phost failed----------"
+		log_err "----------Start phala-phost failed----------"
 		exit 1
 	fi
 }

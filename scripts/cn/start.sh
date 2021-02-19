@@ -2,12 +2,12 @@
 
 start_phala_node()
 {
-	log_info "---------启动 phala node----------"
+	log_info "---------启动 phala-node----------"
 	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	
 	if [ ! -z $(docker ps -qf "name=phala-node") ]; then
-		log_info "---------phala node 已启动，等待同步----------"
+		log_info "---------phala-node 已启动，等待同步----------"
 		while true ; do
 			local block_json=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://$ipaddr:9933)
 			local node_block=$(echo $block_json | jq -r '.result.currentBlock')
@@ -24,7 +24,7 @@ start_phala_node()
 
 	docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-node
 	if [ $? -ne 0 ]; then
-		log_err "----------启动 phala node 失败-------------"
+		log_err "----------启动 phala-node 失败-------------"
 		exit 1
 	fi
 
@@ -45,12 +45,12 @@ start_phala_node()
 
 start_phala_node_debug()
 {
-	log_info "---------启动 phala node----------"
+	log_info "---------启动 phala-node----------"
 	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	
 	if [ ! -z $(docker ps -qf "name=phala-node") ]; then
-		log_info "---------phala node 已启动，等待同步----------"
+		log_info "---------phala-node 已启动，等待同步----------"
 		while true ; do
 			local block_json=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://$ipaddr:9933)
 			local node_block=$(echo $block_json | jq -r '.result.currentBlock')
@@ -67,7 +67,7 @@ start_phala_node_debug()
 
 	docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-node
 	if [ $? -ne 0 ]; then
-		log_err "----------启动 phala node 失败-------------"
+		log_err "----------启动 phala-node 失败-------------"
 		exit 1
 	fi
 
