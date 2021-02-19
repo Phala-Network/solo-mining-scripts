@@ -8,7 +8,6 @@ update_script()
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/phala/main.zip
 	unzip /tmp/phala/main.zip -d /tmp/phala
 	rm -rf /opt/phala/*
-	cp /tmp/phala/solo-mining-scripts-main/config.json /opt/phala
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
 	mv /opt/phala/scripts/phala.sh /usr/bin/phala
 	chmod +x /usr/bin/phala
