@@ -12,9 +12,6 @@ update_script()
 	mv /opt/phala/scripts/phala.sh /usr/bin/phala
 	chmod +x /usr/bin/phala
 	chmod +x /opt/phala/scripts/*
-	if [ $? -ne 0 ]; then
-		log_err "----------Failed to update phala script----------"
-	fi
 
 	log_success "----------Update success----------"
 	rm -rf /tmp/phala
