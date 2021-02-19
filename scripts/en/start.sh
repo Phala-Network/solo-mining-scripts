@@ -23,7 +23,7 @@ start_phala_node()
 	fi
 
 	config_set_all
-	docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-node
+	docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc3-node
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-node failed-------------"
 		exit 1
@@ -67,7 +67,7 @@ start_phala_node_debug()
 	fi
 
 	config_set_all
-	docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-node
+	docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc3-node
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-node failed-------------"
 		exit 1
