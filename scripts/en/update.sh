@@ -17,7 +17,6 @@ update_script()
 	rm -rf /tmp/phala
 }
 
-
 update_clean()
 {
 	log_info "----------Clean phala node images----------"
