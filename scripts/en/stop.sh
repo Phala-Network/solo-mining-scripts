@@ -29,7 +29,7 @@ stop_phala_phost()
 
 	if [ $? -ne 0 ]; then
 		log_err "----------Stop failed----------"
-		exit 0
+		exit 1
 	fi
 }
 
