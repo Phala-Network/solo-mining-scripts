@@ -7,7 +7,7 @@ update_script()
 	mkdir -p /tmp/phala
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/phala/main.zip
 	unzip /tmp/phala/main.zip -d /tmp/phala
-	rm -rf /opt/phala/*
+	rm -rf /opt/phala/scripts
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/cn /opt/phala/scripts
 	mv /opt/phala/scripts/phala.sh /usr/bin/phala
 	chmod +x /usr/bin/phala
