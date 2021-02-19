@@ -157,6 +157,7 @@ start()
 				start_phala_phost
 				;;
 			"")
+				config_set_all
 				start_phala_node
 				start_phala_pruntime
 				sleep 30
