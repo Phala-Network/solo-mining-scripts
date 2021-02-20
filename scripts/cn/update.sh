@@ -21,14 +21,14 @@ update_clean()
 {
 	log_info "----------删除 Docker 镜像----------"
 	log_info "关闭 phala-node phala-pruntime phala-phost"
-	docker kill phalaphost
-	docker kill phalapruntime
-	docker kill phalanode
+	docker kill phala-phost
+	docker kill phala-pruntime
+	docker kill phala-node
 	docker image prune -a
 
 	log_info "----------删除节点数据----------"
-	rm -r $HOME/phalanodedata
-	rm -r $HOME/phalapruntimedata
+	rm -r $HOME/phala-node-data
+	rm -r $HOME/phala-pruntime-data
 
 	local res=0
 	log_info "----------更新 Docker 镜像----------"
@@ -50,9 +50,9 @@ update_noclean()
 {
 	log_info "----------更新挖矿套件镜像----------"
 	log_info "关闭 phala-node phala-pruntime phala-phost"
-	docker kill phalaphost
-	docker kill phalapruntime
-	docker kill phalanode
+	docker kill phala-phost
+	docker kill phala-pruntime
+	docker kill phala-node
 	docker image prune -a
 
 	local res=0

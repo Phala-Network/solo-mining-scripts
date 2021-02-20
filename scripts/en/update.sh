@@ -21,14 +21,14 @@ update_clean()
 {
 	log_info "----------Clean phala node images----------"
 	log_info "Kill phala-node phala-pruntime phala-phost"
-	docker kill phalaphost
-	docker kill phalapruntime
-	docker kill phalanode
+	docker kill phala-phost
+	docker kill phala-pruntime
+	docker kill phala-node
 	docker image prune -a
 
 	log_info "----------Clean data----------"
-	rm -r $HOME/phalanodedata
-	rm -r $HOME/phalapruntimedata
+	rm -r $HOME/phala-node-data
+	rm -r $HOME/phala-pruntime-data
 
 	local res=0
 	log_info "----------Pull docker images----------"
@@ -50,9 +50,9 @@ update_noclean()
 {
 	log_info "----------Update phala node----------"
 	log_info "Kill phala-node phala-pruntime phala-phost"
-	docker kill phalaphost
-	docker kill phalapruntime
-	docker kill phalanode
+	docker kill phala-phost
+	docker kill phala-pruntime
+	docker kill phala-node
 	docker image prune -a
 
 	local res=0
