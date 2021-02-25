@@ -42,7 +42,7 @@ sgx_test()
 	local res_isgx=$(ls /dev | grep -w isgx)
 	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
-	elif [ x"$res_isgx" == x"isgx" ] && [ x"$res_sgx" == x"" ]; then
+	elif [ x"$res_isgx" == x"isgx" ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
 	else
 		log_err "----------sgx/dcap 驱动没有安装----------"

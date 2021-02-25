@@ -41,7 +41,7 @@ sgx_test()
 	local res_isgx=$(ls /dev | grep -w isgx)
 	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect
-	elif [ x"$res_isgx" == x"isgx" ] && [ x"$res_sgx" == x"" ]; then
+	elif [ x"$res_isgx" == x"isgx" ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect
 	else
 		log_err "----------sgx/dcap driver not install----------"
