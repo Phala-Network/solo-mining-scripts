@@ -5,6 +5,14 @@ start_phala_node()
 	log_info "---------启动 phala-node----------"
 	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+	if [ -z $node_name ] || [ -z $ipaddr ]; then
+		config_set_all
+		local node_name=$(cat $basedir/config.json | jq -r '.nodename')
+		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+	else
+		log_info "节点名：$node_name"
+		log_info "IP地址：$ipaddr"
+	fi
 	
 	if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 		log_info "---------phala-node 已启动，等待同步----------"
@@ -22,7 +30,6 @@ start_phala_node()
 		exit 0
 	fi
 
-	config_set_all
 	docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-node
 	if [ $? -ne 0 ]; then
 		log_err "----------启动 phala-node 失败-------------"
@@ -49,7 +56,15 @@ start_phala_node_debug()
 	log_info "---------启动 phala-node----------"
 	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-	
+        if [ -z $node_name ] || [ -z $ipaddr ]; then
+                config_set_all
+                local node_name=$(cat $basedir/config.json | jq -r '.nodename')
+                local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+        else
+                log_info "节点名：$node_name"
+                log_info "IP地址：$ipaddr"
+        fi
+
 	if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 		log_info "---------phala-node 已启动，等待同步----------"
 		while true ; do
@@ -66,7 +81,6 @@ start_phala_node_debug()
 		exit 0
 	fi
 
-	config_set_all
 	docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-node
 	if [ $? -ne 0 ]; then
 		log_err "----------启动 phala-node 失败-------------"
@@ -148,6 +162,11 @@ start_phala_phost()
 
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+	if [ -z $ipaddr ] || [ -z $mnemonic ]; then
+		config_set_all
+	        local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+	        local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+	fi
 	docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-phost
 	if [ $? -ne 0 ]; then
 		log_err "----------启动phost失败----------"
@@ -165,6 +184,11 @@ start_phala_phost_debug()
 
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+        if [ -z $ipaddr ] || [ -z $mnemonic ]; then
+                config_set_all
+                local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+                local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+        fi
 	docker run -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-phost
 	if [ $? -ne 0 ]; then
 		log_err "----------启动phost失败----------"
