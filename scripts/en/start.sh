@@ -162,7 +162,7 @@ start_phala_phost()
 
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-        if [ -z $node_name ] || [ -z $ipaddr ]; then
+        if [ -z $ipaddr ] || [ -z $mnemonic ]; then
                 config_set_all
 	        local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	        local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
@@ -185,7 +185,7 @@ start_phala_phost_debug()
 
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-        if [ -z $node_name ] || [ -z $ipaddr ]; then
+        if [ -z $ipaddr ] || [ -z $mnemonic ]; then
                 config_set_all
                 local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
                 local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
