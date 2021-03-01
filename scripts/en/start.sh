@@ -9,10 +9,9 @@ start_phala_node()
                 config_set_all
                 local node_name=$(cat $basedir/config.json | jq -r '.nodename')
                 local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-        else
-                log_info "your node name:$node_name"
-                log_info "your IP address:$ipaddr"
-        fi
+	fi
+        log_info "your node name:$node_name"
+        log_info "your IP address:$ipaddr"
 
 	if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 		log_info "---------phala-node already exists----------"
@@ -60,10 +59,9 @@ start_phala_node_debug()
                 config_set_all
                 local node_name=$(cat $basedir/config.json | jq -r '.nodename')
                 local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-        else
-                log_info "your node name:$node_name"
-                log_info "your IP address:$ipaddr"
-        fi
+	fi
+        log_info "your node name:$node_name"
+        log_info "your IP address:$ipaddr"
 
 	if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 		log_info "---------phala-node already exists----------"

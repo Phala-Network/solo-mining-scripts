@@ -9,10 +9,10 @@ start_phala_node()
 		config_set_all
 		local node_name=$(cat $basedir/config.json | jq -r '.nodename')
 		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-	else
-		log_info "节点名：$node_name"
-		log_info "IP地址：$ipaddr"
 	fi
+	log_info "节点名：$node_name"
+	log_info "IP地址：$ipaddr"
+
 	
 	if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 		log_info "---------phala-node 已启动，等待同步----------"
@@ -60,10 +60,9 @@ start_phala_node_debug()
                 config_set_all
                 local node_name=$(cat $basedir/config.json | jq -r '.nodename')
                 local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-        else
-                log_info "节点名：$node_name"
-                log_info "IP地址：$ipaddr"
-        fi
+	fi
+        log_info "节点名：$node_name"
+        log_info "IP地址：$ipaddr"
 
 	if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 		log_info "---------phala-node 已启动，等待同步----------"
