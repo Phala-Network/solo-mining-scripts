@@ -183,11 +183,11 @@ start_phala_phost_debug()
 
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-        if [ -z $ipaddr ] || [ -z $mnemonic ]; then
-                config_set_all
-                local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-                local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-        fi
+	if [ -z $ipaddr ] || [ -z $mnemonic ]; then
+		config_set_all
+		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+		local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+	fi
 	docker run -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-phost
 	if [ $? -ne 0 ]; then
 		log_err "----------启动phost失败----------"

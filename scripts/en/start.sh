@@ -5,10 +5,10 @@ start_phala_node()
 	log_info "---------Start phala-node----------"
 	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-        if [ -z $node_name ] || [ -z $ipaddr ]; then
-                config_set_all
-                local node_name=$(cat $basedir/config.json | jq -r '.nodename')
-                local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+	if [ -z $node_name ] || [ -z $ipaddr ]; then
+		config_set_all
+		local node_name=$(cat $basedir/config.json | jq -r '.nodename')
+		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	fi
         log_info "your node name:$node_name"
         log_info "your IP address:$ipaddr"
@@ -55,10 +55,10 @@ start_phala_node_debug()
 	log_info "---------Start phala-node----------"
 	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-        if [ -z $node_name ] || [ -z $ipaddr ]; then
-                config_set_all
-                local node_name=$(cat $basedir/config.json | jq -r '.nodename')
-                local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+	if [ -z $node_name ] || [ -z $ipaddr ]; then
+		config_set_all
+		local node_name=$(cat $basedir/config.json | jq -r '.nodename')
+		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	fi
         log_info "your node name:$node_name"
         log_info "your IP address:$ipaddr"
@@ -160,10 +160,10 @@ start_phala_phost()
 
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-        if [ -z $ipaddr ] || [ -z $mnemonic ]; then
-                config_set_all
-	        local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-	        local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+	if [ -z $ipaddr ] || [ -z $mnemonic ]; then
+		config_set_all
+		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+		local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
 	fi
 	docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
 
@@ -183,11 +183,11 @@ start_phala_phost_debug()
 
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-        if [ -z $ipaddr ] || [ -z $mnemonic ]; then
-                config_set_all
-                local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-                local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-        fi
+	if [ -z $ipaddr ] || [ -z $mnemonic ]; then
+		config_set_all
+		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+		local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+	fi
 	docker run -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
 
 	if [ $? -ne 0 ]; then
