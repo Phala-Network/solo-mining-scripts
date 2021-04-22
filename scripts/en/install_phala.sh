@@ -26,11 +26,11 @@ download_docker_images()
 	log_info "----------Download phala docker images----------"
 	local res=0
 
-	docker pull phalanetwork/phala-poc3-node
+	docker pull phalanetwork/phala-poc4-node
 	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc3-pruntime
+	docker pull phalanetwork/phala-poc4-pruntime
 	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc3-phost
+	docker pull phalanetwork/phala-poc4-phost
 	res=$(($?|$res))
 
 	if [ $res -ne 0 ]; then

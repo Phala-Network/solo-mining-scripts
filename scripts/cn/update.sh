@@ -32,11 +32,11 @@ update_clean()
 
 	local res=0
 	log_info "----------更新 Docker 镜像----------"
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-node
+	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-node
 	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-pruntime
+	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-pruntime
 	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-phost
+	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
 	res=$(($?|$res))
 
 	if [ $res -ne 0 ]; then
@@ -56,11 +56,11 @@ update_noclean()
 	docker image prune -a
 
 	local res=0
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-node
+	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-node
 	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-pruntime
+	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-pruntime
 	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc3-phost
+	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
 	res=$(($?|$res))
 
 	if [ $res -ne 0 ]; then

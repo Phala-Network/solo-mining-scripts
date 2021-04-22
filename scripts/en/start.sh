@@ -29,7 +29,7 @@ start_phala_node()
 		exit 0
 	fi
 
-	docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc3-node
+	docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc4-node
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-node failed-------------"
 		exit 1
@@ -79,7 +79,7 @@ start_phala_node_debug()
 		exit 0
 	fi
 
-	docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc3-node
+	docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc4-node
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-node failed-------------"
 		exit 1
@@ -111,9 +111,9 @@ start_phala_pruntime()
 	local res_sgx=$(ls /dev | grep -w sgx)
 	local res_isgx=$(ls /dev | grep -w isgx)
 	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ]; then
-		docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc3-pruntime
+		docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc4-pruntime
 	elif [ x"$res_isgx" == x"isgx" ] && [ x"$res_sgx" == x"" ]; then
-		docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc3-pruntime
+		docker run -d -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc4-pruntime
 	else
 		log_err "----------sgx/dcap driver not install----------"
 		exit 1
@@ -136,9 +136,9 @@ start_phala_pruntime_debug()
 	local res_sgx=$(ls /dev | grep -w sgx)
 	local res_isgx=$(ls /dev | grep -w isgx)
 	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ]; then
-		docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc3-pruntime
+		docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-poc4-pruntime
 	elif [ x"$res_isgx" == x"isgx" ] && [ x"$res_sgx" == x"" ]; then
-		docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc3-pruntime
+		docker run -ti --rm --name phala-pruntime -p 8000:8000 -v $HOME/phala-pruntime-data:/root/data --device /dev/isgx phalanetwork/phala-poc4-pruntime
 	else
 		log_err "----------sgx/dcap driver not install----------"
 		exit 1
@@ -165,7 +165,7 @@ start_phala_phost()
 		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 		local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
 	fi
-	docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
+	docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc4-phost
 
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-phost failed----------"
@@ -188,7 +188,7 @@ start_phala_phost_debug()
 		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 		local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
 	fi
-	docker run -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc3-phost
+	docker run -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc4-phost
 
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-phost failed----------"
