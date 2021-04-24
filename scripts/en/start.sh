@@ -160,24 +160,13 @@ start_phala_phost()
 
 	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-<<<<<<< HEAD
-<<<<<<< HEAD
-    if [ -z $ipaddr ] || [ -z $mnemonic ]; then
-        config_set_all
-	    local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-	    local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
-=======
-	if [ -z $ipaddr ] || [ -z $mnemonic ]; then
-=======
 	if [ -z $ipaddr ] || [ -z "$mnemonic" ]; then
->>>>>>> main
 		config_set_all
 		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
 		local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
->>>>>>> master
 	fi
+	
 	docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" phalanetwork/phala-poc4-phost
-
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-phost failed----------"
 		exit 1
