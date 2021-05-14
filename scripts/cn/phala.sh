@@ -12,6 +12,8 @@ source $scriptdir/update.sh
 source $scriptdir/logs.sh
 source $scriptdir/status.sh
 
+node_name=$(cat $basedir/config.json | jq -r '.nodename')
+
 help()
 {
 cat << EOF

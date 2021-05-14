@@ -162,13 +162,13 @@ install()
 	if [ x"$release" = x"18.04" ]; then
 		dcap_driverbin=sgx_linux_x64_driver_1.41.bin
 		dcap_driverurl=https://download.01.org/intel-sgx/latest/dcap-latest/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.41.bin
-		isgx_driverbin=sgx_linux_x64_driver_2.11.0_0373e2e.bin
-		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.11.0_0373e2e.bin
+		isgx_driverbin=sgx_linux_x64_driver_2.11.0_2d2b795.bin
+		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin
 	elif [ x"$release" = x"20.04" ]; then
 		dcap_driverbin=sgx_linux_x64_driver_1.41.bin
 		dcap_driverurl=https://download.01.org/intel-sgx/latest/dcap-latest/linux/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.41.bin
-		isgx_driverbin=sgx_linux_x64_driver_2.11.0_0373e2e.bin
-		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_0373e2e.bin
+		isgx_driverbin=sgx_linux_x64_driver_2.11.0_2d2b795.bin
+		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin
 	else
 		log_err "----------系统版本不支持----------"
 		exit 1
