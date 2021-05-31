@@ -29,7 +29,7 @@ start_phala_node()
 		exit 0
 	fi
 
-	docker run -ti --rm --name phala-node -d -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc4-node -e EXTRA_OPTS='--bootnodes "/ip4/49.232.173.187/tcp/30333/p2p/12D3KooWHgopFXoB8RZhEm5sFUY6T94FNfB3hafQGFFiBEk7PZL1"'
+	docker run -dti --rm --name phala-node -e NODE_NAME=$node_name -e EXTRA_OPTS=--bootnodes /ip4/49.232.173.187/tcp/30333/p2p/12D3KooWHgopFXoB8RZhEm5sFUY6T94FNfB3hafQGFFiBEk7PZL1 -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc4-node
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-node failed-------------"
 		exit 1
@@ -79,7 +79,7 @@ start_phala_node_debug()
 		exit 0
 	fi
 
-	docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc4-node -e EXTRA_OPTS='--bootnodes "/ip4/49.232.173.187/tcp/30333/p2p/12D3KooWHgopFXoB8RZhEm5sFUY6T94FNfB3hafQGFFiBEk7PZL1"'
+	docker run -ti --rm --name phala-node -e NODE_NAME=$node_name -e EXTRA_OPTS=--bootnodes /ip4/49.232.173.187/tcp/30333/p2p/12D3KooWHgopFXoB8RZhEm5sFUY6T94FNfB3hafQGFFiBEk7PZL1 -p 9933:9933 -p 9944:9944 -p 30333:30333 -v $HOME/phala-node-data:/root/data phalanetwork/phala-poc4-node
 	if [ $? -ne 0 ]; then
 		log_err "----------Start phala-node failed-------------"
 		exit 1
