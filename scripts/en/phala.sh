@@ -49,6 +49,41 @@ sgx_test()
 	fi
 }
 
+score_test()
+{
+	if [ $# != 1 ]; then
+		log_err "---------Parameter error----------"
+		exit 1
+	fi
+
+	docker -v
+	if [ $? -ne 0 ]; then
+		log_err "----------docker not install----------" 
+		install_depenencies
+	fi
+
+	local res_sgx=$(ls /dev | grep -w sgx)
+	local res_isgx=$(ls /dev | grep -w isgx)
+	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-dev-pruntime-bench
+	elif [ x"$res_isgx" == x"isgx" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx phalanetwork/phala-dev-pruntime-bench
+	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
+		log_err "----------sgx/dcap driver not install----------"
+		exit 1
+	fi
+
+	echo -e "\033[31m Affected by various environmental factors, the performance score may fluctuate to a certain extent! \
+	This rating is a preview version, and there may be changes in the preparation of the mainnet line! \033[0m"
+	echo "The rating is being updated, please wait a moment!"
+	sleep 30
+	while true; do
+		sleep 30
+		score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
+		printf "\rThe score of your machine is: %d" $score
+	done
+}
+
 case "$1" in
 	install)
 		install $2
@@ -74,6 +109,9 @@ case "$1" in
 		;;
 	uninstall)
 		$scriptdir/uninstall.sh
+		;;
+	score_test)
+		score_test $2
 		;;
 	sgx-test)
 		sgx_test

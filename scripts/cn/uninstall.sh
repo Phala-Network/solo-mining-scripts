@@ -16,6 +16,7 @@ if [ -f "$bin_file" ]; then
 	docker kill phala-phost
 	docker kill phala-pruntime
 	docker kill phala-node
+	docker kill phala-pruntime-bench
 	docker image prune -a
 	rm -r $HOME/phala-node-data
 	rm -r $HOME/phala-pruntime-data

@@ -35,7 +35,7 @@ sgx_test()
 	docker -v
 	if [ $? -ne 0 ]; then
 		log_err "----------docker 没有安装----------" 
-		exit 1
+		install_depenencies
 	fi
 
 	local res_sgx=$(ls /dev | grep -w sgx)
@@ -46,8 +46,42 @@ sgx_test()
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
 	else
 		log_err "----------sgx/dcap 驱动没有安装----------"
+		install_driver
+	fi
+}
+
+score_test()
+{
+	if [ $# != 1 ]; then
+		log_err "---------缺少重要参数！----------"
 		exit 1
 	fi
+
+	docker -v
+	if [ $? -ne 0 ]; then
+		log_err "----------docker 没有安装----------" 
+		install_depenencies
+	fi
+
+	local res_sgx=$(ls /dev | grep -w sgx)
+	local res_isgx=$(ls /dev | grep -w isgx)
+	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+	elif [ x"$res_isgx" == x"isgx" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
+		log_err "----------sgx/dcap 驱动没有安装----------"
+		exit 1
+	fi
+
+	echo -e "\033[31m 受各种环境因素影响，性能评分有可能产生一定程度的波动！此评分为预览版本，预备主网上线有变化的可能！ \033[0m"
+	echo "评分更新中，请稍等！"
+	sleep 30
+	while true; do
+		sleep 30
+		score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
+		printf "\r您评分为: %d" $score
+	done
 }
 
 case "$1" in
@@ -75,6 +109,9 @@ case "$1" in
 		;;
 	uninstall)
 		$scriptdir/uninstall.sh
+		;;
+	score_test)
+		score_test $2
 		;;
 	sgx-test)
 		sgx_test

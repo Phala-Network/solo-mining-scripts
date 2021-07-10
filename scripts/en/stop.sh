@@ -22,6 +22,17 @@ stop_phala_pruntime()
 	fi
 }
 
+stop_phala_pruntime_bench()
+{
+	log_info "----------Stop phala pruntime-bench----------"
+	docker kill phala-pruntime-bench
+
+	if [ $? -ne 0 ]; then
+		log_err "----------Stop failed----------"
+		exit 1
+	fi
+}
+
 stop_phala_phost()
 {
 	log_info "----------Stop phala phost----------"
@@ -45,10 +56,14 @@ stop()
 		phost)
 			stop_phala_phost
 			;;
+		phost-bench)
+			stop_phala_pruntime_bench
+			;;
 		"")
 			stop_phala_node
 			stop_phala_pruntime
 			stop_phala_phost
+			stop_phala_pruntime_bench
 			break
 			;;
 		*)
