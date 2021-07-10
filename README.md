@@ -27,6 +27,14 @@ chmod +x install.sh
 sudo ./install.sh en
 ```
 
+#### Get the scores of your machine 
+
+Note: The number of cores depends on your machine.
+
+```bash
+sudo phala score_test [the number of your cores]
+```
+
 #### How to use
 
 ##### Install

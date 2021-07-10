@@ -115,6 +115,13 @@ sudo phala install
 sudo phala sgx-test
 ```
 
+##### 3.9 获取主板得分
+- 安装phala命令后执行以下命令，注意：核心数量根据主板情况而定
+
+```bash
+sudo phala score_test [需要使用的核心数量]
+```
+
 #### 四、最简安装步骤
 
 一台全新矿机配置步骤
