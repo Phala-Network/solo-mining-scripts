@@ -35,7 +35,7 @@ sgx_test()
 	docker -v
 	if [ $? -ne 0 ]; then
 		log_err "----------docker 没有安装----------" 
-		install_depenencies
+		exit 1
 	fi
 
 	local res_sgx=$(ls /dev | grep -w sgx)
@@ -46,14 +46,14 @@ sgx_test()
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
 	else
 		log_err "----------sgx/dcap 驱动没有安装----------"
-		install_driver
+		exit 1
 	fi
 }
 
 score_test()
 {
 	if [ $# != 1 ]; then
-		log_err "---------缺少重要参数！----------"
+		log_err "---------请填写要使用的机器核心的数量！----------"
 		exit 1
 	fi
 

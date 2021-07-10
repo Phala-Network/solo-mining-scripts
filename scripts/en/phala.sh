@@ -52,7 +52,7 @@ sgx_test()
 score_test()
 {
 	if [ $# != 1 ]; then
-		log_err "---------Parameter error----------"
+		log_err "---------The parameter of the number of machine cores is missing.----------"
 		exit 1
 	fi
 
