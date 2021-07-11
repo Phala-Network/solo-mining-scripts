@@ -56,7 +56,7 @@ stop()
 		phost)
 			stop_phala_phost
 			;;
-		phost-bench)
+		pruntime-bench)
 			stop_phala_pruntime_bench
 			;;
 		"")

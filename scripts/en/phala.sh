@@ -73,8 +73,7 @@ score_test()
 		exit 1
 	fi
 
-	echo -e "\033[31m Affected by various environmental factors, the performance score may fluctuate to a certain extent! \
-	This rating is a preview version, and there may be changes in the preparation of the mainnet line! \033[0m"
+	echo -e "\033[31m The performance score could be influnced by various factors, including the CPU tempreture, power supply, and the background processes in your system. So it may fluctuate at the beginning, but it will be stablized after running for a while.\n The benchmark algorithm is still experimental and may be subject to future changes. \033[0m"
 	echo "The rating is being updated, please wait a moment!"
 	sleep 30
 	while true; do
