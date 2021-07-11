@@ -71,17 +71,31 @@ score_test()
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
 		log_err "----------sgx/dcap 驱动没有安装----------"
-		exit 1
+		install_driver
+		score_test $1
 	fi
 
 	echo -e "\033[31m 受各种环境因素影响，性能评分有可能产生一定程度的波动！此评分为预览版本，预备主网上线有变化的可能！ \033[0m"
 	echo "评分更新中，请稍等！"
-	sleep 30
-	while true; do
-		sleep 30
-		score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
-		printf "\r您评分为: %d" $score
-	done
+	sleep 60
+	score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
+	printf "您评分为: %d \n" $score
+	if [ -z $(docker ps -qf "name=phala-node") ] || [ -z $(docker ps -qf "name=phala-phost") ] || [ -z $(docker ps -qf "name=phala-pruntime") ]; then
+		log_err "---------您的节点还未完全启动，无法为您上传评分，请先启动节点！----------"
+		exit 1
+	elif read -t 10 -p "您是否愿意上传您的评分到PhalaNetwork(默认10秒后自动上传)？ [Y/n] " input; then
+		case $input in
+			[yY][eE][sS]|[yY])
+				$basedir/reportsystemlog.sh
+				log_info "----------上传成功！----------"
+				;;
+			[nN][oO]|[nN])
+				log_info "----------取消上传评分！----------"
+				;;
+		esac
+	else
+		$basedir/reportsystemlog.sh
+	fi
 }
 
 case "$1" in
@@ -121,6 +135,7 @@ case "$1" in
 		;;
 	*)
 		help
+		;;
 esac
 
 exit 0

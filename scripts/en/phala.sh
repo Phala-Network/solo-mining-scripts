@@ -70,18 +70,31 @@ score_test()
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx phalanetwork/phala-dev-pruntime-bench
 	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
 		log_err "----------sgx/dcap driver not install----------"
-		exit 1
+		install_driver
+		score_test $1
 	fi
 
-	echo -e "\033[31m Affected by various environmental factors, the performance score may fluctuate to a certain extent! \
-	This rating is a preview version, and there may be changes in the preparation of the mainnet line! \033[0m"
+	echo -e "\033[31m The performance score could be influnced by various factors, including the CPU tempreture, power supply, and the background processes in your system. So it may fluctuate at the beginning, but it will be stablized after running for a while.\n The benchmark algorithm is still experimental and may be subject to future changes. \033[0m"
 	echo "The rating is being updated, please wait a moment!"
-	sleep 30
-	while true; do
-		sleep 30
-		score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
-		printf "\rThe score of your machine is: %d" $score
-	done
+	sleep 60
+	score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
+	printf "\rThe score of your machine is: %d" $score
+	if [ -z $(docker ps -qf "name=phala-node") ] || [ -z $(docker ps -qf "name=phala-phost") ] || [ -z $(docker ps -qf "name=phala-pruntime") ]; then
+		log_err "---------Your node has not been fully started, and cannot upload the score for you, please start the node first!----------"
+		exit 1
+	elif read -t 10 -p "Would you like to upload your score to PhalaNetwork (automatically upload after 10 seconds by default)? [Y/n] " input; then
+		case $input in
+			[yY][eE][sS]|[yY])
+				$basedir/reportsystemlog.sh
+				log_info "----------Upload success！----------"
+				;;
+			[nN][oO]|[nN])
+				log_info "----------Cancel upload！----------"
+				;;
+		esac
+	else
+		$basedir/reportsystemlog.sh
+	fi
 }
 
 case "$1" in
@@ -121,6 +134,7 @@ case "$1" in
 		;;
 	*)
 		help
+		;;
 esac
 
 exit 0

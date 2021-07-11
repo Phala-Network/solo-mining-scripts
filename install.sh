@@ -26,6 +26,7 @@ install_cnphala_scripts()
 	echo "安装新的 Phala 脚本"
 	mkdir -p $installdir
 	cp $basedir/config.json $installdir/
+	cp $basedir/reportsystemlog.sh $installdir/
 	cp -r $basedir/scripts/cn $installdir/scripts
 	chmod 777 -R $installdir
 
@@ -47,6 +48,7 @@ install_enphala_scripts()
 	echo "Install new phala node"
 	mkdir -p $installdir
 	cp $basedir/config.json $installdir/
+	cp $basedir/reportsystemlog.sh $installdir/
 	cp -r $basedir/scripts/en $installdir/scripts
 	chmod 777 -R $installdir
 
