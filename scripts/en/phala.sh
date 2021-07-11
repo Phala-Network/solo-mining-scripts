@@ -70,7 +70,8 @@ score_test()
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx phalanetwork/phala-dev-pruntime-bench
 	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
 		log_err "----------sgx/dcap driver not install----------"
-		exit 1
+		install_driver
+		score_test $1
 	fi
 
 	echo -e "\033[31m The performance score could be influnced by various factors, including the CPU tempreture, power supply, and the background processes in your system. So it may fluctuate at the beginning, but it will be stablized after running for a while.\n The benchmark algorithm is still experimental and may be subject to future changes. \033[0m"
@@ -133,6 +134,7 @@ case "$1" in
 		;;
 	*)
 		help
+		;;
 esac
 
 exit 0
