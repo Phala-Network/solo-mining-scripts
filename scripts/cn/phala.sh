@@ -71,7 +71,8 @@ score_test()
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
 		log_err "----------sgx/dcap 驱动没有安装----------"
-		exit 1
+		install_driver
+		score_test $1
 	fi
 
 	echo -e "\033[31m 受各种环境因素影响，性能评分有可能产生一定程度的波动！此评分为预览版本，预备主网上线有变化的可能！ \033[0m"
