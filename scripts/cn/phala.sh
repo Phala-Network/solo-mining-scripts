@@ -143,9 +143,6 @@ case "$1" in
 	sgx-test)
 		sgx_test
 		;;
-	help)
-		help
-		;;
 	*)
 		help
 		;;

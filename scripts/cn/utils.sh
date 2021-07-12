@@ -1,21 +1,21 @@
 #!/bin/bash
 
-function echo_c()
+echo_c()
 {
 	printf "\033[0;$1m$2\033[0m\n"
 }
 
-function log_info()
+log_info()
 {
 	echo_c 33 "$1"
 }
 
-function log_success()
+log_success()
 {
 	echo_c 32 "$1"
 }
 
-function log_err()
+log_err()
 {
 	echo_c 35 "$1"
 }
