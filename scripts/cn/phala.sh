@@ -36,6 +36,7 @@ reportsystemlog()
 	elif [ x"$(ls /dev | grep -w isgx)" == x"isgx" ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-isgx.inf
 	fi
+	echo $score > /tmp/systemlog/score$ti.inf
 	zip -r /tmp/systemlog$ti.zip /tmp/systemlog/*
 	fln="file=@/tmp/systemlog"$ti".zip"
 	echo $fln
@@ -134,7 +135,7 @@ case "$1" in
 		logs $2
 		;;
 	uninstall)
-		$scriptdir/uninstall.sh
+		uninstall
 		;;
 	score_test)
 		score_test $2

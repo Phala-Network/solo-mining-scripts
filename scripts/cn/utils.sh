@@ -8,7 +8,7 @@ function echo_c()
 function log_info()
 {
 	echo_c 33 "$1"
-} 
+}
 
 function log_success()
 {
@@ -18,15 +18,6 @@ function log_success()
 function log_err()
 {
 	echo_c 35 "$1"
-}
-
-check_port() {
-	local port=$1
-	local grep_port=`netstat -tlpn | grep "\b$port\b"`
-	if [ -n "$grep_port" ]; then
-		echo "[ERROR] please make sure port $port is not occupied"
-		return 1
-	fi
 }
 
 check_docker_status()

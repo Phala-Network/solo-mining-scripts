@@ -3,14 +3,7 @@
 basedir=/opt/phala
 scriptdir=$basedir/scripts
 
-source $scriptdir/utils.sh
-source $scriptdir/config.sh
-source $scriptdir/install_phala.sh
-source $scriptdir/start.sh
-source $scriptdir/stop.sh
-source $scriptdir/update.sh
-source $scriptdir/logs.sh
-source $scriptdir/status.sh
+source $scriptdir/*
 
 help()
 {
@@ -18,6 +11,7 @@ cat << EOF
 Usage:
 	help					show help information
 	install {init|isgx|dcap}		install your phala node
+	uninstall               		uninstall your phala scripts
 	start {node|pruntime|phost}{debug}	start your node module(debug parameter output command logs)
 	stop {node|pruntime|phost}		use docker kill to stop module
 	config					configure your phala node
@@ -28,6 +22,7 @@ Usage:
 EOF
 exit 0
 }
+
 
 sgx_test()
 {
@@ -47,6 +42,29 @@ sgx_test()
 		log_err "----------sgx/dcap driver not install----------"
 		exit 1
 	fi
+}
+
+reportsystemlog()
+{
+	mkdir /tmp/systemlog
+	ti=$(date +%s)
+	dmidecode > /tmp/systemlog/system$ti.inf
+	if [ -z $(docker ps -qf "name=phala-node") ]; then docker logs phala-node --tail 50000 > /tmp/systemlog/node$ti.inf; fi
+	if [ -z $(docker ps -qf "name=phala-phost") ]; then docker logs phala-phost --tail 50000 > /tmp/systemlog/phost$ti.inf; fi
+	if [ -z $(docker ps -qf "name=phala-pruntime") ]; then docker logs phala-pruntime --tail 50000 > /tmp/systemlog/pruntime$ti.inf; fi
+	if [ x"$(ls /dev | grep -w sgx)" == x"sgx" ]; then
+		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-dcap.inf
+	elif [ x"$(ls /dev | grep -w isgx)" == x"isgx" ]; then
+		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-isgx.inf
+	fi
+	echo $score > /tmp/systemlog/score$ti.inf
+	zip -r /tmp/systemlog$ti.zip /tmp/systemlog/*
+	fln="file=@/tmp/systemlog"$ti".zip"
+	echo $fln
+	sleep 10
+	curl -F $fln http://118.24.253.211:10128/upload?token=1145141919
+	rm /tmp/systemlog$ti.zip
+	rm -r /tmp/systemlog
 }
 
 score_test()
@@ -82,7 +100,7 @@ score_test()
 	if read -t 10 -p "Would you like to upload your score to PhalaNetwork (automatically upload after 10 seconds by default)? [Y/n] " input; then
 		case $input in
 			[yY][eE][sS]|[yY])
-				$basedir/reportsystemlog.sh
+				reportsystemlog
 				log_info "----------Upload success！----------"
 				;;
 			[nN][oO]|[nN])
@@ -90,7 +108,7 @@ score_test()
 				;;
 		esac
 	else
-		$basedir/reportsystemlog.sh
+		reportsystemlog
 	fi
 }
 
@@ -118,16 +136,13 @@ case "$1" in
 		logs $2
 		;;
 	uninstall)
-		$scriptdir/uninstall.sh
+		uninstall
 		;;
 	score_test)
 		score_test $2
 		;;
 	sgx-test)
 		sgx_test
-		;;
-	help)
-		help
 		;;
 	*)
 		help
