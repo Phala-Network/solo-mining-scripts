@@ -29,8 +29,8 @@ install_cnphala_scripts()
 	cp -r $basedir/scripts/cn $installdir/scripts
 
 	echo "安装 Phala 命令行工具"
-	chmod +x $scriptdir/phala.sh
-	ln -s $scriptdir/phala.sh /usr/bin/phala
+	chmod +x $installdir/scripts/phala.sh
+	ln -s $installdir/scripts/phala.sh /usr/bin/phala
 
 	echo "------------安装成功-------------"
 }
@@ -49,8 +49,8 @@ install_enphala_scripts()
 	cp -r $basedir/scripts/en $installdir/scripts
 
 	echo "Install phala command line tool"
-	chmod +x $scriptdir/phala.sh
-	ln -s $scriptdir/phala.sh /usr/bin/phala
+	chmod +x $installdir/scripts/phala.sh
+	ln -s $installdir/scripts/phala.sh /usr/bin/phala
 
 	echo "------------Install success-------------"
 }

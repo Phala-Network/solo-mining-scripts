@@ -3,7 +3,7 @@
 installdir=/opt/phala
 scriptdir=$installdir/scripts
 
-source $scriptdir/*
+source $scriptdir/*.sh
 
 help()
 {
