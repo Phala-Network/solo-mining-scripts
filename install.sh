@@ -19,20 +19,18 @@ install_cnphala_scripts()
 {
 	echo "--------------安装 phala 脚本程序-------------"
 
-	if [ -f "$installdir/scripts/uninstall.sh" ]; then
+	if [ -f /usr/bin/phala ]; then
 		echo "删除旧的 Phala 脚本"
-		$installdir/scripts/uninstall.sh
+		phala uninstall
 	fi
 	echo "安装新的 Phala 脚本"
 	mkdir -p $installdir
 	cp $basedir/config.json $installdir/
-	cp $basedir/reportsystemlog.sh $installdir/
 	cp -r $basedir/scripts/cn $installdir/scripts
-	chmod 777 -R $installdir
 
 	echo "安装 Phala 命令行工具"
-	cp $scriptdir/cn/phala.sh /usr/bin/phala
-	chmod 777 /usr/bin/phala
+	chmod +x $scriptdir/phala.sh
+	ln -s $scriptdir/phala.sh /usr/bin/phala
 
 	echo "------------安装成功-------------"
 }
@@ -41,20 +39,18 @@ install_enphala_scripts()
 {
 	echo "--------------Install phala node-------------"
 
-	if [ -f "$installdir/scripts/uninstall.sh" ]; then
+	if [ -f /usr/bin/phala ]; then
 		echo "Uninstall old phala node"
-		$installdir/scripts/uninstall.sh
+		phala uninstall
 	fi
 	echo "Install new phala node"
 	mkdir -p $installdir
 	cp $basedir/config.json $installdir/
-	cp $basedir/reportsystemlog.sh $installdir/
 	cp -r $basedir/scripts/en $installdir/scripts
-	chmod 777 -R $installdir
 
 	echo "Install phala command line tool"
-	cp $scriptdir/en/phala.sh /usr/bin/phala
-	chmod 777 /usr/bin/phala
+	chmod +x $scriptdir/phala.sh
+	ln -s $scriptdir/phala.sh /usr/bin/phala
 
 	echo "------------Install success-------------"
 }
@@ -66,9 +62,6 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 case "$1" in
-	help)
-		help
-		;;
 	"cn")
 		install_cnphala_scripts
 		;;
@@ -79,5 +72,3 @@ case "$1" in
 		help
 		;;
 esac
-
-exit 0
