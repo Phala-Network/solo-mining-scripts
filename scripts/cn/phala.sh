@@ -3,14 +3,7 @@
 basedir=/opt/phala
 scriptdir=$basedir/scripts
 
-source $scriptdir/utils.sh
-source $scriptdir/config.sh
-source $scriptdir/install_phala.sh
-source $scriptdir/start.sh
-source $scriptdir/stop.sh
-source $scriptdir/update.sh
-source $scriptdir/logs.sh
-source $scriptdir/status.sh
+source $scriptdir/*
 
 help()
 {
@@ -28,6 +21,28 @@ Usage:
 	sgx-test				运行挖矿测试程序
 EOF
 exit 0
+}
+
+reportsystemlog()
+{
+	mkdir /tmp/systemlog
+	ti=$(date +%s)
+	dmidecode > /tmp/systemlog/system$ti.inf
+	if [ -z $(docker ps -qf "name=phala-node") ]; then docker logs phala-node --tail 50000 > /tmp/systemlog/node$ti.inf; fi
+	if [ -z $(docker ps -qf "name=phala-phost") ]; then docker logs phala-phost --tail 50000 > /tmp/systemlog/phost$ti.inf; fi
+	if [ -z $(docker ps -qf "name=phala-pruntime") ]; then docker logs phala-pruntime --tail 50000 > /tmp/systemlog/pruntime$ti.inf; fi
+	if [ x"$(ls /dev | grep -w sgx)" == x"sgx" ]; then
+		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-dcap.inf
+	elif [ x"$(ls /dev | grep -w isgx)" == x"isgx" ]; then
+		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-isgx.inf
+	fi
+	zip -r /tmp/systemlog$ti.zip /tmp/systemlog/*
+	fln="file=@/tmp/systemlog"$ti".zip"
+	echo $fln
+	sleep 10
+	curl -F $fln http://118.24.253.211:10128/upload?token=1145141919
+	rm /tmp/systemlog$ti.zip
+	rm -r /tmp/systemlog
 }
 
 sgx_test()
@@ -86,7 +101,7 @@ score_test()
 	elif read -t 10 -p "您是否愿意上传您的评分到PhalaNetwork(默认10秒后自动上传)？ [Y/n] " input; then
 		case $input in
 			[yY][eE][sS]|[yY])
-				$basedir/reportsystemlog.sh
+				reportsystemlog
 				log_info "----------上传成功！----------"
 				;;
 			[nN][oO]|[nN])
@@ -94,7 +109,7 @@ score_test()
 				;;
 		esac
 	else
-		$basedir/reportsystemlog.sh
+		reportsystemlog
 	fi
 }
 
