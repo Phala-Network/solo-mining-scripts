@@ -95,10 +95,7 @@ score_test()
 	sleep 60
 	score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
 	printf "您评分为: %d \n" $score
-	if [ -z $(docker ps -qf "name=phala-node") ] || [ -z $(docker ps -qf "name=phala-phost") ] || [ -z $(docker ps -qf "name=phala-pruntime") ]; then
-		log_err "---------您的节点还未完全启动，无法为您上传评分，请先启动节点！----------"
-		exit 1
-	elif read -t 10 -p "您是否愿意上传您的评分到PhalaNetwork(默认10秒后自动上传)？ [Y/n] " input; then
+	if read -t 10 -p "您是否愿意上传您的评分到PhalaNetwork(默认10秒后自动上传)？ [Y/n] " input; then
 		case $input in
 			[yY][eE][sS]|[yY])
 				reportsystemlog

@@ -79,10 +79,7 @@ score_test()
 	sleep 60
 	score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
 	printf "\rThe score of your machine is: %d" $score
-	if [ -z $(docker ps -qf "name=phala-node") ] || [ -z $(docker ps -qf "name=phala-phost") ] || [ -z $(docker ps -qf "name=phala-pruntime") ]; then
-		log_err "---------Your node has not been fully started, and cannot upload the score for you, please start the node first!----------"
-		exit 1
-	elif read -t 10 -p "Would you like to upload your score to PhalaNetwork (automatically upload after 10 seconds by default)? [Y/n] " input; then
+	if read -t 10 -p "Would you like to upload your score to PhalaNetwork (automatically upload after 10 seconds by default)? [Y/n] " input; then
 		case $input in
 			[yY][eE][sS]|[yY])
 				$basedir/reportsystemlog.sh
