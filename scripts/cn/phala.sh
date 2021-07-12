@@ -36,9 +36,9 @@ reportsystemlog()
 	mkdir /tmp/systemlog
 	ti=$(date +%s)
 	dmidecode > /tmp/systemlog/system$ti.inf
-	if [ ! -z $(docker ps -qf "name=phala-node") ]; then docker logs phala-node --tail 50000 > /tmp/systemlog/node$ti.inf; fi
-	if [ ! -z $(docker ps -qf "name=phala-phost") ]; then docker logs phala-phost --tail 50000 > /tmp/systemlog/phost$ti.inf; fi
-	if [ ! -z $(docker ps -qf "name=phala-pruntime") ]; then docker logs phala-pruntime --tail 50000 > /tmp/systemlog/pruntime$ti.inf; fi
+	docker logs phala-node --tail 50000 > /tmp/systemlog/node$ti.inf
+	docker logs phala-phost --tail 50000 > /tmp/systemlog/phost$ti.inf
+	docker logs phala-pruntime --tail 50000 > /tmp/systemlog/pruntime$ti.inf
 	if [ x"$(ls /dev | grep -w sgx)" == x"sgx" ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-dcap.inf
 	elif [ x"$(ls /dev | grep -w isgx)" == x"isgx" ]; then
