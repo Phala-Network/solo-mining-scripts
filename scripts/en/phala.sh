@@ -65,7 +65,7 @@ reportsystemlog()
 	elif [ x"$(ls /dev | grep -w isgx)" == x"isgx" ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-isgx.inf
 	fi
-	echo $score > /tmp/systemlog/score$ti.inf
+	echo "$1 $score" > /tmp/systemlog/score$ti.inf
 	zip -r /tmp/systemlog$ti.zip /tmp/systemlog/*
 	fln="file=@/tmp/systemlog"$ti".zip"
 	echo $fln
@@ -102,13 +102,13 @@ score_test()
 
 	echo -e "\033[31m The performance score could be influnced by various factors, including the CPU tempreture, power supply, and the background processes in your system. So it may fluctuate at the beginning, but it will be stablized after running for a while.\n The benchmark algorithm is still experimental and may be subject to future changes. \033[0m"
 	echo "The rating is being updated, please wait a moment!"
-	sleep 60
+	sleep 90
 	score=$(curl -d '{"input": {}, "nonce": {}}' -H "Content-Type: application/json"  http://localhost:8001/get_info 2>/dev/null | jq -r .payload | jq .score)
 	printf "\rThe score of your machine is: %d" $score
 	if read -t 10 -p "Would you like to upload your score to PhalaNetwork (automatically upload after 10 seconds by default)? [Y/n] " input; then
 		case $input in
 			[yY][eE][sS]|[yY])
-				reportsystemlog
+				reportsystemlog $1
 				log_info "----------Upload success！----------"
 				;;
 			[nN][oO]|[nN])
@@ -116,7 +116,7 @@ score_test()
 				;;
 		esac
 	else
-		reportsystemlog
+		reportsystemlog $1
 	fi
 }
 
