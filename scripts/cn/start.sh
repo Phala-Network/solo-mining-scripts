@@ -3,12 +3,12 @@
 start_phala_node()
 {
 	log_info "---------启动 phala-node----------"
-	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
-	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+	local node_name=$(cat $installdir/config.json | jq -r '.nodename')
+	local ipaddr=$(cat $installdir/config.json | jq -r '.ipaddr')
 	if [ -z $node_name ] || [ -z $ipaddr ]; then
 		config_set_all
-		local node_name=$(cat $basedir/config.json | jq -r '.nodename')
-		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+		local node_name=$(cat $installdir/config.json | jq -r '.nodename')
+		local ipaddr=$(cat $installdir/config.json | jq -r '.ipaddr')
 	fi
 	log_info "节点名：$node_name"
 	log_info "IP地址：$ipaddr"
@@ -54,12 +54,12 @@ start_phala_node()
 start_phala_node_debug()
 {
 	log_info "---------启动 phala-node----------"
-	local node_name=$(cat $basedir/config.json | jq -r '.nodename')
-	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+	local node_name=$(cat $installdir/config.json | jq -r '.nodename')
+	local ipaddr=$(cat $installdir/config.json | jq -r '.ipaddr')
 	if [ -z $node_name ] || [ -z $ipaddr ]; then
 		config_set_all
-		local node_name=$(cat $basedir/config.json | jq -r '.nodename')
-		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
+		local node_name=$(cat $installdir/config.json | jq -r '.nodename')
+		local ipaddr=$(cat $installdir/config.json | jq -r '.ipaddr')
 	fi
         log_info "节点名：$node_name"
         log_info "IP地址：$ipaddr"
@@ -159,12 +159,12 @@ start_phala_phost()
 		exit 0
 	fi
 
-	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+	local ipaddr=$(cat $installdir/config.json | jq -r '.ipaddr')
+	local mnemonic=$(cat $installdir/config.json | jq -r '.mnemonic')
 	if [ -z $ipaddr ] || [ -z "$mnemonic" ]; then
 		config_set_all
-	    local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-	    local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+	    local ipaddr=$(cat $installdir/config.json | jq -r '.ipaddr')
+	    local mnemonic=$(cat $installdir/config.json | jq -r '.mnemonic')
 	fi
 	docker run -d -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
 	if [ $? -ne 0 ]; then
@@ -181,12 +181,12 @@ start_phala_phost_debug()
 		exit 0
 	fi
 
-	local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-	local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+	local ipaddr=$(cat $installdir/config.json | jq -r '.ipaddr')
+	local mnemonic=$(cat $installdir/config.json | jq -r '.mnemonic')
 	if [ -z $ipaddr ] || [ -z "$mnemonic" ]; then
 		config_set_all
-		local ipaddr=$(cat $basedir/config.json | jq -r '.ipaddr')
-		local mnemonic=$(cat $basedir/config.json | jq -r '.mnemonic')
+		local ipaddr=$(cat $installdir/config.json | jq -r '.ipaddr')
+		local mnemonic=$(cat $installdir/config.json | jq -r '.mnemonic')
 	fi
 	docker run -ti --rm --name phala-phost -e PRUNTIME_ENDPOINT="http://$ipaddr:8000" -e PHALA_NODE_WS_ENDPOINT="ws://$ipaddr:9944" -e MNEMONIC="$mnemonic" -e EXTRA_OPTS="-r" swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
 	if [ $? -ne 0 ]; then

@@ -12,7 +12,7 @@ EOF
 
 config_show()
 {
-	cat $basedir/config.json | jq .
+	cat $installdir/config.json | jq .
 }
 
 config_set_all()
@@ -23,7 +23,7 @@ config_set_all()
 		read -p "The node name can't contain spaces, please re-enter：" node_name
 	done
 	node_name=`echo "$node_name"`
-	sed -i "2c \\  \"nodename\" : \"$node_name\"," $basedir/config.json &>/dev/null
+	sed -i "2c \\  \"nodename\" : \"$node_name\"," $installdir/config.json &>/dev/null
 	log_success "Set phala node name: '$node_name' successfully"
 	local ipaddr=""
 	read -p "Enter your local IP address: " ipaddr
@@ -32,7 +32,7 @@ config_set_all()
 		log_err "The IP address cannot be empty or the format is wrong"
 		exit 1
 	fi
-	sed -i "3c \\  \"ipaddr\" : \"$ipaddr\"," $basedir/config.json &>/dev/null
+	sed -i "3c \\  \"ipaddr\" : \"$ipaddr\"," $installdir/config.json &>/dev/null
 	log_success "Set IP address: '$ipaddr' successfully"
 
 	local mnemonic=""
@@ -42,7 +42,7 @@ config_set_all()
 		log_err "Mnemonic cannot be empty"
 		exit 1
 	fi
-	sed -i "4c \\  \"mnemonic\" : \"$mnemonic\"" $basedir/config.json &>/dev/null
+	sed -i "4c \\  \"mnemonic\" : \"$mnemonic\"" $installdir/config.json &>/dev/null
 	log_success "Set your controllor mnemonic: '$mnemonic' successfully"
 }
 

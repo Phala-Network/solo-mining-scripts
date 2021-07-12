@@ -1,7 +1,7 @@
 #!/bin/bash
 
-basedir=/opt/phala
-scriptdir=$basedir/scripts
+installdir=/opt/phala
+scriptdir=$installdir/scripts
 
 source $scriptdir/*
 
