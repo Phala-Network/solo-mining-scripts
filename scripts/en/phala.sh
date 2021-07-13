@@ -128,7 +128,6 @@ case "$1" in
 		config $2
 		;;
 	start)
-		shift 1
 		start $@
 		;;
 	stop)
@@ -151,6 +150,9 @@ case "$1" in
 		;;
 	sgx-test)
 		sgx_test
+		;;
+	version)
+		echo $(cat $installdir/config.json | jq -r '.version')
 		;;
 	*)
 		help
