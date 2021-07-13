@@ -1,5 +1,6 @@
 {
   "nodename" : "",
   "ipaddr" : "",
-  "mnemonic" : ""
+  "mnemonic" : "",
+  "version" : "v0.1.1"
 }
