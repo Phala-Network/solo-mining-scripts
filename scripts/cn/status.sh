@@ -2,11 +2,11 @@
 
 status()
 {
-	local ipaddr=$(jq -r '.ipaddr' $installdir/config.json)
 	local node_status="stop"
-	local node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://$ipaddr:9933 | jq '.result.currentBlock')
+	local node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
 	local pruntime_status="stop"
 	local phost_status="stop"
+	local publickey=$(curl -X POST -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info | jq '.payload|fromjson.public_key')
 
 	check_docker_status phala-node
 	local res=$?
@@ -39,6 +39,7 @@ status()
 	phala-node		${node_status}		${node_block}
 	phala-pruntime		${pruntime_status}
 	phala-phost		${phost_status}
+	publickey       ${publickey}
 --------------------------------------------------------------------------
 EOF
 }
