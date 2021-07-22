@@ -43,7 +43,7 @@ config_set_all()
 	local mnemonic=""
 	while true ; do
 		read -p "输入你的GAS费账号助记词 : " mnemonic
-		if [ -z $mnemonic ] || [ $(node $installdir/console.js verify $mnemonic) != "Valid private key" ]; then
+		if [ -z "$mnemonic" ] || [ "$(node $installdir/console.js verify $mnemonic)" != "Valid private key" ]; then
 			printf "请输入合法助记词,且不能为空！\n"
 		else
 			sed -i "5c MNEMONIC=$mnemonic" $installdir/.env
