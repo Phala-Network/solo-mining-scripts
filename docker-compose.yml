@@ -24,7 +24,8 @@ services:
   depends_on: 
    - phala-node
   devices: 
-   - ${SGXDRIVE}
+   - /dev/sgx/enclave
+   - /dev/sgx/provision
   environment: 
    - EXTRA_OPTS=--cores=${CORES}
    - ROCKET_ADDRESS=0.0.0.0
