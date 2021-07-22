@@ -118,10 +118,10 @@ score_test()
 
 case "$1" in
 	install)
-		install $@
+		install $2
 		;;
 	config)
-		config $@
+		config $2
 		;;
 	start)
 		cd $installdir
@@ -132,10 +132,10 @@ case "$1" in
 		docker-compose stop
 		;;
 	status)
-		status $@
+		status $2
 		;;
 	update)
-		update $@
+		update $2
 		;;
 	logs)
 		cd $installdir
@@ -149,7 +149,7 @@ case "$1" in
 		rm /usr/bin/phala
 		;;
 	score_test)
-		score_test $@
+		score_test $2
 		;;
 	sgx-test)
 		sgx_test
