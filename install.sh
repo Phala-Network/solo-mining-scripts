@@ -25,7 +25,6 @@ install_cn()
 	fi
 	echo "安装新的 Phala 脚本"
 	mkdir -p $installdir
-	cp $basedir/config.json $installdir/
 	cp $basedir/.env $installdir/
 	cp $basedir/docker-compose.yml $installdir/
 	cp $basedir/console.js $installdir/
@@ -48,7 +47,6 @@ install_en()
 	fi
 	echo "Install new phala scripts"
 	mkdir -p $installdir
-	cp $basedir/config.json $installdir/
 	cp $basedir/.env $installdir/
 	cp $basedir/docker-compose.yml $installdir/
 	cp $basedir/console.js $installdir/

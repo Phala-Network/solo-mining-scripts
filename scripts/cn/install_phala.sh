@@ -10,18 +10,14 @@ install_depenencies()
 	fi
 
 	log_info "----------安装依赖----------"
-	local res=0
 	apt-get install -y jq curl wget unzip zip
-	res=$(($?|$res))
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-	res=$(($?|$res))
 	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-	res=$(($?|$res))
 	apt-get install -y docker-ce docker-ce-cli containerd.io dkms
-	res=$(($?|$res))
 	curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 	chmod +x /usr/local/bin/docker-compose
-	res=$(($?|$res))
+	curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+	apt-get install -y nodejs
 	if [ $? -ne 0 ]; then
 		log_err "安装依赖失败"
 		exit 1
