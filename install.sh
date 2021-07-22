@@ -28,6 +28,7 @@ install_cn()
 	cp $basedir/config.json $installdir/
 	cp $basedir/.env $installdir/
 	cp $basedir/docker-compose.yml $installdir/
+	cp $basedir/console.js $installdir/
 	cp -r $basedir/scripts/cn $installdir/scripts
 
 	echo "安装 Phala 命令行工具"
@@ -50,6 +51,7 @@ install_en()
 	cp $basedir/config.json $installdir/
 	cp $basedir/.env $installdir/
 	cp $basedir/docker-compose.yml $installdir/
+	cp $basedir/console.js $installdir/
 	cp -r $basedir/scripts/en $installdir/scripts
 
 	echo "Install phala command line tool"

@@ -25,7 +25,8 @@ update_clean()
 	docker-compose rm $(docker-compose ps -aq)
 
 	log_info "----------删除节点数据----------"
-	rm -r /var/phala
+	rm -r /var/phala-node
+	rm -r /var/phala-pruntime
 	log_success "----------成功删数据----------"
 
 	phala start
