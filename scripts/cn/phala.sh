@@ -6,11 +6,7 @@ scriptdir=$installdir/scripts
 source $scriptdir/utils.sh
 source $scriptdir/config.sh
 source $scriptdir/install_phala.sh
-source $scriptdir/logs.sh
-source $scriptdir/start.sh
 source $scriptdir/status.sh
-source $scriptdir/stop.sh
-source $scriptdir/uninstall.sh
 source $scriptdir/update.sh
 
 help()
