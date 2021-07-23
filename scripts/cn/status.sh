@@ -42,7 +42,7 @@ status()
 		fi
 
 		clear
-		if [ $(echo "$balance < 2"|bc) -eq 1 ]; then
+		if [ `echo "$balance < 2"|bc` -eq 1 ]; then
 			printf "
 --------------------------------------------------------------------------
 	服务名称		服务状态		本地节点区块高度
