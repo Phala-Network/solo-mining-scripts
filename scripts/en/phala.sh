@@ -128,10 +128,7 @@ case "$1" in
 		config $2
 		;;
 	start)
-		install
-		config_set_all
-		cd $installdir
-		docker-compose up -d
+		start
 		;;
 	stop)
 		cd $installdir

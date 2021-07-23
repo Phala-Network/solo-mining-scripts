@@ -198,47 +198,20 @@ start_phala_phost_debug()
 
 start()
 {
-	if [ x"$2" == x"debug" ]; then
-		case "$1" in
-			node)
-				start_phala_node_debug
-				;;
-			pruntime)
-				start_phala_pruntime_debug
-				;;
-			phost)
-				start_phala_phost_debug
-				;;
-			"")
-				start_phala_node_debug
-				start_phala_pruntime_debug
-				sleep 30
-				start_phala_phost_debug
-				;;
-			*)
-				log_err "----------Parameter error----------"
-				exit 1
-	        esac
+	local node_name=$(cat $installdir/.env | grep 'NODE_NAME' | awk -F "=" '{print $NF}')
+	local cores=$(cat $installdir/.env | grep 'CORES' | awk -F "=" '{print $NF}')
+	local mnemonic=$(cat $installdir/.env | grep 'MNEMONIC' | awk -F "=" '{print $NF}')
+	local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
+	local res_isgx=$(ls /dev | grep isgx)
+	local res_sgx=$(ls /dev | grep sgx)
+	if [ -z $node_name ]||[ -z $cores ]||[ -z $mnemonic ]||[ -z $pool_address ]; then
+		log_err "----------The node is not configured, or the important configuration is lost, please reconfigure the node!----------"
+		exit 1
+	elif [ -z $res_sgx ]&&[ -z $res_isgx ]; then
+		log_err "----------The dcap/isgx driver is not installed, please execute the 'sudo phala install dcap'/'sudo phala install isgx' command to install!----------"
+		exit 1
 	else
-		case "$1" in
-			node)
-				start_phala_node
-				;;
-			pruntime)
-				start_phala_pruntime
-				;;
-			phost)
-				start_phala_phost
-				;;
-			"")
-				start_phala_node
-				start_phala_pruntime
-				sleep 30
-				start_phala_phost
-				;;
-			*)
-				log_err "----------Parameter error----------"
-				exit 1
-		esac
+		cd $installdir
+		docker-compose up -d
 	fi
 }
