@@ -139,12 +139,13 @@ case "$1" in
 		;;
 	logs)
 		cd $installdir
-		docker-compose logs
+		docker-compose logs -f
 		;;
 	uninstall)
 		cd $installdir
 		docker-compose stop
 		docker-compose rm $(docker-compose ps -aq)
+		remove_dirvers
 		rm -rf $installdir
 		rm /usr/bin/phala
 		;;

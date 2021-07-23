@@ -22,7 +22,7 @@ config_set_all()
 		read -p "您使用几个核心参与挖矿: " cores
 		expr $cores + 0 &> /dev/null
 		if [ $? -eq 0 ] && [ $cores -ge 1 ] && [ $cores -le 32 ]; then
-			sed -i "4c CORES=$cores" $installdir/.env
+			sed -i "6c CORES=$cores" $installdir/.env
 			break
 		else
 			printf "请输入大于1小于32的整数，该数据不正确，请重新输入！\n"
@@ -35,7 +35,7 @@ config_set_all()
 		if [[ $node_name =~ \ |\' ]]; then
 			printf "节点名称不能包含空格，请重新输入!\n"
 		else
-			sed -i "5c NODE_NAME=$node_name" $installdir/.env
+			sed -i "7c NODE_NAME=$node_name" $installdir/.env
 			break
 		fi
 	done
@@ -50,13 +50,13 @@ config_set_all()
 		else
 			gas_adress=$(node $installdir/console.js verify "$mnemonic")
 			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://poc5-dev.phala.network/ws:9944" free-balance $gas_adress 2>&1)
-			balance=$(expr ${balance:277} / 1000000000000)
+			balance=$(echo "${balance##*WorkerStat} / 1000000000000"|bc)
 			if [ `echo "$balance < 0.1"|bc` -eq 1 ]; then
 				printf "账户PHA小于0.1！\n"
 				exit 1
 			fi
-			sed -i "6c MNEMONIC=$mnemonic" $installdir/.env
-			sed -i "7c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
+			sed -i "8c MNEMONIC=$mnemonic" $installdir/.env
+			sed -i "9c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
 			break
 		fi
 	done
@@ -67,7 +67,7 @@ config_set_all()
 		if [ -z "$pool_addr" ] || [ "$(node $installdir/console.js verify $pool_addr)" == "Cannot decode the input" ]; then
 			printf "请输入合法抵押池账户地址，且不能为空！\n"
 		else
-			sed -i "8c OPERATOR=$pool_addr" $installdir/.env
+			sed -i "10c OPERATOR=$pool_addr" $installdir/.env
 			break
 		fi
 	done

@@ -1,7 +1,7 @@
 version: "3"
 services:
  phala-node:
-  image: jasl123/phala-dev-node:latest
+  image: ${NODE_IMAGE}
   container_name: phala-node
   ports: 
    - "9933:9933"
@@ -11,25 +11,26 @@ services:
    - NODE_NAME=${NODE_NAME}
    - EXTRA_OPTS=--unsafe-ws-external
   volumes: 
-   - "/var/phala-node-data:/root/data"
-   
+   - ${NODE_VOLUMES}
 
  phala-pruntime: 
-  image: jasl123/phala-dev-pruntime
+  image: ${PRUNTIME_IMAGE}
   container_name: phala-pruntime
   ports: 
    - "8000:8000"
-  volumes:
-   - "/var/phala-pruntime-data:/root/data"
+  volumes: 
+   - ${PRUNTIME_VOLUMES}
   depends_on: 
    - phala-node
   devices: 
+
+
   environment: 
    - EXTRA_OPTS=--cores=${CORES}
    - ROCKET_ADDRESS=0.0.0.0
 
  phala-pherry: 
-  image: jasl123/phala-dev-phost
+  image: ${PHERRY_IMAGE}
   container_name: phala-pherry
   depends_on: 
    - phala-node

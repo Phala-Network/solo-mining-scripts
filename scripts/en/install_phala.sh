@@ -14,8 +14,8 @@ install_depenencies()
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 	apt-get install -y docker-ce docker-ce-cli containerd.io dkms
-	curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-	chmod +x /usr/local/bin/docker-compose
+	curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+	chmod +x /usr/bin/docker-compose
 	curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 	if [ $? -ne 0 ]; then
 		log_err "Install depenencies failed"
@@ -31,6 +31,8 @@ remove_dirver()
 	local res_sgx=$(ls /dev | grep sgx)
 	if [ x"$res_isgx" == x"isgx" ] || [ x"$res_sgx" == x"sgx" ]; then
 		/opt/intel/sgxdriver/uninstall.sh
+		sed -i "26a \ " $installdir/docker-compose.yml
+		sed -i "27a \ " $installdir/docker-compose.yml
 		if [ $? -ne 0 ]; then
 			log_info "----------Remove dcap/isgx driver failed----------"
 			exit 1
@@ -77,10 +79,15 @@ install_driver()
 		if [ x"$res_sgx" == x"" ]; then
 			log_err "----------Install isgx dirver bin failed----------"
 			exit 1
+		else
+			sed -i "26a \   - /dev/isgx" $installdir/docker-compose.yml
 		fi
 
 		log_info "----------Clean resource----------"
 		rm $isgx_driverbin
+	else
+		sed -i "26a \   - /dev/sgx/enclave" $installdir/docker-compose.yml
+		sed -i "27a \   - /dev/sgx/provision" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
@@ -110,7 +117,7 @@ install_dcap()
 		exit 1
 	else
 		sed -i "26a \   - /dev/sgx/enclave" $installdir/docker-compose.yml
-		sed -i "26a \   - /dev/sgx/provision" $installdir/docker-compose.yml
+		sed -i "27a \   - /dev/sgx/provision" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
