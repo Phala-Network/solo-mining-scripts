@@ -89,14 +89,14 @@ install_driver()
 			log_err "----------安装 isgx 驱动失败，请检查主板BIOS----------"
 			exit 1
 		else
-			sed -i "26a \   - /dev/isgx" $installdir/docker-compose.yml
+			sed -i "26c \   - /dev/isgx" $installdir/docker-compose.yml
 		fi
 
 		log_info "----------删除临时文件----------"
 		rm $isgx_driverbin
 	else
-		sed -i "26a \   - /dev/sgx/enclave" $installdir/docker-compose.yml
-		sed -i "27a \   - /dev/sgx/provision" $installdir/docker-compose.yml
+		sed -i "26c \   - /dev/sgx/enclave" $installdir/docker-compose.yml
+		sed -i "27c \   - /dev/sgx/provision" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------删除临时文件----------"
@@ -125,8 +125,8 @@ install_dcap()
 		log_err "----------安装DCAP驱动失败----------"
 		exit 1
 	else
-		sed -i "26a \   - /dev/sgx/enclave" $installdir/docker-compose.yml
-		sed -i "27a \   - /dev/sgx/provision" $installdir/docker-compose.yml
+		sed -i "26c \   - /dev/sgx/enclave" $installdir/docker-compose.yml
+		sed -i "27c \   - /dev/sgx/provision" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------删除临时文件----------"
@@ -155,7 +155,7 @@ install_isgx()
 		log_err "----------安装 isgx 驱动失败----------"
 		exit 1
 	else
-		sed -i "26a \   - /dev/isgx" $installdir/docker-compose.yml
+		sed -i "26c \   - /dev/isgx" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------删除临时文件----------"

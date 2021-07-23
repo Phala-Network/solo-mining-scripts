@@ -90,14 +90,14 @@ install_driver()
 			log_err "----------Install isgx dirver bin failed----------"
 			exit 1
 		else
-			sed -i "26a \   - /dev/isgx" $installdir/docker-compose.yml
+			sed -i "26c \   - /dev/isgx" $installdir/docker-compose.yml
 		fi
 
 		log_info "----------Clean resource----------"
 		rm $isgx_driverbin
 	else
-		sed -i "26a \   - /dev/sgx/enclave" $installdir/docker-compose.yml
-		sed -i "27a \   - /dev/sgx/provision" $installdir/docker-compose.yml
+		sed -i "26c \   - /dev/sgx/enclave" $installdir/docker-compose.yml
+		sed -i "27c \   - /dev/sgx/provision" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
@@ -126,8 +126,8 @@ install_dcap()
 		log_err "----------Install dcap dirver bin failed----------"
 		exit 1
 	else
-		sed -i "26a \   - /dev/sgx/enclave" $installdir/docker-compose.yml
-		sed -i "27a \   - /dev/sgx/provision" $installdir/docker-compose.yml
+		sed -i "26c \   - /dev/sgx/enclave" $installdir/docker-compose.yml
+		sed -i "27c \   - /dev/sgx/provision" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
@@ -156,7 +156,7 @@ install_isgx()
 		log_err "----------Install isgx dirver bin failed----------"
 		exit 1
 	else
-		sed -i "26a \   - /dev/isgx" $installdir/docker-compose.yml
+		sed -i "26c \   - /dev/isgx" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
