@@ -27,6 +27,14 @@ install_depenencies()
 remove_dirver()
 {
 	log_info "----------Remove dcap/isgx driver----------"
+	local contents26=$(cat $installdir/docker-compose.yml|awk 'NR==26')
+	local contents27=$(cat $installdir/docker-compose.yml|awk 'NR==27')
+	if [ ! -z $contents26 ]&&[ "$contents26" != '  environment: ' ]; then
+		sed -i "26c \ " $installdir/docker-compose.yml
+	elif [ ! -z $contents27 ]&&[ "$contents27" != '  environment: ' ]&&[ "$contents27" != '   - EXTRA_OPTS=--cores=${CORES}' ]
+		sed -i "27c \ " $installdir/docker-compose.yml
+	fi
+	
 	local res_isgx=$(ls /dev | grep isgx)
 	local res_sgx=$(ls /dev | grep sgx)
 	if [ x"$res_isgx" == x"isgx" ] || [ x"$res_sgx" == x"sgx" ]; then
