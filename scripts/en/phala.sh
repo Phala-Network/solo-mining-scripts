@@ -128,12 +128,8 @@ case "$1" in
 		config $2
 		;;
 	start)
-		res_isgx=$(ls /dev | grep isgx)
-		res_sgx=$(ls /dev | grep sgx)
-		if [ -z $res_isgx ]&&[ -z $res_sgx ]; then
-			log_err "----------sgx/dcap driver not install----------"
-			exit 1
-		fi
+		install
+		config_set_all
 		cd $installdir
 		docker-compose up -d
 		;;

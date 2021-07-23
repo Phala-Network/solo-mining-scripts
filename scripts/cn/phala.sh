@@ -6,7 +6,11 @@ scriptdir=$installdir/scripts
 source $scriptdir/utils.sh
 source $scriptdir/config.sh
 source $scriptdir/install_phala.sh
+source $scriptdir/logs.sh
+source $scriptdir/start.sh
 source $scriptdir/status.sh
+source $scriptdir/stop.sh
+source $scriptdir/uninstall.sh
 source $scriptdir/update.sh
 
 help()
@@ -124,12 +128,8 @@ case "$1" in
 		config $2
 		;;
 	start)
-		res_isgx=$(ls /dev | grep isgx)
-		res_sgx=$(ls /dev | grep sgx)
-		if [ -z $res_isgx ]&&[ -z $res_sgx ]; then
-			log_err "----------sgx/dcap 驱动没有安装----------"
-			exit 1
-		fi
+		install
+		config_set_all
 		cd $installdir
 		docker-compose up -d
 		;;
