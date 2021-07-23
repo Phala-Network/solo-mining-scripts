@@ -217,7 +217,7 @@ start()
 	elif [ -z "$node_name" ]||[ -z "$cores" ]||[ -z "$mnemonic" ]||[ -z "$pool_address" ]; then
 		log_err "----------The node is not configured, or the important configuration is lost, please reconfigure the node!----------"
 		exit 1
-	elif [ -z $res_sgx ]&&[ -z $res_isgx ]; then
+	elif [ -z "$res_sgx" ]&&[ -z "$res_isgx" ]; then
 		log_err "----------The dcap/isgx driver is not installed, please execute the 'sudo phala install dcap'/'sudo phala install isgx' command to install!----------"
 		exit 1
 	else

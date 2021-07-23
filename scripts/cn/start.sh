@@ -216,7 +216,7 @@ start()
 	elif [ -z "$node_name" ]||[ -z "$cores" ]||[ -z "$mnemonic" ]||[ -z "$pool_address" ]; then
 		log_err "----------节点未配置，或重要启动配置丢失，请重新配置节点！----------"
 		exit 1
-	elif [ -z $res_sgx ]&&[ -z $res_isgx ]; then
+	elif [ -z "$res_sgx" ]&&[ -z "$res_isgx" ]; then
 		log_err "----------dcap/isgx 驱动未安装，请执行sudo phala install dcap/sudo phala install isgx命令安装----------"
 		exit 1
 	else
