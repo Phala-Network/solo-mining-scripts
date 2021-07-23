@@ -33,7 +33,7 @@ remove_dirver()
 		sed -i "26c \ " $installdir/docker-compose.yml
 	fi
 	
-	if [ ! -z $contents27 ]&&[ "$contents27" != '  environment: ' ]&&[ "$contents27" != '   - EXTRA_OPTS=--cores=${CORES}' ]
+	if [ ! -z $contents27 ]&&[ "$contents27" != '  environment: ' ]&&[ "$contents27" != '   - EXTRA_OPTS=--cores=${CORES}' ]; then
 		sed -i "27c \ " $installdir/docker-compose.yml
 	fi
 

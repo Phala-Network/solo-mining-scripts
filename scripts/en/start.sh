@@ -204,7 +204,17 @@ start()
 	local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
 	local res_isgx=$(ls /dev | grep isgx)
 	local res_sgx=$(ls /dev | grep sgx)
-	if [ -z $node_name ]||[ -z $cores ]||[ -z $mnemonic ]||[ -z $pool_address ]; then
+	local res=0
+	docker -v
+	res=$(($?|$res))
+	docker-compose -v
+	res=$(($?|$res))
+	node -v
+	res=$(($?|$res))
+	if [ $res -ne 0 ]; then
+		log_err "----------Lack of important dependent tools, please execute 'sudo phala install' to reinstall！----------"
+		exit 1
+	elif [ -z $node_name ]||[ -z $cores ]||[ -z $mnemonic ]||[ -z $pool_address ]; then
 		log_err "----------The node is not configured, or the important configuration is lost, please reconfigure the node!----------"
 		exit 1
 	elif [ -z $res_sgx ]&&[ -z $res_isgx ]; then

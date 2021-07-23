@@ -203,7 +203,17 @@ start()
 	local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
 	local res_isgx=$(ls /dev | grep isgx)
 	local res_sgx=$(ls /dev | grep sgx)
-	if [ -z $node_name ]||[ -z $cores ]||[ -z $mnemonic ]||[ -z $pool_address ]; then
+	local res=0
+	docker -v
+	res=$(($?|$res))
+	docker-compose -v
+	res=$(($?|$res))
+	node -v
+	res=$(($?|$res))
+	if [ $res -ne 0 ]; then
+		log_err "----------缺少重要依赖工具，请执行sudo phala install重新安装！----------"
+		exit 1
+	elif [ -z $node_name ]||[ -z $cores ]||[ -z $mnemonic ]||[ -z $pool_address ]; then
 		log_err "----------节点未配置，或重要启动配置丢失，请重新配置节点！----------"
 		exit 1
 	elif [ -z $res_sgx ]&&[ -z $res_isgx ]; then
