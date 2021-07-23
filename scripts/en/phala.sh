@@ -131,7 +131,7 @@ case "$1" in
 		res_isgx=$(ls /dev | grep isgx)
 		res_sgx=$(ls /dev | grep sgx)
 		if [ -z $res_isgx ]&&[ -z $res_sgx ]; then
-			log_err "----------sgx/dcap 驱动没有安装----------"
+			log_err "----------sgx/dcap driver not install----------"
 			exit 1
 		fi
 		cd $installdir
