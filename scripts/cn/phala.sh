@@ -148,7 +148,7 @@ case "$1" in
 		cd $installdir
 		docker-compose stop
 		docker-compose rm $(docker-compose ps -aq)
-		remove_dirvers
+		remove_dirver
 		rm -rf $installdir
 		rm /usr/bin/phala
 		;;
