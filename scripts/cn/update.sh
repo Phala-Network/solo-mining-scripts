@@ -19,7 +19,7 @@ update_script()
 update_clean()
 {
 	log_info "----------删除 Docker 镜像----------"
-	log_info "关闭 phala-node phala-pruntime phala-phost"
+	log_info "关闭 phala-node phala-pruntime phala-pherry"
 	cd $installdir
 	docker-compose stop
 	docker-compose rm $(docker-compose ps -aq)
@@ -35,7 +35,7 @@ update_clean()
 update_noclean()
 {
 	log_info "----------更新挖矿套件镜像----------"
-	log_info "关闭 phala-node phala-pruntime phala-phost"
+	log_info "关闭 phala-node phala-pruntime phala-pherry"
 	cd $installdir
 	docker-compose stop
 	docker-compose rm $(docker-compose ps -aq)

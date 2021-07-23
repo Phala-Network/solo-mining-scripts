@@ -20,53 +20,29 @@ update_script()
 update_clean()
 {
 	log_info "----------Clean phala node images----------"
-	log_info "Kill phala-node phala-pruntime phala-phost"
-	docker kill phala-phost
-	docker kill phala-pruntime
-	docker kill phala-node
-	docker image prune -a
+	log_info "Kill phala-node phala-pruntime phala-pherry"
+	cd $installdir
+	docker-compose stop
+	docker-compose rm $(docker-compose ps -aq)
 
 	log_info "----------Clean data----------"
-	rm -r $HOME/phala-node-data
-	rm -r $HOME/phala-pruntime-data
-
-	local res=0
-	log_info "----------Pull docker images----------"
-	docker pull phalanetwork/phala-poc4-node
-	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc4-pruntime
-	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc4-phost
-	res=$(($?|$res))
-
-	if [ $res -ne 0 ]; then
-		log_err "----------docker pull failed----------"
-	fi
+	rm -r /var/phala-node
+	rm -r /var/phala-pruntime
 
 	log_success "----------Clean success----------"
+
+	phala start
 }
 
 update_noclean()
 {
 	log_info "----------Update phala node----------"
-	log_info "Kill phala-node phala-pruntime phala-phost"
-	docker kill phala-phost
-	docker kill phala-pruntime
-	docker kill phala-node
-	docker image prune -a
+	log_info "Kill phala-node phala-pruntime phala-pherry"
+	cd $installdir
+	docker-compose stop
+	docker-compose rm $(docker-compose ps -aq)
 
-	local res=0
-	docker pull phalanetwork/phala-poc4-node
-	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc4-pruntime
-	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc4-phost
-	res=$(($?|$res))
-
-	if [ $res -ne 0 ]; then
-		log_err "----------docker pull failed----------"
-	fi
-
+	phala start
 	log_success "----------Update success----------"
 }
 

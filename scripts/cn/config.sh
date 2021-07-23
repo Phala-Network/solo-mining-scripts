@@ -31,7 +31,7 @@ config_set_all()
 
 	local node_name
 	while true ; do
-		read -p "请输入节点名称: " node_name
+		read -p "请输入节点名称（不能包含空格）: " node_name
 		if [[ $node_name =~ \ |\' ]]; then
 			printf "节点名称不能包含空格，请重新输入!\n"
 		else
@@ -52,7 +52,7 @@ config_set_all()
 			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://poc5-dev.phala.network/ws:9944" free-balance $gas_adress 2>&1)
 			balance=$(expr ${balance:277} / 1000000000000)
 			if [ `echo "$balance < 0.1"|bc` -eq 1 ]; then
-				printf "账户PHA小于0.1！"
+				printf "账户PHA小于0.1！\n"
 				exit 1
 			fi
 			sed -i "6c MNEMONIC=$mnemonic" $installdir/.env

@@ -128,23 +128,31 @@ case "$1" in
 		config $2
 		;;
 	start)
-		shift 1
-		start $@
+		cd $installdir
+		docker-compose up -d
 		;;
 	stop)
-		stop $2
+		cd $installdir
+		docker-compose stop
 		;;
 	status)
-		status $@
+		status $2
 		;;
 	update)
 		update $2
 		;;
 	logs)
-		logs $2
+		cd $installdir
+		docker-compose logs
 		;;
 	uninstall)
-		uninstall
+		cd $installdir
+		docker-compose stop
+		docker-compose rm $(docker-compose ps -aq)
+		docker container stop $(docker container ls -aq)
+		docker container rm $(docker container ls -aq)
+		rm -rf $installdir
+		rm /usr/bin/phala
 		;;
 	score_test)
 		score_test $2
