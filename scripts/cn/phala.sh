@@ -6,11 +6,7 @@ scriptdir=$installdir/scripts
 source $scriptdir/utils.sh
 source $scriptdir/config.sh
 source $scriptdir/install_phala.sh
-source $scriptdir/logs.sh
-source $scriptdir/start.sh
 source $scriptdir/status.sh
-source $scriptdir/stop.sh
-source $scriptdir/uninstall.sh
 source $scriptdir/update.sh
 
 help()
@@ -128,23 +124,31 @@ case "$1" in
 		config $2
 		;;
 	start)
-		shift 1
-		start $@
+		cd $installdir
+		docker-compose up -d
 		;;
 	stop)
-		stop $2
+		cd $installdir
+		docker-compose stop
 		;;
 	status)
-		status $@
+		status $2
 		;;
 	update)
 		update $2
 		;;
 	logs)
-		logs $2
+		cd $installdir
+		docker-compose logs
 		;;
 	uninstall)
-		uninstall
+		cd $installdir
+		docker-compose stop
+		docker-compose rm $(docker-compose ps -aq)
+		docker container stop $(docker container ls -aq)
+		docker container rm $(docker container ls -aq)
+		rm -rf $installdir
+		rm /usr/bin/phala
 		;;
 	score_test)
 		score_test $2

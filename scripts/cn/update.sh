@@ -9,9 +9,8 @@ update_script()
 	unzip /tmp/phala/main.zip -d /tmp/phala
 	rm -rf /opt/phala/scripts
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/cn /opt/phala/scripts
-	mv /opt/phala/scripts/phala.sh /usr/bin/phala
-	chmod +x /usr/bin/phala
 	chmod +x /opt/phala/scripts/*
+	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 
 	log_success "----------更新完成----------"
 	rm -rf /tmp/phala
@@ -21,52 +20,27 @@ update_clean()
 {
 	log_info "----------删除 Docker 镜像----------"
 	log_info "关闭 phala-node phala-pruntime phala-phost"
-	docker kill phala-phost
-	docker kill phala-pruntime
-	docker kill phala-node
-	docker image prune -a
+	cd $installdir
+	docker-compose stop
+	docker-compose rm $(docker-compose ps -aq)
 
 	log_info "----------删除节点数据----------"
-	rm -r $HOME/phala-node-data
-	rm -r $HOME/phala-pruntime-data
+	rm -r /var/phala-node
+	rm -r /var/phala-pruntime
+	log_success "----------成功删数据----------"
 
-	local res=0
-	log_info "----------更新 Docker 镜像----------"
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-node
-	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-pruntime
-	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
-	res=$(($?|$res))
-
-	if [ $res -ne 0 ]; then
-		log_err "----------docker 镜像下载失败----------"
-	fi
-
-	log_success "----------成功删数据更新----------"
+	phala start
 }
 
 update_noclean()
 {
 	log_info "----------更新挖矿套件镜像----------"
 	log_info "关闭 phala-node phala-pruntime phala-phost"
-	docker kill phala-phost
-	docker kill phala-pruntime
-	docker kill phala-node
-	docker image prune -a
+	cd $installdir
+	docker-compose stop
+	docker-compose rm $(docker-compose ps -aq)
 
-	local res=0
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-node
-	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-pruntime
-	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
-	res=$(($?|$res))
-
-	if [ $res -ne 0 ]; then
-		log_err "----------docker下载失败----------"
-	fi
-
+	phala start
 	log_success "----------更新成功----------"
 }
 

@@ -10,33 +10,19 @@ install_depenencies()
 	fi
 
 	log_info "----------安装依赖----------"
-	apt-get install -y jq curl wget unzip
+	apt-get install -y jq curl wget unzip zip
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 	apt-get install -y docker-ce docker-ce-cli containerd.io dkms
+	curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+	chmod +x /usr/local/bin/docker-compose
+	curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+	apt-get install -y nodejs
 	if [ $? -ne 0 ]; then
 		log_err "安装依赖失败"
 		exit 1
 	fi
 	usermod -aG docker $USER
-}
-
-download_docker_images()
-{
-	log_info "----------下载Phala Docker镜像----------"
-	local res=0
-
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-node
-	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-pruntime
-	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
-	res=$(($?|$res))
-
-	if [ $res -ne 0 ]; then
-		log_err "----------下载 Docker 镜像失败----------"
-		exit 1
-	fi
 }
 
 remove_dirver()
@@ -92,10 +78,15 @@ install_driver()
 		if [ x"$res_sgx" == x"" ]; then
 			log_err "----------安装 isgx 驱动失败，请检查主板BIOS----------"
 			exit 1
+		else
+		sed -i "26a \   - /dev/isgx" $installdir/docker-compose.yml
 		fi
 
 		log_info "----------删除临时文件----------"
 		rm $isgx_driverbin
+	else
+		sed -i "26a \   - /dev/sgx/enclave" $installdir/docker-compose.yml
+		sed -i "26a \   - /dev/sgx/provision" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------删除临时文件----------"
@@ -113,7 +104,7 @@ install_dcap()
 		exit 1
 	fi
 
-	log_info "----------添加运行权限----------" 
+	log_info "----------添加运行权限----------"
 	chmod +x $dcap_driverbin
 
 	log_info "----------安装DCAP驱动----------"
@@ -123,6 +114,9 @@ install_dcap()
 	if [ x"$res_dcap" == x"" ]; then
 		log_err "----------安装DCAP驱动失败----------"
 		exit 1
+	else
+		sed -i "26a \   - /dev/sgx/enclave" $installdir/docker-compose.yml
+		sed -i "26a \   - /dev/sgx/provision" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------删除临时文件----------"
@@ -150,6 +144,8 @@ install_isgx()
 	if [ x"$res_sgx" == x"" ]; then
 		log_err "----------安装 isgx 驱动失败----------"
 		exit 1
+	else
+		sed -i "26a \   - /dev/isgx" $installdir/docker-compose.yml
 	fi
 
 	log_success "----------删除临时文件----------"
@@ -177,12 +173,6 @@ install()
 	case "$1" in
 		"")
 			install_depenencies
-			download_docker_images
-			install_driver
-			;;
-		init)
-			install_depenencies
-			download_docker_images
 			config_set_all
 			install_driver
 			;;

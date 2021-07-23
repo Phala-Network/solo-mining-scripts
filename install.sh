@@ -15,7 +15,7 @@ EOF
 exit 0
 }
 
-install_cnphala_scripts()
+install_cn()
 {
 	echo "--------------安装 phala 脚本程序-------------"
 
@@ -25,7 +25,9 @@ install_cnphala_scripts()
 	fi
 	echo "安装新的 Phala 脚本"
 	mkdir -p $installdir
-	cp $basedir/config.json $installdir/
+	cp $basedir/.env $installdir/
+	cp $basedir/docker-compose.yml $installdir/
+	cp $basedir/console.js $installdir/
 	cp -r $basedir/scripts/cn $installdir/scripts
 
 	echo "安装 Phala 命令行工具"
@@ -35,17 +37,19 @@ install_cnphala_scripts()
 	echo "------------安装成功-------------"
 }
 
-install_enphala_scripts()
+install_en()
 {
-	echo "--------------Install phala node-------------"
+	echo "--------------Install phala scripts-------------"
 
 	if [ -f /usr/bin/phala ]; then
-		echo "Uninstall old phala node"
+		echo "Uninstall old phala scripts"
 		phala uninstall
 	fi
-	echo "Install new phala node"
+	echo "Install new phala scripts"
 	mkdir -p $installdir
-	cp $basedir/config.json $installdir/
+	cp $basedir/.env $installdir/
+	cp $basedir/docker-compose.yml $installdir/
+	cp $basedir/console.js $installdir/
 	cp -r $basedir/scripts/en $installdir/scripts
 
 	echo "Install phala command line tool"
@@ -63,10 +67,10 @@ fi
 
 case "$1" in
 	"cn")
-		install_cnphala_scripts
+		install_cn
 		;;
 	"en")
-		install_enphala_scripts
+		install_en
 		;;
 	*)
 		help

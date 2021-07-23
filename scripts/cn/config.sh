@@ -12,38 +12,65 @@ EOF
 
 config_show()
 {
-	cat $installdir/config.json | jq .
+	cat $installdir/.env
 }
 
 config_set_all()
 {
-	local node_name=""
-	read -p "输入节点名称: " node_name
-	node_name=`echo "$node_name"`
-	while [[ x"$node_name" =~ \ |\' ]]; do
-		read -p "节点名称不能包含空格，请重新输入：" node_name
+	local cores
+	while true ; do
+		read -p "您使用几个核心参与挖矿: " cores
+		expr $cores + 0 &> /dev/null
+		if [ $? -eq 0 ] && [ $cores -ge 1 ] && [ $cores -le 32 ]; then
+			sed -i "4c CORES=$cores" $installdir/.env
+			break
+		else
+			printf "请输入大于1小于32的整数，该数据不正确，请重新输入！\n"
+		fi
 	done
-	sed -i "2c \\  \"nodename\" : \"$node_name\"," $installdir/config.json &>/dev/null
-	log_success "设置节点名称为: '$node_name' 成功"
-	local ipaddr=""
-	read -p "输入你的IP地址: " ipaddr
-	ipaddr=`echo "$ipaddr"`
-	if [ x"$ipaddr" == x"" ] || [ `echo $ipaddr | awk -F . '{print NF}'` -ne 4 ]; then
-		log_err "IP地址格式错误，或者为空"
-		exit 1
-	fi
-	sed -i "3c \\  \"ipaddr\" : \"$ipaddr\"," $installdir/config.json &>/dev/null
-	log_success "设置IP地址为: '$ipaddr' 成功"
+
+	local node_name
+	while true ; do
+		read -p "请输入节点名称: " node_name
+		if [[ $node_name =~ \ |\' ]]; then
+			printf "节点名称不能包含空格，请重新输入!\n"
+		else
+			sed -i "5c NODE_NAME=$node_name" $installdir/.env
+			break
+		fi
+	done
 
 	local mnemonic=""
-	read -p "输入你的Controllor账号助记词 : " mnemonic
-	mnemonic=`echo "$mnemonic"`
-	if [ x"$mnemonic" == x"" ]; then
-		log_err "助记词不能为空"
-		exit 1
-	fi
-	sed -i "4c \\  \"mnemonic\" : \"$mnemonic\"" $installdir/config.json &>/dev/null
-	log_success "设置助记词为: '$mnemonic' 成功"
+	local gas_adress=""
+	local balance=""
+	while true ; do
+		read -p "输入你的GAS费账号助记词 : " mnemonic
+		if [ -z "$mnemonic" ] || [ "$(node $installdir/console.js verify "$mnemonic")" == "Cannot decode the input" ]; then
+			printf "请输入合法助记词,且不能为空！\n"
+		else
+			gas_adress=$(node $installdir/console.js verify "$mnemonic")
+			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://poc5-dev.phala.network/ws:9944" free-balance $gas_adress 2>&1)
+			balance=$(expr ${balance:277} / 1000000000000)
+			if [ `echo "$balance < 0.1"|bc` -eq 1 ]; then
+				printf "账户PHA小于0.1！"
+				exit 1
+			fi
+			sed -i "6c MNEMONIC=$mnemonic" $installdir/.env
+			sed -i "7c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
+			break
+		fi
+	done
+
+	local pool_addr=""
+	while true ; do
+		read -p "输入抵押池账户地址 : " pool_addr
+		if [ -z "$pool_addr" ] || [ "$(node $installdir/console.js verify $pool_addr)" == "Cannot decode the input" ]; then
+			printf "请输入合法抵押池账户地址，且不能为空！\n"
+		else
+			sed -i "8c OPERATOR=$pool_addr" $installdir/.env
+			break
+		fi
+	done
 }
 
 config()

@@ -1,43 +1,45 @@
-version: "3.9"
+version: "3"
 services:
  phala-node:
-  image: swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-node
+  image: jasl123/phala-dev-node:latest
   container_name: phala-node
-  ports:
+  ports: 
    - "9933:9933"
    - "9944:9944"
    - "30333:30333"
-  environment:
-   - NODE_NAME=""
-  volumes:
-   - "$HOME/phala-node-data:/root/data"
+  environment: 
+   - NODE_NAME=${NODE_NAME}
+   - EXTRA_OPTS=--unsafe-ws-external
+  volumes: 
+   - "/var/phala-node-data:/root/data"
+   
 
- phala-pruntime:
-  image: swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-pruntime
+ phala-pruntime: 
+  image: jasl123/phala-dev-pruntime
   container_name: phala-pruntime
-  ports:
+  ports: 
    - "8000:8000"
   volumes:
-   - "$HOME/phala-pruntime-data:/root/data"
-  depends_on:
+   - "/var/phala-pruntime-data:/root/data"
+  depends_on: 
    - phala-node
-  devices:
-   - "/dev/sgx/enclave:/dev/sgx/enclave"
-   - "/dev/sgx/provision:/dev/sgx/provision"
+  devices: 
+  environment: 
+   - EXTRA_OPTS=--cores=${CORES}
+   - ROCKET_ADDRESS=0.0.0.0
 
- phala-phost:
-  image: swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
-  container_name: phala-phost
-  depends_on:
+ phala-pherry: 
+  image: jasl123/phala-dev-phost
+  container_name: phala-pherry
+  depends_on: 
    - phala-node
    - phala-pruntime
   restart: always
   entrypoint: [
       "/root/phost",
       "--dev",
-      "--mnemonic=",
-      "--substrate-ws-endpoint=",
-      "--pruntime-endpoint=",
+      "--mnemonic=${MNEMONIC}",
+      "--substrate-ws-endpoint=ws://phala-node:9944",
+      "--pruntime-endpoint=http://phala-pruntime:8000",
+      "--operator=${OPERATOR}"
     ]
-
-  
