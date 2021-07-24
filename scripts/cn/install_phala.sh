@@ -14,8 +14,11 @@ install_depenencies()
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 	apt-get install -y docker-ce docker-ce-cli containerd.io dkms
-	curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
-	chmod +x /usr/bin/docker-compose
+	docker-compose -v > /dev/null
+	if [ $? -ne 0 ]; then
+		curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+		chmod +x /usr/bin/docker-compose
+	fi
 	curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 	apt-get install -y nodejs
 	if [ $? -ne 0 ]; then
