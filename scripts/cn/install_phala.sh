@@ -183,8 +183,8 @@ install()
 	case "$1" in
 		"")
 			install_depenencies
-			config_set_all
 			install_driver
+			config_set_all
 			;;
 		dcap)
 			install_dcap

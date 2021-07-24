@@ -51,13 +51,14 @@ config_set_all()
 			gas_adress=$(node $installdir/console.js verify "$mnemonic")
 			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://poc5-dev.phala.network/ws:9944" free-balance $gas_adress 2>&1)
 			balance=$(expr "${balance##*WorkerStat} / 1000000000000"|bc)
-			if [ `echo "$balance < 0.1"|bc` -eq 1 ]; then
+			if [ `echo "$balance > 0.1"|bc` -eq 1 ]; then
+				sed -i "8c MNEMONIC=$mnemonic" $installdir/.env
+				sed -i "9c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
+				break
+			else
 				printf "Account PHA is less than 0.1!\n"
-				exit 1
+
 			fi
-			sed -i "8c MNEMONIC=$mnemonic" $installdir/.env
-			sed -i "9c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
-			break
 		fi
 	done
 
