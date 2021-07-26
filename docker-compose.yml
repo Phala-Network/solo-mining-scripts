@@ -37,7 +37,7 @@ services:
    - phala-pruntime
   restart: always
   entrypoint: [
-      "/root/phost",
+      "/root/pherry",
       "--dev",
       "--mnemonic=${MNEMONIC}",
       "--substrate-ws-endpoint=ws://phala-node:9944",
