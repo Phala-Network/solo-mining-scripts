@@ -1,36 +1,45 @@
 version: "3"
 services:
-  phala-node:
-    image: ${NODE_IMAGE}
-    container_name: phala-node
-    ports:
-      - "9933:9933"
-      - "9944:9944"
-      - "30333:30333"
-    environment:
-      - NODE_NAME=${NODE_NAME}
-      - EXTRA_OPTS=--unsafe-ws-external
-    volumes:
-      - ${NODE_VOLUMES}
-  phala-pruntime:
-    image: ${PRUNTIME_IMAGE}
-    container_name: phala-pruntime
-    ports:
-      - "8000:8000"
-    volumes:
-      - ${PRUNTIME_VOLUMES}
-    depends_on:
-      - phala-node
-    devices:
-      - /dev/isgx
-    environment:
-      - EXTRA_OPTS=--cores=${CORES}
-      - ROCKET_ADDRESS=0.0.0.0
-  phala-pherry:
-    image: ${PHERRY_IMAGE}
-    container_name: phala-pherry
-    depends_on:
-      - phala-node
-      - phala-pruntime
-    restart: always
-    entrypoint: ["/root/phost", "--dev", "--mnemonic=${MNEMONIC}", "--substrate-ws-endpoint=ws://phala-node:9944", "--pruntime-endpoint=http://phala-pruntime:8000", "--operator=${OPERATOR}"]
+ phala-node:
+  image: ${NODE_IMAGE}
+  container_name: phala-node
+  ports: 
+   - "9933:9933"
+   - "9944:9944"
+   - "30333:30333"
+  environment: 
+   - NODE_NAME=${NODE_NAME}
+   - EXTRA_OPTS=--unsafe-ws-external
+  volumes: 
+   - ${NODE_VOLUMES}
+
+ phala-pruntime: 
+  image: ${PRUNTIME_IMAGE}
+  container_name: phala-pruntime
+  ports: 
+   - "8000:8000"
+  volumes: 
+   - ${PRUNTIME_VOLUMES}
+  depends_on: 
+   - phala-node
+  devices: 
+   - /dev/isgx
+  environment: 
+   - EXTRA_OPTS=--cores=${CORES}
+   - ROCKET_ADDRESS=0.0.0.0
+
+ phala-pherry: 
+  image: ${PHERRY_IMAGE}
+  container_name: phala-pherry
+  depends_on: 
+   - phala-node
+   - phala-pruntime
+  restart: always
+  entrypoint: [
+      "/root/pherry",
+      "--dev",
+      "--mnemonic=${MNEMONIC}",
+      "--substrate-ws-endpoint=ws://phala-node:9944",
+      "--pruntime-endpoint=http://phala-pruntime:8000",
+      "--operator=${OPERATOR}"
+    ]
