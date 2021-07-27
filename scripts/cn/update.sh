@@ -22,11 +22,17 @@ update_clean()
 	log_info "关闭 phala-node phala-pruntime phala-pherry"
 	cd $installdir
 	docker-compose stop
-	docker-compose rm $(docker-compose ps -aq)
+	docker-compose rm phala-node phala-pruntime phala-pherry
+	docker image rm phala-node phala-pruntime phala-pherry
 
 	log_info "----------删除节点数据----------"
-	rm -r /var/phala-node
-	rm -r /var/phala-pruntime
+	local node_data=$(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
+	local pruntime_data=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
+	if [ -f $node_data ]; then
+		rm -rf $node_data
+	elif [-f $pruntime_data ]; then
+		rm -rf $pruntime_data
+	fi
 	log_success "----------成功删数据----------"
 
 	phala start
@@ -38,7 +44,8 @@ update_noclean()
 	log_info "关闭 phala-node phala-pruntime phala-pherry"
 	cd $installdir
 	docker-compose stop
-	docker-compose rm $(docker-compose ps -aq)
+	docker-compose rm phala-node phala-pruntime phala-pherry
+	docker image rm phala-node phala-pruntime phala-pherry
 
 	phala start
 	log_success "----------更新成功----------"

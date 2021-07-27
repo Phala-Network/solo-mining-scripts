@@ -2,18 +2,13 @@
 
 uninstall()
 {
-	if [ -f /usr/bin/phala ]; then
-		docker kill phala-phost
-		docker kill phala-pruntime
-		docker kill phala-node
-		docker kill phala-pruntime-bench
-		docker image prune -a
-		rm -r $HOME/phala-node-data
-		rm -r $HOME/phala-pruntime-data
-		rm /usr/bin/phala
-	fi
-
+	cd $installdir
+	docker-compose stop
+	docker-compose rm phala-node phala-pruntime phala-pherry
+	docker image rm phala-dev-node phala-dev-pruntime phala-dev-pherry # 合并到main时，更新image名字
+	remove_dirver
 	rm -rf $installdir
+	rm /usr/bin/phala
 
 	log_success "---------------删除 phala 挖矿套件成功---------------"
 }

@@ -141,16 +141,10 @@ case "$1" in
 		update $2
 		;;
 	logs)
-		cd $installdir
-		docker-compose logs -f
+		logs
 		;;
 	uninstall)
-		cd $installdir
-		docker-compose stop
-		docker-compose rm $(docker-compose ps -aq)
-		remove_dirver
-		rm -rf $installdir
-		rm /usr/bin/phala
+		uninstall
 		;;
 	score_test)
 		score_test $2

@@ -5,8 +5,8 @@ config_help()
 cat << EOF
 Usage:
 	help			帮助信息
-	show			查看配置信息
-	set			重新设置
+	show			查看配置信息（直接看到配置文件所有信息）
+	set			重新配置
 EOF
 }
 
@@ -56,7 +56,7 @@ config_set_all()
 				sed -i "9c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
 				break
 			else
-				printf "账户PHA小于0.1！\n"
+				printf "账户PHA小于0.1，请重新输入！\n"
 			fi
 		fi
 	done
