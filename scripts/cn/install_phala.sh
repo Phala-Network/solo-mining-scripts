@@ -24,7 +24,7 @@ install_depenencies()
 		apt-get install -y nodejs
 	elif ! type yq >/dev/null 2>&1; then
 		wget https://github.com/mikefarah/yq/releases/download/v4.11.2/yq_linux_amd64.tar.gz -O /tmp/yq_linux_amd64.tar.gz
-		tar xzvf /tmp/yq_linux_amd64.tar.gz -C /tmp
+		tar -xvf /tmp/yq_linux_amd64.tar.gz -C /tmp
 		mv /tmp/yq_linux_amd64 /usr/bin/yq
 		rm /tmp/yq_linux_amd64.tar.gz
 	fi

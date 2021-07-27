@@ -30,7 +30,7 @@ update_clean()
 	local pruntime_data=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
 	if [ -f $node_data ]; then
 		rm -rf $node_data
-	elif [-f $pruntime_data ]; then
+	elif [ -f $pruntime_data ]; then
 		rm -rf $pruntime_data
 	fi
 	log_success "----------成功删数据----------"

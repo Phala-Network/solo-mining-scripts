@@ -6,7 +6,7 @@ start()
 	local cores=$(cat $installdir/.env | grep 'CORES' | awk -F "=" '{print $NF}')
 	local mnemonic=$(cat $installdir/.env | grep 'MNEMONIC' | awk -F "=" '{print $NF}')
 	local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
-	if ! type docker >/dev/null 2>&1 || ! type docker-compose >/dev/null 2>&1 || ! type node >/dev/null 2>&1 ; then
+	if ! type docker docker-compose node yq jq curl wget unzip zip >/dev/null 2>&1; then
 		log_err "----------缺少重要依赖工具，请执行sudo phala install重新安装！----------"
 		exit 1
 	elif [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
