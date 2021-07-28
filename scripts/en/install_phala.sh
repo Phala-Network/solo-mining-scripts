@@ -10,19 +10,23 @@ install_depenencies()
 	fi
 
 	log_info "----------Install depenencies----------"
-	apt-get install -y jq curl wget unzip zip
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-	apt-get install -y docker-ce docker-ce-cli containerd.io dkms
-	docker-compose -v > /dev/null
-	if [ $? -ne 0 ]; then
-		curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
-		chmod +x /usr/bin/docker-compose
-	fi
-	curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-	if [ $? -ne 0 ]; then
-		log_err "Install depenencies failed"
-		exit 1
+	if ! type jq curl wget unzip zip >/dev/null 2>&1; then
+		apt-get install -y jq curl wget unzip zip
+	elif ! type docker >/dev/null 2>&1; then
+		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+		add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+		apt-get install -y docker-ce docker-ce-cli containerd.io dkms
+	elif ! type docker-compose >/dev/null 2>&1; then
+		curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		chmod +x /usr/local/bin/docker-compose
+	elif ! type node >/dev/null 2>&1; then
+		curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+		apt-get install -y nodejs
+	elif ! type yq >/dev/null 2>&1; then
+		wget https://github.com/mikefarah/yq/releases/download/v4.11.2/yq_linux_amd64.tar.gz -O /tmp/yq_linux_amd64.tar.gz
+		tar -xvf /tmp/yq_linux_amd64.tar.gz -C /tmp
+		mv /tmp/yq_linux_amd64 /usr/bin/yq
+		rm /tmp/yq_linux_amd64.tar.gz
 	fi
 	usermod -aG docker $USER
 }
@@ -30,22 +34,18 @@ install_depenencies()
 remove_dirver()
 {
 	log_info "----------Remove dcap/isgx driver----------"
-	local contents26=$(cat $installdir/docker-compose.yml|awk 'NR==26')
-	local contents27=$(cat $installdir/docker-compose.yml|awk 'NR==27')
-	if [ ! -z $contents26 ]&&[ "$contents26" != '  environment: ' ]; then
-		sed -i "26c \ " $installdir/docker-compose.yml
-	fi
+	# local contents26=$(cat $installdir/docker-compose.yml|awk 'NR==26')
+	# local contents27=$(cat $installdir/docker-compose.yml|awk 'NR==27')
+	# if [ ! -z $contents26 ]&&[ "$contents26" != '  environment: ' ]; then
+	# 	sed -i "26c \ " $installdir/docker-compose.yml
+	# fi
 	
-	if [ ! -z "$contents27" ]&&[ "$contents27" != '  environment: ' ]&&[ "$contents27" != '   - EXTRA_OPTS=--cores=${CORES}' ]; then
-		sed -i "27c \ " $installdir/docker-compose.yml
-	fi
+	# if [ ! -z "$contents27" ]&&[ "$contents27" != '  environment: ' ]&&[ "$contents27" != '   - EXTRA_OPTS=--cores=${CORES}' ]; then
+	# 	sed -i "27c \ " $installdir/docker-compose.yml
+	# fi
 
-	local res_isgx=$(ls /dev | grep isgx)
-	local res_sgx=$(ls /dev | grep sgx)
-	if [ x"$res_isgx" == x"isgx" ] || [ x"$res_sgx" == x"sgx" ]; then
+	if [ -c /dev/isgx ] || [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
 		/opt/intel/sgxdriver/uninstall.sh
-		sed -i "26a \ " $installdir/docker-compose.yml
-		sed -i "27a \ " $installdir/docker-compose.yml
 		if [ $? -ne 0 ]; then
 			log_info "----------Remove dcap/isgx driver failed----------"
 			exit 1
@@ -57,7 +57,7 @@ install_driver()
 {
 	remove_dirver
 	log_info "----------Download dcap driver----------"
-	wget $dcap_driverurl
+	wget $dcap_driverurl -O /tmp/$dcap_driverbin
 
 	if [ $? -ne 0 ]; then
 		log_err "----------Download dcap dirver failed----------"
@@ -65,13 +65,13 @@ install_driver()
 	fi
 
 	log_info "----------Give dcap driver executable permission----------"
-	chmod +x $dcap_driverbin
+	chmod +x /tmp/$dcap_driverbin
 
 	log_info "----------Installing dcap driver----------"
-	./$dcap_driverbin
+	/tmp/$dcap_driverbin
 
 	local res_dcap=$(ls /dev | grep sgx)
-	if [ x"$res_dcap" == x"" ]; then
+	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
 		log_err "----------Install dcap dirver bin failed----------"
 		remove_dirver
 		log_info "----------Download isgx driver----------"
@@ -83,35 +83,33 @@ install_driver()
 		fi
 
 		log_info "----------Give isgx driver executable permission----------"
-		chmod +x $isgx_driverbin
+		chmod +x /tmp/$isgx_driverbin
 
 		log_info "----------Installing isgx driver----------"
-		./$isgx_driverbin
+		/tmp/$isgx_driverbin
 
-		local res_sgx=$(ls /dev | grep isgx)
-		if [ x"$res_sgx" == x"" ]; then
+		if [ ! -c /dev/isgx ]; then
 			log_err "----------Install isgx dirver bin failed----------"
 			exit 1
 		else
-			sed -i "26c \   - /dev/isgx" $installdir/docker-compose.yml
+			yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
 		fi
 
 		log_info "----------Clean resource----------"
-		rm $isgx_driverbin
+		rm /tmp/$isgx_driverbin
 	else
-		sed -i "26c \   - /dev/sgx/enclave" $installdir/docker-compose.yml
-		sed -i "27c \   - /dev/sgx/provision" $installdir/docker-compose.yml
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
-	rm $dcap_driverbin
+	rm /tmp/$dcap_driverbin
 }
 
 install_dcap()
 {
 	remove_dirver
 	log_info "----------Download dcap driver----------"
-	wget $dcap_driverurl
+	wget $dcap_driverurl -O /tmp/$dcap_driverbin
 
 	if [ $? -ne 0 ]; then
 		log_err "----------Download isgx dirver failed----------"
@@ -119,29 +117,27 @@ install_dcap()
 	fi
 
 	log_info "----------Give dcap driver executable permission----------" 
-	chmod +x $dcap_driverbin
+	chmod +x /tmp/$dcap_driverbin
 
 	log_info "----------Installing dcap driver----------"
-	./$dcap_driverbin
+	/tmp/$dcap_driverbin
 
-	local res_dcap=$(ls /dev | grep sgx)
-	if [ x"$res_dcap" == x"" ]; then
+	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
 		log_err "----------Install dcap dirver bin failed----------"
 		exit 1
 	else
-		sed -i "26c \   - /dev/sgx/enclave" $installdir/docker-compose.yml
-		sed -i "27c \   - /dev/sgx/provision" $installdir/docker-compose.yml
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
-	rm $dcap_driverbin
+	rm /tmp/$dcap_driverbin
 }
 
 install_isgx()
 {
 	remove_dirver
 	log_info "----------Download isgx driver----------"
-	wget $isgx_driverurl
+	wget $isgx_driverurl -O /tmp/$isgx_driverbin
 	
 	if [ $? -ne 0 ]; then
 		log_err "----------Download isgx dirver failed----------"
@@ -149,17 +145,16 @@ install_isgx()
 	fi
 
 	log_info "----------Give isgx driver executable permission----------"
-	chmod +x $isgx_driverbin
+	chmod +x /tmp/$isgx_driverbin
 
 	log_info "----------Installing isgx driver----------"
-	./$isgx_driverbin
+	/tmp/$isgx_driverbin
 
-	local res_sgx=$(ls /dev | grep isgx)
-	if [ x"$res_sgx" == x"" ]; then
+	if [! -c /dev/isgxs ]; then
 		log_err "----------Install isgx dirver bin failed----------"
 		exit 1
 	else
-		sed -i "26c \   - /dev/isgx" $installdir/docker-compose.yml
+		yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
@@ -170,15 +165,15 @@ install()
 {
 	release=$(lsb_release -r | grep -o "[0-9]*\.[0-9]*")
 	if [ x"$release" = x"18.04" ]; then
-		dcap_driverbin=sgx_linux_x64_driver_1.36.2.bin
-		dcap_driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.36.2.bin
-		isgx_driverbin=sgx_linux_x64_driver_2.11.0_2d2b795.bin
-		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin
+		dcap_driverurl=$(awk -F '=' 'NR==11 {print $2}' $installdir/.env)
+		dcap_driverbin=$(awk -F '/' 'NR==11 {print $NF}' $installdir/.env)
+		isgx_driverurl=$(awk -F '=' 'NR==13 {print $2}' $installdir/.env)
+		isgx_driverbin=$(awk -F '/' 'NR==13 {print $NF}' $installdir/.env)
 	elif [ x"$release" = x"20.04" ]; then
-		dcap_driverbin=sgx_linux_x64_driver_1.36.2.bin
-		dcap_driverurl=https://download.01.org/intel-sgx/sgx-dcap/1.9/linux/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.36.2.bin
-		isgx_driverbin=sgx_linux_x64_driver_2.11.0_2d2b795.bin
-		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin
+		dcap_driverurl=$(awk -F '=' 'NR==12 {print $2}' $installdir/.env)
+		dcap_driverbin=$(awk -F '/' 'NR==12 {print $NF}' $installdir/.env)
+		isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
+		isgx_driverbin=$(awk -F '/' 'NR==14 {print $NF}' $installdir/.env)
 	else
 		log_err "----------The system does not support----------"
 		exit 1

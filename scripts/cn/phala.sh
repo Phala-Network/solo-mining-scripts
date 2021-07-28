@@ -31,6 +31,24 @@ EOF
 exit 0
 }
 
+sgx_test()
+{
+	docker -v
+	if [ $? -ne 0 ]; then
+		log_err "----------docker 没有安装----------"
+		exit 1
+	fi
+
+	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ] && [ -c /dev/isgx ]; then
+		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
+	elif [ -c /dev/isgx ]; then
+		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
+	else
+		log_err "----------sgx/dcap 驱动没有安装----------"
+		exit 1
+	fi
+}
+
 reportsystemlog()
 {
 	mkdir /tmp/systemlog
@@ -54,26 +72,6 @@ reportsystemlog()
 	rm -r /tmp/systemlog
 }
 
-sgx_test()
-{
-	docker -v
-	if [ $? -ne 0 ]; then
-		log_err "----------docker 没有安装----------"
-		exit 1
-	fi
-
-	local res_sgx=$(ls /dev | grep -w sgx)
-	local res_isgx=$(ls /dev | grep -w isgx)
-	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ]; then
-		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
-	elif [ x"$res_isgx" == x"isgx" ]; then
-		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
-	else
-		log_err "----------sgx/dcap 驱动没有安装----------"
-		exit 1
-	fi
-}
-
 score_test()
 {
 	if [ $# != 1 ]; then
@@ -89,10 +87,10 @@ score_test()
 
 	local res_sgx=$(ls /dev | grep -w sgx)
 	local res_isgx=$(ls /dev | grep -w isgx)
-	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
-		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+	if [-c /dev/sgx_enclave -a -c /dev/sgx_provision ] && [ -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	elif [ x"$res_isgx" == x"isgx" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
-		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/data/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
 		log_err "----------sgx/dcap 驱动没有安装----------"
 		install_driver

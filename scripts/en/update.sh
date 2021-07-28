@@ -9,9 +9,8 @@ update_script()
 	unzip /tmp/phala/main.zip -d /tmp/phala
 	rm -rf /opt/phala/scripts
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
-	mv /opt/phala/scripts/phala.sh /usr/bin/phala
-	chmod +x /usr/bin/phala
 	chmod +x /opt/phala/scripts/*
+	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 
 	log_success "----------Update success----------"
 	rm -rf /tmp/phala
@@ -23,15 +22,20 @@ update_clean()
 	log_info "Kill phala-node phala-pruntime phala-pherry"
 	cd $installdir
 	docker-compose stop
-	docker-compose rm $(docker-compose ps -aq)
+	docker-compose rm phala-node phala-pruntime phala-pherry
+	docker image rm phala-node phala-pruntime phala-pherry
 
 	log_info "----------Clean data----------"
-	rm -r /var/phala-node
-	rm -r /var/phala-pruntime
-
+	local node_data=$(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
+	local pruntime_data=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
+	if [ -f $node_data ]; then
+		rm -rf $node_data
+	elif [ -f $pruntime_data ]; then
+		rm -rf $pruntime_data
+	fi
 	log_success "----------Clean success----------"
 
-	phala start
+	start
 }
 
 update_noclean()
@@ -40,9 +44,10 @@ update_noclean()
 	log_info "Kill phala-node phala-pruntime phala-pherry"
 	cd $installdir
 	docker-compose stop
-	docker-compose rm $(docker-compose ps -aq)
+	docker-compose rm phala-node phala-pruntime phala-pherry
+	docker image rm phala-node phala-pruntime phala-pherry
 
-	phala start
+	start
 	log_success "----------Update success----------"
 }
 

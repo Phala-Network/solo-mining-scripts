@@ -35,7 +35,7 @@ update_clean()
 	fi
 	log_success "----------成功删数据----------"
 
-	phala start
+	start
 }
 
 update_noclean()
@@ -47,7 +47,7 @@ update_noclean()
 	docker-compose rm phala-node phala-pruntime phala-pherry
 	docker image rm phala-node phala-pruntime phala-pherry
 
-	phala start
+	start
 	log_success "----------更新成功----------"
 }
 

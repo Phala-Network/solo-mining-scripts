@@ -31,7 +31,6 @@ EOF
 exit 0
 }
 
-
 sgx_test()
 {
 	docker -v
@@ -40,11 +39,9 @@ sgx_test()
 		exit 1
 	fi
 
-	local res_sgx=$(ls /dev | grep -w sgx)
-	local res_isgx=$(ls /dev | grep -w isgx)
-	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ]; then
+	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ] && [ -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect
-	elif [ x"$res_isgx" == x"isgx" ]; then
+	elif [ -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect
 	else
 		log_err "----------sgx/dcap driver not install----------"
@@ -90,10 +87,10 @@ score_test()
 
 	local res_sgx=$(ls /dev | grep -w sgx)
 	local res_isgx=$(ls /dev | grep -w isgx)
-	if [ x"$res_sgx" == x"sgx" ] && [ x"$res_isgx" == x"" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
-		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-dev-pruntime-bench
+	if [-c /dev/sgx_enclave -a -c /dev/sgx_provision ] && [ -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-dev-pruntime-bench
 	elif [ x"$res_isgx" == x"isgx" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
-		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v $HOME/data/phala-pruntime-data:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx phalanetwork/phala-dev-pruntime-bench
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx phalanetwork/phala-dev-pruntime-bench
 	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
 		log_err "----------sgx/dcap driver not install----------"
 		install_driver
@@ -141,16 +138,10 @@ case "$1" in
 		update $2
 		;;
 	logs)
-		cd $installdir
-		docker-compose logs -f
+		logs
 		;;
 	uninstall)
-		cd $installdir
-		docker-compose stop
-		docker-compose rm $(docker-compose ps -aq)
-		remove_dirver
-		rm -rf $installdir
-		rm /usr/bin/phala
+		uninstall
 		;;
 	score_test)
 		score_test $2
