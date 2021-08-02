@@ -10,7 +10,7 @@ install_depenencies()
 	fi
 
 	log_info "----------安装依赖----------"
-	apt-get install -y jq curl wget unzip
+	apt-get install -y jq curl wget unzip zip
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 	apt-get install -y docker-ce docker-ce-cli containerd.io dkms
