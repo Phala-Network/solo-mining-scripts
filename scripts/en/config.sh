@@ -65,7 +65,7 @@ config_set_all()
 	local pool_addr=""
 	while true ; do
 		read -p "Enter your pool address: " pool_addr
-		if [ -z "$pool_addr" ] || [ "$(node $installdir/console.js verify $pool_addr)" == "Cannot decode the input" ]; then
+		if [ -z "$pool_addr" ] || [ "$(node $installdir/console.js verify "$pool_addr")" == "Cannot decode the input" ]; then
 			printf "Please enter a legal pool address, and it cannot be empty!\n"
 		else
 			sed -i "10c OPERATOR=$pool_addr" $installdir/.env

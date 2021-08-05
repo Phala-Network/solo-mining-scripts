@@ -45,7 +45,7 @@ config_set_all()
 	local balance=""
 	while true ; do
 		read -p "输入你的GAS费账号助记词 : " mnemonic
-		if [ -z "$mnemonic" ] || [ "$(node $installdir/console.js verify "$mnemonic")" == "Cannot decode the input" ]; then
+		if [ -z "$mnemonic" ] || [ $(node $installdir/console.js verify "$mnemonic") == "Cannot decode the input" ]; then
 			printf "请输入合法助记词,且不能为空！\n"
 		else
 			gas_adress=$(node $installdir/console.js verify "$mnemonic")
@@ -64,7 +64,7 @@ config_set_all()
 	local pool_addr=""
 	while true ; do
 		read -p "输入抵押池账户地址 : " pool_addr
-		if [ -z "$pool_addr" ] || [ "$(node $installdir/console.js verify $pool_addr)" == "Cannot decode the input" ]; then
+		if [ -z "$pool_addr" ] || [ $(node $installdir/console.js verify "$pool_addr") == "Cannot decode the input" ]; then
 			printf "请输入合法抵押池账户地址，且不能为空！\n"
 		else
 			sed -i "10c OPERATOR=$pool_addr" $installdir/.env
