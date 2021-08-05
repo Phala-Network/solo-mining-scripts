@@ -53,10 +53,10 @@ reportsystemlog()
 	mkdir /tmp/systemlog
 	ti=$(date +%s)
 	dmidecode > /tmp/systemlog/system$ti.inf
-	for image_name in phala-node phala-pruntime phala-pherry
+	for container_name in phala-node phala-pruntime phala-pherry
 	do
-		if [ ! -z $(docker ps -qf "name=$image_name") ]; then
-			case $image_name in
+		if [ ! -z $(docker ps -qf "name=$container_name") ]; then
+			case $container_name in
 				phala-node)
 					docker logs phala-node --tail 50000 > /tmp/systemlog/node$ti.inf
 					;;
@@ -150,8 +150,7 @@ case "$1" in
 		start
 		;;
 	stop)
-		cd $installdir
-		docker-compose stop
+		stop
 		;;
 	status)
 		status $2

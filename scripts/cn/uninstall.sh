@@ -4,10 +4,29 @@ uninstall()
 {
 	cd $installdir
 	docker-compose stop
-	docker container rm phala-node phala-pruntime phala-pherry
-	docker image rm $(awk -F '[=]' 'NR==1,NR==3 {print $2}' $installdir/.env)
+	for container_name in phala-node phala-pruntime phala-pherry
+	do
+		if [ ! -z $(docker ps -qf "name=$container_name") ]; then
+			docker container rm $container_name
+			case $container_name in
+				phala-node)
+					docker image rm $(awk -F "=" 'NR==1 {print $2}' $installdir/.env)
+					rm -rf $(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
+					;;
+				phala-pruntime)
+					docker image rm $(awk -F "=" 'NR==2 {print $2}' $installdir/.env)
+					rm -rf $(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
+					;;
+				phala-pherry)
+					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env)
+					;;
+				*)
+					break
+			esac
+		fi
+	done
 	remove_dirver
-	rm -rf $installdir $(awk -F '[=:]' 'NR==4,NR==5 {print $2}' $installdir/.env)
+	rm -rf $installdir
 	rm /usr/bin/phala
 
 	log_success "---------------删除 phala 挖矿套件成功---------------"
