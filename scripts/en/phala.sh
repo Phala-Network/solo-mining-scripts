@@ -27,6 +27,7 @@ Usage:
 	update {clean}				update phala node
 	logs {node|pruntime|phost}		show node module logs
 	sgx-test				start the mining test program
+	score-test				get the scores of your machine
 EOF
 exit 0
 }
@@ -164,7 +165,7 @@ case "$1" in
 	uninstall)
 		uninstall
 		;;
-	score_test)
+	score-test)
 		score_test $2
 		;;
 	sgx-test)

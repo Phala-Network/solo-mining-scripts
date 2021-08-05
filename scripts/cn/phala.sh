@@ -27,6 +27,7 @@ Usage:
 	update {clean}				升级
 	logs {node|pruntime|phost}		打印log信息
 	sgx-test				运行挖矿测试程序
+	score-test				获取机器评分
 EOF
 exit 0
 }
@@ -164,7 +165,7 @@ case "$1" in
 	uninstall)
 		uninstall
 		;;
-	score_test)
+	score-test)
 		score_test $2
 		;;
 	sgx-test)
