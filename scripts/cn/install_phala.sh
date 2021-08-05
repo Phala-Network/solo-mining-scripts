@@ -45,15 +45,14 @@ remove_dirver()
 	# 	sed -i "27c \ " $installdir/docker-compose.yml
 	# fi
 
-	if [ -c /dev/isgx ] && [ -f /opt/intel/sgxdriver/uninstall.sh ] ; then
-		local res=$(/opt/intel/sgxdriver/uninstall.sh)
-	elif [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ] && [ -f /opt/intel/sgxdriver/uninstall.sh ]; then
-		local res=$(/opt/intel/sgxdriver/uninstall.sh)
-	fi
-
-	if [ $? -ne 0 ]; then
-		log_info "----------删除旧版本 dcap/isgx 驱动失败----------"
-		exit 1
+	if [ -c /dev/isgx ] || [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+		if [ -f /opt/intel/sgxdriver/uninstall.sh ]; then
+			/opt/intel/sgxdriver/uninstall.sh
+			if [ $? -ne 0 ]; then
+				log_info "----------删除旧版本 dcap/isgx 驱动失败----------"
+				exit 1
+			fi
+		fi
 	fi
 }
 
