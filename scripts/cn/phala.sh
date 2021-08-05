@@ -83,14 +83,18 @@ score_test()
 		install_depenencies
 	fi
 
-	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+	if [ ! -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker container stop phala-pruntime-bench
+		docker image rm swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+	fi
+
+	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
-	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/data/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	else
 		log_err "----------sgx/dcap 驱动没有安装----------"
-		install_driver
-		score_test $1
+		exit 1
 	fi
 
 	echo -e "\033[31m 受各种环境因素影响，性能评分有可能产生一定程度的波动！此评分为预览版本，预备主网上线有变化的可能！ \033[0m"

@@ -78,20 +78,23 @@ score_test()
 		exit 1
 	fi
 
-	docker -v
-	if [ $? -ne 0 ]; then
+	if ! type docker > /dev/null 2>&1; then
 		log_err "----------docker not install----------" 
 		install_depenencies
 	fi
 
-	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+	if [ ! -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker container stop phala-pruntime-bench
+		docker image rm swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+	fi
+
+	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
-	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/data/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	else
 		log_err "----------sgx/dcap driver not install----------"
-		install_driver
-		score_test $1
+		exit 1
 	fi
 
 	echo -e "\033[31m The performance score could be influnced by various factors, including the CPU tempreture, power supply, and the background processes in your system. So it may fluctuate at the beginning, but it will be stablized after running for a while.\n The benchmark algorithm is still experimental and may be subject to future changes. \033[0m"
