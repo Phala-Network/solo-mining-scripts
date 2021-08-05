@@ -17,7 +17,7 @@ status()
 		local node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
 		local publickey=$(curl -X POST -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
 
-		check_docker_status khala-dev-node
+		check_docker_status khala-node
 		local res=$?
 		if [ $res -eq 0 ]; then
 			node_status="running"
@@ -25,7 +25,7 @@ status()
 			node_status="exited"
 		fi
 
-		check_docker_status phala-dev-pruntime
+		check_docker_status phala-pruntime
 		local res=$?
 		if [ $res -eq 0 ]; then
 			pruntime_status="running"
@@ -33,7 +33,7 @@ status()
 			pruntime_status="exited"
 		fi
 
-		check_docker_status phala-dev-pherry
+		check_docker_status phala-pherry
 		local res=$?
 		if [ $res -eq 0 ]; then
 			pherry_status="running"
