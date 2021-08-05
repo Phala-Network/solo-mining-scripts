@@ -33,15 +33,14 @@ exit 0
 
 sgx_test()
 {
-	docker -v
-	if [ $? -ne 0 ]; then
+	if ! type docker > /dev/null 2>&1; then
 		log_err "----------docker 没有安装----------"
 		exit 1
 	fi
 
-	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ] && [ -c /dev/isgx ]; then
+	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision ] && [ ! -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
-	elif [ -c /dev/isgx ]; then
+	elif [ -c /dev/isgx ] && [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
 	else
 		log_err "----------sgx/dcap 驱动没有安装----------"
@@ -79,19 +78,16 @@ score_test()
 		exit 1
 	fi
 
-	docker -v
-	if [ $? -ne 0 ]; then
+	if ! type docker > /dev/null 2>&1; then
 		log_err "----------docker 没有安装----------" 
 		install_depenencies
 	fi
 
-	local res_sgx=$(ls /dev | grep -w sgx)
-	local res_isgx=$(ls /dev | grep -w isgx)
-	if [-c /dev/sgx_enclave -a -c /dev/sgx_provision ] && [ -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
-	elif [ x"$res_isgx" == x"isgx" ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ] && [ -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/data/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
-	elif [ x"$res_sgx" == x"" ] && [ x"$res_isgx" == x"" ]; then
+	else
 		log_err "----------sgx/dcap 驱动没有安装----------"
 		install_driver
 		score_test $1
