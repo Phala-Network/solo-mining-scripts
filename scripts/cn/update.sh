@@ -28,9 +28,9 @@ update_clean()
 	log_info "----------删除节点数据----------"
 	local node_data=$(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
 	local pruntime_data=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
-	if [ -f $node_data ]; then
+	if [ -d $node_data ]; then
 		rm -rf $node_data
-	elif [ -f $pruntime_data ]; then
+	elif [ -d $pruntime_data ]; then
 		rm -rf $pruntime_data
 	fi
 	log_success "----------成功删数据----------"
@@ -46,7 +46,7 @@ update_noclean()
 	docker-compose stop
 	docker-compose rm khala-dev-node phala-dev-pruntime phala-dev-pherry
 	docker image rm khala-dev-node phala-dev-pruntime phala-dev-pherry
-	
+
 	start
 	log_success "----------更新成功----------"
 }

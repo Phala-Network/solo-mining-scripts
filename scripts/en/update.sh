@@ -28,9 +28,9 @@ update_clean()
 	log_info "----------Clean data----------"
 	local node_data=$(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
 	local pruntime_data=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
-	if [ -f $node_data ]; then
+	if [ -d $node_data ]; then
 		rm -rf $node_data
-	elif [ -f $pruntime_data ]; then
+	elif [ -d $pruntime_data ]; then
 		rm -rf $pruntime_data
 	fi
 	log_success "----------Clean success----------"
