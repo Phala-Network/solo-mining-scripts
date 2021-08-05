@@ -117,6 +117,11 @@ score_test()
 	fi
 }
 
+if [ $(id -u) -ne 0 ]; then
+	echo "Please run with sudo!"
+	exit 1
+fi
+
 case "$1" in
 	install)
 		install $2

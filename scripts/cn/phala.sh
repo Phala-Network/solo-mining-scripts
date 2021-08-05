@@ -117,6 +117,10 @@ score_test()
 	fi
 }
 
+if [ $(id -u) -ne 0 ]; then
+	echo "请使用sudo运行!"
+	exit 1
+fi
 
 case "$1" in
 	install)
