@@ -38,9 +38,9 @@ sgx_test()
 		exit 1
 	fi
 
-	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision ] && [ ! -c /dev/isgx ]; then
+	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
-	elif [ -c /dev/isgx ] && [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision ]; then
+	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
 	else
 		log_err "----------sgx/dcap 驱动没有安装----------"
@@ -53,12 +53,27 @@ reportsystemlog()
 	mkdir /tmp/systemlog
 	ti=$(date +%s)
 	dmidecode > /tmp/systemlog/system$ti.inf
-	docker logs phala-node --tail 50000 > /tmp/systemlog/node$ti.inf
-	docker logs phala-phost --tail 50000 > /tmp/systemlog/phost$ti.inf
-	docker logs phala-pruntime --tail 50000 > /tmp/systemlog/pruntime$ti.inf
-	if [ x"$(ls /dev | grep -w sgx)" == x"sgx" ]; then
+	for image_name in phala-node phala-pruntime phala-pherry
+	do
+		if [ ! -z $(docker ps -qf "name=$image_name") ]; then
+			case $image_name in
+				phala-node)
+					docker logs phala-node --tail 50000 > /tmp/systemlog/node$ti.inf
+					;;
+				phala-pruntime)
+					docker logs phala-pruntime --tail 50000 > /tmp/systemlog/pruntime$ti.inf
+					;;
+				phala-pherry)
+					docker logs phala-pherry --tail 50000 > /tmp/systemlog/pherry$ti.inf
+					;;
+				*)
+					break
+		fi
+	done
+
+	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-dcap.inf
-	elif [ x"$(ls /dev | grep -w isgx)" == x"isgx" ]; then
+	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-isgx.inf
 	fi
 	echo "$1 $score" > /tmp/systemlog/score$ti.inf
