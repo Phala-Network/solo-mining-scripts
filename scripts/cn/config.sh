@@ -50,8 +50,9 @@ config_set_all()
 		else
 			gas_adress=$(node $installdir/console.js verify "$mnemonic")
 			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://pc-test.phala.network/khala/ws" free-balance $gas_adress 2>&1)
+			balance=$(echo $balance | awk -F " " '{print $NF}')			
 			balance=$(echo "${balance##*WorkerStat} / 1000000000000"|bc)
-			if [ `echo "$balance > 0.1"|bc` -eq 1 ]; then
+			if [ $(echo "$balance > 0.1"|bc) -eq 1 ]; then
 				sed -i "8c MNEMONIC=$mnemonic" $installdir/.env
 				sed -i "9c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
 				break

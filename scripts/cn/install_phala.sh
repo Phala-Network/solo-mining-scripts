@@ -45,14 +45,8 @@ remove_dirver()
 	# 	sed -i "27c \ " $installdir/docker-compose.yml
 	# fi
 
-	if [ -c /dev/isgx ] || [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
-		if [ -f /opt/intel/sgxdriver/uninstall.sh ]; then
-			/opt/intel/sgxdriver/uninstall.sh
-			if [ $? -ne 0 ]; then
-				log_info "----------删除旧版本 dcap/isgx 驱动失败----------"
-				exit 1
-			fi
-		fi
+	if [ -f /opt/intel/sgxdriver/uninstall.sh ]; then
+		/opt/intel/sgxdriver/uninstall.sh
 	fi
 }
 
@@ -73,11 +67,11 @@ install_driver()
 	log_info "----------尝试安装DCAP驱动----------"
 	/tmp/$dcap_driverbin
 
-	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
+	if [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision ]; then
 		log_err "----------安装DCAP驱动失败，尝试安装isgx驱动----------"
 		remove_dirver
 		log_info "----------下载 ISGX 驱动----------"
-		wget $isgx_driverurl
+		wget $isgx_driverurl -O /tmp/$isgx_driverbin
 		
 		if [ $? -ne 0 ]; then
 			log_err "----------下载 ISGX 驱动失败----------"
@@ -124,7 +118,7 @@ install_dcap()
 	log_info "----------安装DCAP驱动----------"
 	/tmp/$dcap_driverbin
 
-	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
+	if [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision ]; then
 		log_err "----------安装DCAP驱动失败----------"
 		exit 1
 	else
@@ -152,7 +146,7 @@ install_isgx()
 	log_info "----------安装 isgx 驱动----------"
 	/tmp/$isgx_driverbin
 
-	if [! -c /dev/isgxs ]; then
+	if [! -c /dev/isgx ]; then
 		log_err "----------安装 isgx 驱动失败----------"
 		exit 1
 	else
