@@ -2,8 +2,8 @@ version: "3"
 services:
  phala-node:
    image: ${NODE_IMAGE}
-   container_name: khala-dev-node
-   hostname: khala-dev-node
+   container_name: phala-node
+   hostname: phala-node
    ports:
      - "9933:9933"
      - "9934:9934"
@@ -19,8 +19,8 @@ services:
 
  phala-pruntime:
    image: ${PRUNTIME_IMAGE}
-   container_name: phala-dev-pruntime
-   hostname: phala-dev-pruntime
+   container_name: phala-pruntime
+   hostname: phala-pruntime
    ports:
      - "8000:8000"
    devices:
@@ -31,8 +31,8 @@ services:
 
  phala-pherry:
    image: ${PHERRY_IMAGE}
-   container_name: phala-dev-pherry
-   hostname: phala-dev-pherry
+   container_name: phala-pherry
+   hostname: phala-pherry
    depends_on:
      - phala-node
      - phala-pruntime

@@ -5,7 +5,7 @@ update_script()
 	log_info "----------更新 phala 脚本----------"
 
 	mkdir -p /tmp/phala
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/phala/main.zip
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/phala/main.zip
 	unzip /tmp/phala/main.zip -d /tmp/phala
 	rm -rf /opt/phala/scripts
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/cn /opt/phala/scripts
