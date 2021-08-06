@@ -1,6 +1,6 @@
 #!/bin/bash
 
-config_help()
+help_config()
 {
 cat << EOF
 Usage:
@@ -84,6 +84,7 @@ config()
 			config_set_all
 			;;
 		*)
-			config_help
+			help_config
+			break
 	esac
 }
