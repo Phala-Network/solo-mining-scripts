@@ -3,7 +3,7 @@
 check_version()
 {
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
-	unzip /tmp/main.zip -d /tmp/phala
+	unzip -o /tmp/main.zip -d /tmp/phala
 	if [ $(cat $installdir/.env | awk -F "=" '{print $NF}') != $(cat /tmp/phala/solo-mining-scripts-poc5/.env | awk -F "=" '{print $NF}') ]; then
 		rm -rf /opt/phala/scripts
 		rm /usr/bin/phala
