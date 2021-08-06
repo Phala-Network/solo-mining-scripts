@@ -140,6 +140,7 @@ if [ $(id -u) -ne 0 ]; then
 	exit 1
 fi
 
+check_version
 case "$1" in
 	install)
 		install $2
@@ -151,7 +152,7 @@ case "$1" in
 		start
 		;;
 	stop)
-		stop
+		stop $2
 		;;
 	status)
 		status $2

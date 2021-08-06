@@ -6,7 +6,7 @@ check_version()
 	unzip /tmp/main.zip -d /tmp/phala
 	if [ $(cat $installdir/.env | awk -F "=" '{print $NF}') != $(cat /tmp/phala/solo-mining-scripts-poc5/.env | awk -F "=" '{print $NF}') ]; then
 		rm -rf /opt/phala/scripts
-		rm /usr/bin/phalas
+		rm /usr/bin/phala
 		cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
 		chmod +x /opt/phala/scripts/*
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
