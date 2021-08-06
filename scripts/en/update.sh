@@ -18,17 +18,18 @@ update_script()
 {
 	log_info "----------Update phala script----------"
 
-	mkdir -p /tmp/phala
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/phala/main.zip
-	unzip /tmp/phala/main.zip -d /tmp/phala
-	rm -rf /opt/phala/scripts
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
+	unzip -o /tmp/main.zip -d /tmp/phala
+	rm -rf /opt/phala
 	rm /usr/bin/phala
+	mkdir /opt/phala
 	cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/en /opt/phala/scripts
 	chmod +x /opt/phala/scripts/*
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 
 	log_success "----------Update success----------"
 	rm -rf /tmp/phala
+	rm /tmp/main.zip
 }
 
 update_clean()

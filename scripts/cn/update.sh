@@ -8,6 +8,9 @@ check_version()
 		rm -rf /opt/phala/scripts
 		rm /usr/bin/phala
 		cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
+		cp -r /tmp/phala/solo-mining-scripts-poc5/.env /opt/phala/
+		cp -r /tmp/phala/solo-mining-scripts-poc5/console.js /opt/phala/
+		cp -r /tmp/phala/solo-mining-scripts-poc5/docker-compose.yml /opt/phala/
 		chmod +x /opt/phala/scripts/*
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		exit 1
@@ -23,9 +26,12 @@ update_script()
 	mkdir -p /tmp/phala
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
 	unzip -o /tmp/phala/main.zip -d /tmp/phala
-	rm -rf /opt/phala/scripts
+	rm -rf /opt/Phala
 	rm /usr/bin/phala
 	cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
+	cp -r /tmp/phala/solo-mining-scripts-poc5/.env /opt/phala/
+	cp -r /tmp/phala/solo-mining-scripts-poc5/console.js /opt/phala/
+	cp -r /tmp/phala/solo-mining-scripts-poc5/docker-compose.yml /opt/phala/
 	chmod +x /opt/phala/scripts/*
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 
