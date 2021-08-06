@@ -4,10 +4,10 @@ help_stop()
 {
 cat << EOF
 Usage:
-	phala-node					stop phala-node container 
-	phala-pruntime					stop phala-pruntime container
-	phala-pherry					stop phala-pherry container
-	phala-bench					stop phala-bench container
+	node					stop phala-node container 
+	pruntime					stop phala-pruntime container
+	pherry					stop phala-pherry container
+	bench					stop phala-bench container
 EOF
 exit 0
 }
@@ -15,32 +15,32 @@ exit 0
 stop()
 {
 	case $1 in
-		phala-node)
+		node)
 			if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 				docker container stop phala-node
 			else
 				log_info "----------phala-node already stop----------"
 			fi
 			;;
-		phala-pruntime)
+		pruntime)
 			if [ ! -z $(docker ps -qf "name=phala-pruntime") ]; then
 				docker container stop phala-pruntime
 			else
 				log_info "----------phala-pruntime already stop----------"
 			fi
 			;;
-		phala-pherry)
+		pherry)
 			if [ ! -z $(docker ps -qf "name=phala-pherry") ]; then
 				docker container stop phala-pruntime
 			else
 				log_info "----------phala-pherry already stop----------"
 			fi
 			;;
-		phala-bench)
-			if [ ! -z $(docker ps -qf "name=phala-bench") ]; then
-				docker container stop phala-bench
+		bench)
+			if [ ! -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+				docker container stop phala-pruntime-bench
 			else
-				log_info "----------phala-bench already stop----------"
+				log_info "----------phala-pruntime-bench already stop----------"
 			fi
 			;;
 		*)

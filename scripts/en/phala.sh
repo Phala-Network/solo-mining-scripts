@@ -100,16 +100,16 @@ score_test()
 		install_depenencies
 	fi
 
-	if [ ! -z $(docker ps -qf "name=phala-bench") ]; then
-		docker container stop phala-bench
+	if [ ! -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+		docker container stop phala-pruntime-bench
 		docker image rm swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
-		rm -rf /var/phala-bench
+		rm -rf /var/phala-pruntime-bench
 	fi
 
 	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
-		docker run -dti --rm --name phala-bench -p 8001:8000 -v /var/phala-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
-		docker run -dti --rm --name phala-bench -p 8001:8000 -v /var/data/phala-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/data/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	else
 		log_err "----------sgx/dcap driver not install----------"
 		exit 1
@@ -140,10 +140,9 @@ if [ $(id -u) -ne 0 ]; then
 	exit 1
 fi
 
-
-check_version
 case "$1" in
 	install)
+		check_version
 		install $2
 		;;
 	config)
