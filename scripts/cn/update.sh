@@ -25,9 +25,10 @@ update_script()
 
 	mkdir -p /tmp/phala
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
-	unzip -o /tmp/phala/main.zip -d /tmp/phala
-	rm -rf /opt/Phala
+	unzip -o /tmp/main.zip -d /tmp/phala
+	rm -rf /opt/phala
 	rm /usr/bin/phala
+	mkdir /opt/phala
 	cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
 	cp -r /tmp/phala/solo-mining-scripts-poc5/.env /opt/phala/
 	cp -r /tmp/phala/solo-mining-scripts-poc5/console.js /opt/phala/
