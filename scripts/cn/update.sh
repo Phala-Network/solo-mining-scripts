@@ -1,5 +1,18 @@
 #!/bin/bash
 
+check_version()
+{
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -P /tmp/phala-main.zip
+	unzip /tmp/phala-main.zip -d /tmp/phala
+	if [ $(cat $installdir/.env | awk -F "=" '{print $NF}') != $(cat /tmp/phala/.env | awk -F "=" '{print $NF}') ]; then
+		rm -rf /opt/phala/scripts
+		cp -r /tmp/phala/solo-mining-scripts-main/scripts/cn /opt/phala/scripts
+		chmod +x /opt/phala/scripts/*
+		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
+	fi
+
+}
+
 update_script()
 {
 	log_info "----------更新 phala 脚本----------"
