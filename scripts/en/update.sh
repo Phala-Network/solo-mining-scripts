@@ -5,14 +5,19 @@ check_version()
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
 	unzip -o /tmp/main.zip -d /tmp/phala
 	if [ "$(cat $installdir/.env | awk -F "=" '{print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-poc5/.env | awk -F "=" '{print $NF}')" ]; then
-		rm -rf /opt/phala/scripts
-		rm /usr/bin/phala
-		cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/en /opt/phala/scripts
-		cp -r /tmp/phala/solo-mining-scripts-poc5/.env /opt/phala/
-		cp -r /tmp/phala/solo-mining-scripts-poc5/console.js /opt/phala/
-		cp -r /tmp/phala/solo-mining-scripts-poc5/docker-compose.yml /opt/phala/
+		sed -i "4c NODE_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==4 {print $NF}')" /tmp/phala/solo-mining-scripts-poc5/.env
+		sed -i "5c PRUNTIME_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==5 {print $NF}')" /tmp/phala/solo-mining-scripts-poc5/.env
+		sed -i "6c CORES=$(cat $installdir/.env|awk -F "=" 'NR==6 {print $NF}')" /tmp/phala/solo-mining-scripts-poc5/.env
+		sed -i "7c NODE_NAME=$(cat $installdir/.env|awk -F "=" 'NR==7 {print $NF}')" /tmp/phala/solo-mining-scripts-poc5/.env
+		sed -i "8c MNEMONIC=$(cat $installdir/.env|awk -F "=" 'NR==8 {print $NF}')" /tmp/phala/solo-mining-scripts-poc5/.env
+		sed -i "9c GAS_ACCOUNT_ADDRESS=$(cat $installdir/.env|awk -F "=" 'NR==9 {print $NF}')" /tmp/phala/solo-mining-scripts-poc5/.env
+		sed -i "10c OPERATOR=$(cat $installdir/.env|awk -F "=" 'NR==10 {print $NF}')" /tmp/phala/solo-mining-scripts-poc5/.env
+		rm -rf /opt/phala/{scripts,.env,docker-compose.yml,console.js}  /usr/bin/phala
+		cp /tmp/phala/solo-mining-scripts-poc5/{.env,console.js,docker-compose.yml} /opt/phala
+		cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
 		chmod +x /opt/phala/scripts/*
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
+		log_info "----------The local script version is too low and has been automatically upgraded. Please execute the command again!----------"
 		exit 1
 	fi
 
