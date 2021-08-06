@@ -3,7 +3,7 @@
 check_version()
 {
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
-	unzip -oj /tmp/main.zip -d /tmp/phala
+	unzip -o /tmp/main.zip -d /tmp/phala
 	if [ $(cat $installdir/.env | awk -F "=" '{print $NF}') != $(cat /tmp/phala/solo-mining-scripts-poc5/.env | awk -F "=" '{print $NF}') ]; then
 		rm -rf /opt/phala/scripts
 		rm /usr/bin/phala
@@ -12,6 +12,8 @@ check_version()
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		exit 1
 	fi
+	rm -rf /tmp/phala
+	rm /tmp/main.zip
 }
 
 update_script()
@@ -19,8 +21,8 @@ update_script()
 	log_info "----------更新 phala 脚本----------"
 
 	mkdir -p /tmp/phala
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/phala/main.zip
-	unzip /tmp/phala/main.zip -d /tmp/phala
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
+	unzip -o /tmp/phala/main.zip -d /tmp/phala
 	rm -rf /opt/phala/scripts
 	cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
 	chmod +x /opt/phala/scripts/*
@@ -28,6 +30,7 @@ update_script()
 
 	log_success "----------更新完成----------"
 	rm -rf /tmp/phala
+	rm /tmp/main.zip
 }
 
 update_clean()
@@ -71,7 +74,7 @@ update()
 		clean)
 			update_clean
 			;;
-		script)
+		scripts)
 			update_script
 			;;
 		"")

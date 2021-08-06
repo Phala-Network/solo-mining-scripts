@@ -71,7 +71,7 @@ update()
 		clean)
 			update_clean
 			;;
-		script)
+		scripts)
 			update_script
 			;;
 		"")
