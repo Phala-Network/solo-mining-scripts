@@ -5,7 +5,7 @@ help_stop()
 cat << EOF
 Usage:
 	node					停止phala-node容器
-	pruntime					停止phala-pruntime容器
+	pruntime				停止phala-pruntime容器
 	pherry					停止phala-pherry容器
 	bench					停止phala-pruntime-bench容器
 EOF
@@ -15,6 +15,12 @@ exit 0
 stop()
 {
 	case $1 in
+		"")
+			for container_name in phala-node phala-pruntiem phala-pherry phala-pruntime-bench
+			do
+				if [ ! -z $(docker ps -qf "name=$container_name") ]; then docker container stop $container_name; fi
+			done
+			;;
 		node)
 			if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 				docker container stop phala-node

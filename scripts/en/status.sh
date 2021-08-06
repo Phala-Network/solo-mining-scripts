@@ -43,7 +43,7 @@ status()
 		fi
 
 		clear
-		if [ `echo "$balance < 2"|bc` -eq 1 ]; then
+		if [ $(echo "$balance < 2"|bc) -eq 1 ]; then
 			printf "
 --------------------------------------------------------------------------
 	Service		Status		CurrentBlock

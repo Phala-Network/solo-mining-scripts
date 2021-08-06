@@ -15,6 +15,11 @@ exit 0
 stop()
 {
 	case $1 in
+		"")
+			for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench
+			do
+				if [ ! -z $(docker ps -qf "name=$container_name") ]; then docker container stop $container_name; fi
+			done
 		node)
 			if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 				docker container stop phala-node
