@@ -168,6 +168,7 @@ case "$1" in
 		uninstall
 		;;
 	score-test)
+		check_version
 		score_test $2
 		;;
 	sgx-test)

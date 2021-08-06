@@ -140,7 +140,6 @@ if [ $(id -u) -ne 0 ]; then
 	exit 1
 fi
 
-check_version
 case "$1" in
 	install)
 		install $2
@@ -167,6 +166,7 @@ case "$1" in
 		uninstall
 		;;
 	score-test)
+		check_version
 		score_test $2
 		;;
 	sgx-test)
