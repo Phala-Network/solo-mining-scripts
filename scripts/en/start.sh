@@ -9,14 +9,17 @@ start()
 	if ! type docker docker-compose node yq jq curl wget unzip zip >/dev/null 2>&1; then
 		log_err "----------Lack of important dependent tools, please execute 'sudo phala install' to reinstall！----------"
 		exit 1
-	elif [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
+	fi
+
+	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
 		log_err "----------The dcap/isgx driver is not installed, please execute the 'sudo phala install dcap'/'sudo phala install isgx' command to install!----------"
 		exit 1
-	elif [ -z "$node_name" ]||[ -z "$cores" ]||[ -z "$mnemonic" ]||[ -z "$pool_address" ]; then
+	fi
+
+	if [ -z "$node_name" ]||[ -z "$cores" ]||[ -z "$mnemonic" ]||[ -z "$pool_address" ]; then
 		log_err "----------The node is not configured, or the important configuration is lost, please reconfigure the node!----------"
 		exit 1
-	else
-		cd $installdir
-		docker-compose up -d
 	fi
+	cd $installdir
+	docker-compose up -d
 }
