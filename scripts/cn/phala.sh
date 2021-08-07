@@ -36,10 +36,14 @@ sgx_test()
 {
 	if ! type docker > /dev/null 2>&1; then
 		log_err "----------docker 没有安装----------"
-		exit 1
+		install_depenencies
 	fi
 
-	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
+	if [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
+		install
+	fi
+
+	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
 	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest

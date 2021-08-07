@@ -36,7 +36,11 @@ sgx_test()
 {
 	if ! type docker > /dev/null 2>&1; then
 		log_err "----------docker not install----------"
-		exit 1
+		install_depenencies
+	fi
+
+	if [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
+		install
 	fi
 
 	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
