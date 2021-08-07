@@ -78,7 +78,8 @@ config_set_all()
 config()
 {
 	log_info "----------Test confidenceLevel, waiting for Intel to issue IAS remote certification report!----------"
-	local confidenceLevel=$(phala sgx-test | awk '/confidenceLevel =/{ print $3 }')
+	local logs=$(sgx_test)
+	local confidenceLevel=$(echo $logs | awk '/confidenceLevel =/{ print $3 }')
 	if [ $(echo "$confidenceLevel >= 1"|bc) -eq 1 ] && [ $(echo "$confidenceLevel <= 5"|bc) -eq 1 ]; then
 		log_info "----------Intel IAS certification has not passed, please check your motherboard or network!----------"
 		exit 1

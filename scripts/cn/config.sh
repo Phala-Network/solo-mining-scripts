@@ -77,7 +77,8 @@ config_set_all()
 config()
 {
 	log_info "----------测试信用等级，正在等待Intel下发IAS远程认证报告！----------"
-	local confidenceLevel=$(phala sgx-test | awk '/confidenceLevel =/{ print $3 }')
+	local logs=$(sgx_test)
+	local confidenceLevel=$(echo $logs | awk '/confidenceLevel =/{ print $3 }')
 	if [ $(echo "$confidenceLevel >= 1" | bc) -eq 1 ] && [ $(echo "$confidenceLevel <= 5" | bc) -eq 1 ]; then
 		log_info "----------Intel IAS认证没有通过，请检查您的主板或网络！----------"
 		exit 1
