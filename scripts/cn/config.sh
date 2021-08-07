@@ -76,15 +76,23 @@ config_set_all()
 
 config()
 {
-	case "$1" in
-		show)
-			config_show
-			;;
-		set)
-			config_set_all
-			;;
-		*)
-			help_config
-			break
-	esac
+	log_info "----------测试信用等级，正在等待Intel下发IAS远程认证报告！----------"
+	local confidenceLevel=$(sgx_test | awk '/confidenceLevel =/{ print $3 }')
+	if [ $(echo "$confidenceLevel >= 1"|bc) ] && [ $(echo "$confidenceLevel <= 5"|bc) ]; then
+		log_info "----------Intel IAS认证没有通过，请检查您的主板或网络！----------"
+		exit 1
+	else
+		log_info "----------您的信任等级是：$confidenceLevel----------"
+		case "$1" in
+			show)
+				config_show
+				;;
+			set)
+				config_set_all
+				;;
+			*)
+				help_config
+				break
+		esac
+	fi
 }

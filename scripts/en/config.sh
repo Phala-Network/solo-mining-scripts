@@ -77,14 +77,23 @@ config_set_all()
 
 config()
 {
-	case "$1" in
-		show)
-			config_show
-			;;
-		set)
-			config_set_all
-			;;
-		*)
-			config_help
-	esac
+	log_info "----------Test confidenceLevel, waiting for Intel to issue IAS remote certification report!----------"
+	local confidenceLevel=$(sgx_test | awk '/confidenceLevel =/{ print $3 }')
+	if [ $(echo "$confidenceLevel >= 1"|bc) ] && [ $(echo "$confidenceLevel <= 5"|bc) ]; then
+		log_info "----------Intel IAS certification has not passed, please check your motherboard or network!----------"
+		exit 1
+	else
+		log_info "----------Your confidenceLevel is：$confidenceLevel----------"
+		case "$1" in
+			show)
+				config_show
+				;;
+			set)
+				config_set_all
+				;;
+			*)
+				help_config
+				break
+		esac
+	fi
 }
