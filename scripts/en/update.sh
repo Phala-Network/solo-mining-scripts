@@ -14,7 +14,7 @@ check_version()
 		sed -i "10c OPERATOR=$(cat $installdir/.env|awk -F "=" 'NR==10 {print $NF}')" /tmp/phala/solo-mining-scripts-poc5/.env
 		rm -rf /opt/phala/{scripts,.env,docker-compose.yml,console.js}  /usr/bin/phala
 		cp /tmp/phala/solo-mining-scripts-poc5/{.env,console.js,docker-compose.yml} /opt/phala
-		cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
+		cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/en /opt/phala/scripts
 		chmod +x /opt/phala/scripts/*
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		log_info "----------The local script version is too low and has been automatically upgraded. Please execute the command again!----------"
