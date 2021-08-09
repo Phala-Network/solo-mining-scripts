@@ -17,7 +17,7 @@ start()
 	fi
 
 	if [ -z "$node_name" ]||[ -z "$cores" ]||[ -z "$mnemonic" ]||[ -z "$pool_address" ]; then
-		log_err "----------The node is not configured, or the important configuration is lost, please reconfigure the node!----------"
+		log_err "----------The node is not configured, or the important configuration is lost, start configuring the node!----------"
 		exit 1
 	fi
 	cd $installdir

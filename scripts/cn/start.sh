@@ -17,8 +17,8 @@ start()
 	fi
 
 	if [ -z "$node_name" ]||[ -z "$cores" ]||[ -z "$mnemonic" ]||[ -z "$pool_address" ]; then
-		log_err "----------节点未配置，或重要启动配置丢失，请重新配置节点！----------"
-		exit 1
+		log_err "----------节点未配置，开始配置节点！----------"
+		config_set_all
 	fi
 	cd $installdir
 	docker-compose up -d
