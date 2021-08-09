@@ -18,7 +18,7 @@ start()
 
 	if [ -z "$node_name" ]||[ -z "$cores" ]||[ -z "$mnemonic" ]||[ -z "$pool_address" ]; then
 		log_err "----------The node is not configured, or the important configuration is lost, start configuring the node!----------"
-		exit 1
+		config_set_all
 	fi
 	cd $installdir
 	docker-compose up -d
