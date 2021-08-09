@@ -20,6 +20,7 @@ stop()
 			do
 				if [ ! -z $(docker ps -qf "name=$container_name") ]; then docker container stop $container_name; fi
 			done
+			;;
 		node)
 			if [ ! -z $(docker ps -qf "name=phala-node") ]; then
 				docker container stop phala-node
