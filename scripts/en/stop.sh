@@ -37,7 +37,7 @@ stop()
 			;;
 		pherry)
 			if [ ! -z $(docker ps -qf "name=phala-pherry") ]; then
-				docker container stop phala-pruntime
+				docker container stop phala-pherry
 			else
 				log_info "----------phala-pherry already stop----------"
 			fi
