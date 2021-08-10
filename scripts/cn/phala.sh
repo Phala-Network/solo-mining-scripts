@@ -39,13 +39,13 @@ sgx_test()
 		install_depenencies
 	fi
 
-	if [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
+	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision -a ! -c /dev/isgx ]; then
 		install
 	fi
 
-	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
-		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
-	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
+	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision -a ! -c /dev/isgx ]; then
+		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx_enclave --device /dev/sgx_provision swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
+	elif [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision -a -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
 	else
 		log_err "----------sgx/dcap 驱动没有安装----------"
@@ -77,9 +77,9 @@ reportsystemlog()
 		fi
 	done
 
-	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
-		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-dcap.inf
-	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
+	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision -a ! -c /dev/isgx ]; then
+		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx_enclave --device /dev/sgx_provision phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-dcap.inf
+	elif [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision -a -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/isgx phalanetwork/phala-sgx_detect > /tmp/systemlog/testdocker-isgx.inf
 	fi
 	echo "$1 $score" > /tmp/systemlog/score$ti.inf
@@ -110,9 +110,9 @@ score_test()
 		rm -rf /var/phala-pruntime-bench
 	fi
 
-	if [ -c /dev/sgx/enclave -a -c /dev/sgx/provision -a ! -c /dev/isgx ]; then
-		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx/enclave --device /dev/sgx/provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
-	elif [ ! -c /dev/sgx/enclave -a ! -c /dev/sgx/provision -a -c /dev/isgx ]; then
+	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision -a ! -c /dev/isgx ]; then
+		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/sgx_enclave --device /dev/sgx_provision swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+	elif [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision -a -c /dev/isgx ]; then
 		docker run -dti --rm --name phala-pruntime-bench -p 8001:8000 -v /var/phala-pruntime-bench:/root/data -e EXTRA_OPTS="-c $1" --device /dev/isgx swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 	else
 		log_err "----------sgx/dcap 驱动没有安装----------"
