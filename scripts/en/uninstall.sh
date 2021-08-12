@@ -7,7 +7,7 @@ uninstall()
 	for container_name in phala-node phala-pruntime phala-pherry
 	do
 		if [ ! -z $(docker ps -qf "name=$container_name") ]; then
-			docker container rm $container_name
+			docker container rm --force $container_name
 			case $container_name in
 				phala-node)
 					docker image rm $(awk -F "=" 'NR==1 {print $2}' $installdir/.env)

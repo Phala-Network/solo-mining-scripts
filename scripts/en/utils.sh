@@ -9,7 +9,7 @@ log_info()
 {
 	echo_c 33 "$1"
 }
-
+ 
 log_success()
 {
 	echo_c 32 "$1"

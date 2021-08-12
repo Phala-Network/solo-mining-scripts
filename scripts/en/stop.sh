@@ -18,33 +18,33 @@ stop()
 		"")
 			for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench
 			do
-				if [ ! -z $(docker ps -qf "name=$container_name") ]; then docker container stop $container_name; fi
+				if [ ! -z $(docker ps -qf "name=$container_name") ]; then docker container rm --force $container_name; fi
 			done
 			;;
 		node)
 			if [ ! -z $(docker ps -qf "name=phala-node") ]; then
-				docker container stop phala-node
+				docker container rm --force phala-node
 			else
 				log_info "----------phala-node already stop----------"
 			fi
 			;;
 		pruntime)
 			if [ ! -z $(docker ps -qf "name=phala-pruntime") ]; then
-				docker container stop phala-pruntime
+				docker container rm --force phala-pruntime
 			else
 				log_info "----------phala-pruntime already stop----------"
 			fi
 			;;
 		pherry)
 			if [ ! -z $(docker ps -qf "name=phala-pherry") ]; then
-				docker container stop phala-pherry
+				docker container rm --force phala-pherry
 			else
 				log_info "----------phala-pherry already stop----------"
 			fi
 			;;
 		bench)
 			if [ ! -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
-				docker container stop phala-pruntime-bench
+				docker container rm --force phala-pruntime-bench
 			else
 				log_info "----------phala-pruntime-bench already stop----------"
 			fi
