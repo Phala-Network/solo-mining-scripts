@@ -226,6 +226,7 @@ install()
 			;;
 	esac
 
+	sleep 5
 	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
 	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
