@@ -115,19 +115,19 @@ install_driver()
 		log_info "----------安装 ISGX 驱动----------"
 		/tmp/$isgx_driverbin
 
-		if [ ! -c /dev/isgx ]; then
-			log_err "----------安装 isgx 驱动失败，请检查主板BIOS----------"
-			exit 1
-		else
-			yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
-		fi
+		# if [ ! -c /dev/isgx ]; then
+		# 	log_err "----------安装 isgx 驱动失败，请检查主板BIOS----------"
+		# 	exit 1
+		# else
+		# 	yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
+		# fi
 
 		log_info "----------删除临时文件----------"
 		rm /tmp/$isgx_driverbin
-	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
-		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
-	else
-		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	# elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
+	# else
+	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
 	fi
 
 	log_success "----------删除临时文件----------"
@@ -151,14 +151,14 @@ install_dcap()
 	log_info "----------安装DCAP驱动----------"
 	/tmp/$dcap_driverbin
 
-	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
-		log_err "----------安装DCAP驱动失败----------"
-		exit 1
-	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
-		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
-	else
-		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
-	fi
+	# if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
+	# 	log_err "----------安装DCAP驱动失败----------"
+	# 	exit 1
+	# elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
+	# else
+	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	# fi
 
 	log_success "----------删除临时文件----------"
 	rm /tmp/$dcap_driverbin
@@ -181,12 +181,12 @@ install_isgx()
 	log_info "----------安装 isgx 驱动----------"
 	/tmp/$isgx_driverbin
 
-	if [! -c /dev/isgx ]; then
-		log_err "----------安装 isgx 驱动失败----------"
-		exit 1
-	else
-		yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
-	fi
+	# if [! -c /dev/isgx ]; then
+	# 	log_err "----------安装 isgx 驱动失败----------"
+	# 	exit 1
+	# else
+	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
+	# fi
 
 	log_success "----------删除临时文件----------"
 	rm /tmp/$isgx_driverbin
@@ -225,6 +225,14 @@ install()
 			exit 1
 			;;
 	esac
+
+	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
+	elif [ -c /dev/isgx ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
+	fi
 
 	exit 0
 }
