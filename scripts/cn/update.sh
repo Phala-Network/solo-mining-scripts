@@ -2,6 +2,7 @@
 
 check_version()
 {
+	if ! type jq curl wget unzip zip docker docker-compose node yq dkms; then install_depenencies;fi
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
 	unzip -o /tmp/main.zip -d /tmp/phala
 	if [ "$(cat $installdir/.env | awk -F "=" '{print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-poc5/.env | awk -F "=" '{print $NF}')" ]; then
