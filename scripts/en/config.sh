@@ -49,7 +49,7 @@ config_set_all()
 			printf "Please enter a legal mnemonic, and it cannot be empty!\n"
 		else
 			gas_adress=$(node $installdir/console.js verify "$mnemonic")
-			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://pc-test.phala.network/khala/ws" free-balance $gas_adress 2>&1)
+			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://para1-api.phala.network/ws/" free-balance $gas_adress 2>&1)
 			balance=$(echo $balance | awk -F " " '{print $NF}')
 			balance=$(expr "${balance##*WorkerStat} / 1000000000000"|bc)
 			if [ `echo "$balance > 0.1"|bc` -eq 1 ]; then
