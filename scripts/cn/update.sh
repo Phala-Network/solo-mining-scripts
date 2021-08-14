@@ -3,13 +3,13 @@
 check_version()
 {
 	if ! type jq curl wget unzip zip docker docker-compose node yq dkms; then install_depenencies;fi
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/main.zip
 	unzip -o /tmp/main.zip -d /tmp/phala
-	if [ "$(cat $installdir/.env | awk -F "=" '{print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-poc5/.env | awk -F "=" '{print $NF}')" ]; then
+	if [ "$(cat $installdir/.env | awk -F "=" '{print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-para/.env | awk -F "=" '{print $NF}')" ]; then
 		rm -rf /opt/phala/scripts /usr/bin/phala
 		mkdir /opt/phala
-		cp /tmp/phala/solo-mining-scripts-poc5/{.env,console.js,docker-compose.yml} /opt/phala
-		cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
+		cp /tmp/phala/solo-mining-scripts-para/{.env,console.js,docker-compose.yml} /opt/phala
+		cp -r /tmp/phala/solo-mining-scripts-para/scripts/cn /opt/phala/scripts
 		sed -i "4c NODE_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==4 {print $NF}')" $installdir/.env
 		sed -i "5c PRUNTIME_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==5 {print $NF}')" $installdir/.env
 		sed -i "6c CORES=$(cat $installdir/.env|awk -F "=" 'NR==6 {print $NF}')" $installdir/.env
@@ -31,12 +31,12 @@ update_script()
 	log_info "----------更新 phala 脚本----------"
 
 	mkdir -p /tmp/phala
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/poc5.zip -O /tmp/main.zip
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/main.zip
 	unzip -o /tmp/main.zip -d /tmp/phala
 	rm -rf /opt/phala /usr/bin/phala
 	mkdir /opt/phala
-	cp /tmp/phala/solo-mining-scripts-poc5/{.env,console.js,docker-compose.yml} /opt/phala
-	cp -r /tmp/phala/solo-mining-scripts-poc5/scripts/cn /opt/phala/scripts
+	cp /tmp/phala/solo-mining-scripts-para/{.env,console.js,docker-compose.yml} /opt/phala
+	cp -r /tmp/phala/solo-mining-scripts-para/scripts/cn /opt/phala/scripts
 	sed -i "4c NODE_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==4 {print $NF}')" $installdir/.env
 	sed -i "5c PRUNTIME_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==5 {print $NF}')" $installdir/.env
 	sed -i "6c CORES=$(cat $installdir/.env|awk -F "=" 'NR==6 {print $NF}')" $installdir/.env
