@@ -31,10 +31,3 @@ check_docker_status()
 		return 1
 	fi
 }
-
-check_depenencies()
-{
-	if ! type jq yq curl wget unzip zip docker docker-compose node dkms; then
-		return 0
-	
-}
