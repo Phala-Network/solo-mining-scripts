@@ -19,15 +19,13 @@ install_cn()
 {
 	echo "--------------安装 phala 脚本程序-------------"
 
-	if [ -c /usr/bin/phala ]; then
+	if [ -L /usr/bin/phala ]; then
 		echo "删除旧的 Phala 脚本"
 		phala uninstall
 	fi
 	echo "安装新的 Phala 脚本"
 	mkdir -p $installdir
-	cp $basedir/.env $installdir/
-	cp $basedir/docker-compose.yml $installdir/
-	cp $basedir/console.js $installdir/
+	cp $basedir/{.env,docker-compose.yml,/console.js} $installdir/
 	cp -r $basedir/scripts/cn $installdir/scripts
 
 	echo "安装 Phala 命令行工具"
@@ -41,15 +39,13 @@ install_en()
 {
 	echo "--------------Install phala scripts-------------"
 
-	if [ -f /usr/bin/phala ]; then
+	if [ -L /usr/bin/phala ]; then
 		echo "Uninstall old phala scripts"
 		phala uninstall
 	fi
 	echo "Install new phala scripts"
 	mkdir -p $installdir
-	cp $basedir/.env $installdir/
-	cp $basedir/docker-compose.yml $installdir/
-	cp $basedir/console.js $installdir/
+	cp $basedir/{.env,docker-compose.yml,/console.js} $installdir/
 	cp -r $basedir/scripts/en $installdir/scripts
 
 	echo "Install phala command line tool"

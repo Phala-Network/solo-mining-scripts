@@ -97,7 +97,8 @@ install_driver()
 	log_info "----------Installing dcap driver----------"
 	/tmp/$dcap_driverbin
 
-	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
+	sleep 5
+	if [ ! -c /dev/sgx_enclave -a ! -L /dev/sgx/enclave ]; then
 		log_err "----------Install dcap dirver bin failed----------"
 		remove_dirver
 		log_info "----------Download isgx driver----------"
@@ -123,10 +124,12 @@ install_driver()
 
 		log_info "----------Clean resource----------"
 		rm /tmp/$isgx_driverbin
-	# elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
-	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
-	# else
-	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
+	elif [ ! -L /dev/sgx/enclave -a ! -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
@@ -150,13 +153,16 @@ install_dcap()
 	log_info "----------Installing dcap driver----------"
 	/tmp/$dcap_driverbin
 
-	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
+	sleep 5
+	if [ ! -c /dev/sgx_enclave -a ! -L /dev/sgx/enclave ]; then
 		log_err "----------Install dcap dirver bin failed----------"
 		exit 1
-	# elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
-	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
-	# else
-	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
+	elif [ ! -L /dev/sgx/enclave -a ! -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]; then
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
@@ -180,11 +186,12 @@ install_isgx()
 	log_info "----------Installing isgx driver----------"
 	/tmp/$isgx_driverbin
 
+	sleep 5
 	if [! -c /dev/isgx ]; then
 		log_err "----------Install isgx dirver bin failed----------"
 		exit 1
-	# else
-	# 	yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
+	else
+		yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
 	fi
 
 	log_success "----------Clean resource----------"
@@ -225,15 +232,4 @@ install()
 			exit 1
 			;;
 	esac
-
-	sleep 5
-	if [ -c /dev/sgx_enclave -a -c /dev/sgx_provision -a ! -L /dev/sgx/enclave -a ! -L /dev/sgx/provision ]; then
-		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
-	elif [ -L /dev/sgx/enclave -a -L /dev/sgx/provision -a -c /dev/sgx_enclave -a -c /dev/sgx_provision ]; then
-		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision","/dev/sgx/enclave","/dev/sgx/provision"]' $installdir/docker-compose.yml
-	elif [ -c /dev/isgx ]; then
-		yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
-	fi
-
-	exit 0
 }
