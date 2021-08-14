@@ -4,7 +4,7 @@ uninstall()
 {
 	cd $installdir
 	docker-compose stop
-	for container_name in phala-node phala-pruntime phala-pherry
+	for container_name in phala-node phala-pruntime phala-pherry khala-node phala-pruntime-bench
 	do
 		if [ ! -z $(docker ps -qf "name=$container_name") ]; then
 			docker container rm --force $container_name
@@ -19,6 +19,12 @@ uninstall()
 					;;
 				phala-pherry)
 					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env)
+					;;
+				khala-node)
+					docker image rm phalanetwork/khala-node
+					;;
+				phala-pruntime-bench)
+					docker image rm swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 					;;
 				*)
 					break

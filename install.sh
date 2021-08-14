@@ -19,7 +19,7 @@ install_cn()
 {
 	echo "--------------安装 phala 脚本程序-------------"
 
-	if [ -f /usr/bin/phala ]; then
+	if [ -c /usr/bin/phala ]; then
 		echo "删除旧的 Phala 脚本"
 		phala uninstall
 	fi
