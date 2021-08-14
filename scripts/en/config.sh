@@ -77,23 +77,23 @@ config_set_all()
 
 config()
 {
-	log_info "----------Test confidenceLevel, waiting for Intel to issue IAS remote certification report!----------"
-	local Level=$(phala sgx-test | awk '/confidenceLevel =/{ print $3 }' | tr -cd "[0-9]")
-	if [ $(echo "1 <= $Level"|bc) -eq 1 ] && [ $(echo "$Level <= 5"|bc) -eq 1 ]; then
-		log_info "----------Your confidenceLevel is：$Level----------"
-		case "$1" in
-			show)
-				config_show
-				;;
-			set)
+	case "$1" in
+		show)
+			config_show
+			;;
+		set)
+			log_info "----------Test confidenceLevel, waiting for Intel to issue IAS remote certification report!----------"
+			local Level=$(phala sgx-test | awk '/confidenceLevel =/{ print $3 }' | tr -cd "[0-9]")
+			if [ $(echo "1 <= $Level"|bc) -eq 1 ] && [ $(echo "$Level <= 5"|bc) -eq 1 ]; then
+				log_info "----------Your confidenceLevel is：$Level----------"
 				config_set_all
-				;;
-			*)
-				help_config
-				break
-		esac
-	else
-		log_info "----------Intel IAS certification has not passed, please check your motherboard or network!----------"
-		exit 1
-	fi
+			else
+				log_info "----------Intel IAS certification has not passed, please check your motherboard or network!----------"
+				exit 1
+			fi
+			;;
+		*)
+			help_config
+			break
+	esac
 }
