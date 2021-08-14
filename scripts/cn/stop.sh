@@ -16,7 +16,7 @@ stop()
 {
 	case $1 in
 		"")
-			for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench
+			for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node
 			do
 				if [ ! -z $(docker ps -qf "name=$container_name") ]; then docker container rm --force $container_name; fi
 			done
