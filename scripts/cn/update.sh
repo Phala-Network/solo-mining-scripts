@@ -93,7 +93,7 @@ update()
 		clean)
 			update_clean
 			;;
-		scripts)
+		script)
 			update_script
 			;;
 		"")
