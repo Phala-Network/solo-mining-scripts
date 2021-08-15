@@ -20,12 +20,12 @@ Usage:
 	help					show help information
 	install {init|isgx|dcap}		install your phala node
 	uninstall               		uninstall your phala scripts
-	start {node|pruntime|phost}{debug}	start your node module(debug parameter output command logs)
-	stop {node|pruntime|phost}		use docker kill to stop module
+	start {node|pruntime|pherry}{debug}	start your node module(debug parameter output command logs)
+	stop {node|pruntime|pherry}		use docker kill to stop module
 	config					configure your phala node
 	status					display the running status of all components
 	update {clean}				update phala node
-	logs {node|pruntime|phost}		show node module logs
+	logs {node|pruntime|pherry}		show node module logs
 	sgx-test				start the mining test program
 	score-test				get the scores of your machine
 EOF

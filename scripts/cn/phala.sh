@@ -20,12 +20,12 @@ Usage:
 	help					展示帮助信息
 	install {init|isgx|dcap}		安装Phala挖矿套件,默认无需输入IP地址、助记词
 	uninstall				删除phala脚本
-	start {node|pruntime|phost}{debug}	启动挖矿(debug参数允许输出挖矿套件日志信息)
-	stop {node|pruntime|phost}		停止挖矿程序
+	start {node|pruntime|pherry}{debug}	启动挖矿(debug参数允许输出挖矿套件日志信息)
+	stop {node|pruntime|pherry}		停止挖矿程序
 	config					配置
 	status					查看挖矿套件运行状态
 	update {clean}				升级
-	logs {node|pruntime|phost}		打印log信息
+	logs {node|pruntime|pherry}		打印log信息
 	sgx-test				运行挖矿测试程序
 	score-test				获取机器评分
 EOF

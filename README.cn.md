@@ -42,13 +42,13 @@ sudo phala install init
 ```bash
 sudo phala start node
 sudo phala start pruntime
-sudo phala start phost
+sudo phala start pherry
 ```
 - start命令跟上debug可输出程序部署日志
 ```bash
 sudo phala start node debug
 sudo phala start pruntime debug
-sudo phala start phost debug
+sudo phala start pherry debug
 ```
 
 ##### 3.3 停止挖矿程序
@@ -56,7 +56,7 @@ sudo phala start phost debug
 ```bash
 sudo phala stop node
 sudo phala stop pruntime
-sudo phala stop phost
+sudo phala stop pherry
 ```
 
 ##### 3.4 更新程序
@@ -90,7 +90,7 @@ sudo phala status
 ```bash
 sudo phala logs node
 sudo phala logs pruntime
-sudo phala logs phost
+sudo phala logs pherry
 ```
 
 ##### 3.7 检查挖矿程序的配置信息
