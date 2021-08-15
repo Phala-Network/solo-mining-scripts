@@ -220,6 +220,7 @@ install()
 		"")
 			install_depenencies
 			install_driver
+			phala config set
 			;;
 		dcap)
 			install_dcap
