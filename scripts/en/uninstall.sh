@@ -4,7 +4,7 @@ uninstall()
 {
 	cd $installdir
 	docker-compose stop
-	for container_name inphala-node phala-pruntime phala-pherry khala-node phala-pruntime-bench
+	for container_name in phala-node phala-pruntime phala-pherry khala-node phala-pruntime-bench
 	do
 		if [ ! -z $(docker ps -qf "name=$container_name") ]; then
 			docker container rm --force $container_name
