@@ -59,7 +59,7 @@ status()
 	GAS account address     ${gas_address}
 	GAS account balance     \E[1;32m${balance}\E[0m \E[41;33mWaring!\E[0m
 	pool account address    ${pool_address}
-	Worker-publickey-key	${publickey}
+	Worker-public-key	${publickey}
 --------------------------------------------------------------------------
 "
 		else
@@ -78,7 +78,7 @@ status()
 	GAS费账户地址      	${gas_address}
 	GAS费账户余额      	\E[1;32m${balance}\E[0m
 	抵押池账户地址      	${pool_address}
-	Worker-publickey-key	${publickey}
+	Worker-public-key	${publickey}
 --------------------------------------------------------------------------
 "
 		fi
