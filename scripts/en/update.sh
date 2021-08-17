@@ -3,19 +3,19 @@
 check_version()
 {
 	if ! type jq curl wget unzip zip docker docker-compose node yq dkms; then install_depenencies;fi
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/main.zip
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip
 	unzip -o /tmp/main.zip -d /tmp/phala
-	if [ "$(cat $installdir/.env | awk -F "=" '{print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-para/.env | awk -F "=" '{print $NF}')" ]; then
-		sed -i "4c NODE_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==4 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
-		sed -i "5c PRUNTIME_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==5 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
-		sed -i "6c CORES=$(cat $installdir/.env|awk -F "=" 'NR==6 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
-		sed -i "7c NODE_NAME=$(cat $installdir/.env|awk -F "=" 'NR==7 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
-		sed -i "8c MNEMONIC=$(cat $installdir/.env|awk -F "=" 'NR==8 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
-		sed -i "9c GAS_ACCOUNT_ADDRESS=$(cat $installdir/.env|awk -F "=" 'NR==9 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
-		sed -i "10c OPERATOR=$(cat $installdir/.env|awk -F "=" 'NR==10 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
+	if [ "$(cat $installdir/.env | awk -F "=" '{print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" '{print $NF}')" ]; then
+		sed -i "4c NODE_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==4 {print $NF}')" /tmp/phala/solo-mining-scripts-main/.env
+		sed -i "5c PRUNTIME_VOLUMES=$(cat $installdir/.env|awk -F "=" 'NR==5 {print $NF}')" /tmp/phala/solo-mining-scripts-main/.env
+		sed -i "6c CORES=$(cat $installdir/.env|awk -F "=" 'NR==6 {print $NF}')" /tmp/phala/solo-mining-scripts-main/.env
+		sed -i "7c NODE_NAME=$(cat $installdir/.env|awk -F "=" 'NR==7 {print $NF}')" /tmp/phala/solo-mining-scripts-main/.env
+		sed -i "8c MNEMONIC=$(cat $installdir/.env|awk -F "=" 'NR==8 {print $NF}')" /tmp/phala/solo-mining-scripts-main/.env
+		sed -i "9c GAS_ACCOUNT_ADDRESS=$(cat $installdir/.env|awk -F "=" 'NR==9 {print $NF}')" /tmp/phala/solo-mining-scripts-main/.env
+		sed -i "10c OPERATOR=$(cat $installdir/.env|awk -F "=" 'NR==10 {print $NF}')" /tmp/phala/solo-mining-scripts-main/.env
 		rm -rf /opt/phala/{scripts,.env,docker-compose.yml,console.js}  /usr/bin/phala
-		cp /tmp/phala/solo-mining-scripts-para/{.env,console.js,docker-compose.yml} /opt/phala
-		cp -r /tmp/phala/solo-mining-scripts-para/scripts/en /opt/phala/scripts
+		cp /tmp/phala/solo-mining-scripts-main/{.env,console.js,docker-compose.yml} /opt/phala
+		cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
 		chmod +x /opt/phala/scripts/*
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		log_info "----------The local script version is too low and has been automatically upgraded. Please execute the command again!----------"
@@ -30,15 +30,15 @@ update_script()
 {
 	log_info "----------Update phala script----------"
 
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/main.zip
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip
 	unzip -o /tmp/main.zip -d /tmp/phala
 	rm -rf /opt/phala
 	rm /usr/bin/phala
 	mkdir /opt/phala
-	cp -r /tmp/phala/solo-mining-scripts-para/scripts/en /opt/phala/scripts
-	cp -r /tmp/phala/solo-mining-scripts-para/.env /opt/phala/
-	cp -r /tmp/phala/solo-mining-scripts-para/console.js /opt/phala/
-	cp -r /tmp/phala/solo-mining-scripts-para/docker-compose.yml /opt/phala/
+	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
+	cp -r /tmp/phala/solo-mining-scripts-main/.env /opt/phala/
+	cp -r /tmp/phala/solo-mining-scripts-main/console.js /opt/phala/
+	cp -r /tmp/phala/solo-mining-scripts-main/docker-compose.yml /opt/phala/
 	chmod +x /opt/phala/scripts/*
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 

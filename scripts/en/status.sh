@@ -59,7 +59,7 @@ status()
 	GAS account address      	${gas_address}
 	GAS account balance      	\E[1;32m${balance}\E[0m \E[41;33mWaring!\E[0m
 	pool account address      	${pool_address}
-	Worker-publish-key	${publickey}
+	Worker-publickey-key	${publickey}
 --------------------------------------------------------------------------
 "
 		else
@@ -78,7 +78,7 @@ status()
 	GAS account address     ${gas_address}
 	GAS account balance     \E[1;32m${balance}\E[0m
 	pool account address    ${pool_address}
-	Worker-publish-key	${publickey}
+	Worker-publickey-key	${publickey}
 --------------------------------------------------------------------------
 "
 		fi
