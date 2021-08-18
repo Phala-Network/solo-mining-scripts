@@ -82,7 +82,7 @@ config()
 		log_info "您的信任等级是：$Level"
 		case "$1" in
 			show)
-				config_show
+				config_show 
 				;;
 			set)
 				config_set_all

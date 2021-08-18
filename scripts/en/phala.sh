@@ -62,7 +62,7 @@ reportsystemlog()
 	dmidecode > /tmp/systemlog/system$ti.inf
 	for container_name in phala-node phala-pruntime phala-pherry
 	do
-		if [ ! -z $(docker ps -qf "name=$container_name") ]; then
+		if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then
 			case $container_name in
 				phala-node)
 					docker logs phala-node --tail 50000 > /tmp/systemlog/node$ti.inf
@@ -106,7 +106,7 @@ score_test()
 		install_depenencies
 	fi
 
-	if [ ! -z $(docker ps -qf "name=phala-pruntime-bench") ]; then
+	if [ ! -z $(docker container ls -q -f "name=phala-pruntime-bench") ]; then
 		docker container stop phala-pruntime-bench
 		docker image rm swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
 		rm -rf /var/phala-pruntime-bench

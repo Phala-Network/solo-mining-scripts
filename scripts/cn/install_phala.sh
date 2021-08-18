@@ -10,11 +10,11 @@ install_depenencies()
 	fi
 
 	log_info "----------安装依赖----------"
-	for package in jq curl wget unzip zip docker docker-compose node yq dkms
+	for package in jq curl wget unzip zip docker docker-compose node yq dkms bc
 	do
 		if ! type $package > /dev/null 2>&1; then
 			case $package in
-				jq|curl|wget|unzip|zip|dkms)
+				jq|curl|wget|unzip|zip|dkms|bc)
 					apt-get install -y $package
 					;;
 				docker)

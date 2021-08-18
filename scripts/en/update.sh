@@ -13,7 +13,7 @@ check_version()
 		sed -i "8c MNEMONIC=$(cat $installdir/.env|awk -F "=" 'NR==8 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
 		sed -i "9c GAS_ACCOUNT_ADDRESS=$(cat $installdir/.env|awk -F "=" 'NR==9 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
 		sed -i "10c OPERATOR=$(cat $installdir/.env|awk -F "=" 'NR==10 {print $NF}')" /tmp/phala/solo-mining-scripts-para/.env
-		rm -rf /opt/phala/{scripts,.env,docker-compose.yml,console.js}  /usr/bin/phala
+		rm -rf /opt/phala/{scripts,.env,docker-compose.yml,console.js} /usr/bin/phala
 		cp /tmp/phala/solo-mining-scripts-para/{.env,console.js,docker-compose.yml} /opt/phala
 		cp -r /tmp/phala/solo-mining-scripts-para/scripts/en /opt/phala/scripts
 		chmod +x /opt/phala/scripts/*
