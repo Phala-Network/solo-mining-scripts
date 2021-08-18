@@ -78,8 +78,8 @@ function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" 
 
 config()
 {
-	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.11"; then
-		log_info "----------您的内核版本大于5.11，内核版本过高，请降低内核版本！----------"
+	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.10"; then
+		log_info "----------您的内核版本大于5.10，内核版本过高，请降低内核版本！----------"
 		exit 1
 	fi
 	log_info "----------测试信用等级，正在等待Intel下发IAS远程认证报告！----------"
