@@ -74,8 +74,14 @@ config_set_all()
 	done
 }
 
+function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
+
 config()
 {
+	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.1"; then
+		log_info "----------您的内核版本大于5.1，内核版本过高！----------"
+		exit 1
+	fi
 	log_info "----------测试信用等级，正在等待Intel下发IAS远程认证报告！----------"
 	local Level=$(phala sgx-test | awk '/confidenceLevel =/ {print $3 }' | tr -cd "[0-9]")
 	if [ $(echo "1 <= $Level" | bc) -eq 1 ] && [ $(echo "$Level <= 5" | bc) -eq 1 ]; then
