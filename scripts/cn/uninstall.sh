@@ -28,6 +28,7 @@ uninstall()
 					;;
 				phala-sgx_detect)
 					docker image rm swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
+					;;
 				*)
 					break
 			esac
