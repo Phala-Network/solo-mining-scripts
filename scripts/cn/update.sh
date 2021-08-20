@@ -100,6 +100,7 @@ update()
 			update_noclean
 			;;
 		*)
-			log_err "----------参数错误----------"
+			phala_help
+			break
 	esac
 }

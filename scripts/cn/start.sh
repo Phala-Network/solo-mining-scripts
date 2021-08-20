@@ -6,19 +6,13 @@ start()
 	local cores=$(cat $installdir/.env | grep 'CORES' | awk -F "=" '{print $NF}')
 	local mnemonic=$(cat $installdir/.env | grep 'MNEMONIC' | awk -F "=" '{print $NF}')
 	local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
-	if ! type docker docker-compose node yq jq curl wget unzip zip >/dev/null 2>&1; then
-		log_err "----------缺少重要依赖工具，请执行sudo phala install重新安装！----------"
-		exit 1
-	fi
 
-	if [ ! -c /dev/sgx_enclave -a ! -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
-		log_err "----------dcap/isgx 驱动未安装，请执行sudo phala install dcap/sudo phala install isgx命令安装----------"
-		exit 1
-	fi
+	if ! type jq curl wget unzip zip docker docker-compose node yq dkms bc > /dev/null 2>&1; then install_depenencies;fi
+	if [ ! -L /dev/sgx/enclave ]&&[ ! -L /dev/sgx/provision ]&&[ ! -c /dev/sgx_enclave ]&&[ ! -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then install_driver;fi
 
 	if [ -z "$node_name" ]||[ -z "$cores" ]||[ -z "$mnemonic" ]||[ -z "$pool_address" ]; then
 		log_err "----------节点未配置，开始配置节点！----------"
-		phala config set
+		config set
 	fi
 	cd $installdir
 	docker-compose up -d

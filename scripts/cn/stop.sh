@@ -1,17 +1,5 @@
 #!/bin/bash
 
-help_stop()
-{
-cat << EOF
-Usage:
-	node					停止phala-node容器
-	pruntime				停止phala-pruntime容器
-	pherry					停止phala-pherry容器
-	bench					停止phala-pruntime-bench容器
-EOF
-exit 0
-}
-
 stop()
 {
 	case $1 in
@@ -50,7 +38,7 @@ stop()
 			fi
 			;;
 		*)
-			help_stop
+			phala_help
 			break
 	esac
 }
