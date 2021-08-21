@@ -3,14 +3,14 @@
 function check_version()
 {
 	if ! type wget unzip; then apt-get install -y wget unzip;fi
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/main.zip
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip
 	unzip -o /tmp/main.zip -d /tmp/phala
-	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-para/.env | awk -F "=" 'NR==15 {print $NF}')" ]; then
-		cp $installdir/.env /tmp/phala/solo-mining-scripts-para
+	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" ]; then
+		cp $installdir/.env /tmp/phala/solo-mining-scripts-main
 		rm -rf /opt/phala /usr/bin/phala
  		mkdir /opt/phala
-		cp /tmp/phala/solo-mining-scripts-para/{.env,console.js,docker-compose.yml} /opt/phala
-		cp -r /tmp/phala/solo-mining-scripts-para/scripts/cn /opt/phala/scripts
+		cp /tmp/phala/solo-mining-scripts-main/{.env,console.js,docker-compose.yml} /opt/phala
+		cp -r /tmp/phala/solo-mining-scripts-main/scripts/cn /opt/phala/scripts
 		chmod +x /opt/phala/scripts/phala.sh
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		log_info "----------本地脚本版本过低，已自动升级。请重新执行命令！----------"
@@ -23,13 +23,13 @@ function update_script()
 {
 	log_info "----------更新 phala 脚本----------"
 
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/main.zip
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip
 	unzip -o /tmp/main.zip -d /tmp/phala
-	cp $installdir/.env /tmp/phala/solo-mining-scripts-para
+	cp $installdir/.env /tmp/phala/solo-mining-scripts-main
 	rm -rf /opt/phala /usr/bin/phala
 	mkdir /opt/phala
-	cp /tmp/phala/solo-mining-scripts-para/{.env,console.js,docker-compose.yml} /opt/phala
-	cp -r /tmp/phala/solo-mining-scripts-para/scripts/cn /opt/phala/scripts
+	cp /tmp/phala/solo-mining-scripts-main/{.env,console.js,docker-compose.yml} /opt/phala
+	cp -r /tmp/phala/solo-mining-scripts-main/scripts/cn /opt/phala/scripts
 	chmod +x /opt/phala/scripts/phala.sh
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 

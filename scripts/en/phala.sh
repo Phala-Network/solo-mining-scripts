@@ -20,17 +20,32 @@ Usage:
 	phala [OPTION]...
 
 Options:
-	help					show help information
-	install {init|isgx|dcap}		install your phala node
-	uninstall               		uninstall your phala scripts
-	start {node|pruntime|pherry}{debug}	start your node module(debug parameter output command logs)
-	stop {node|pruntime|pherry}		use docker kill to stop module
-	config					configure your phala node
+	help					display help information
+	install					install your phala node
+		<dcap>				install DCAP driver
+		<isgx>				install isgx driver
+	uninstall				uninstall your phala scripts
+	start					start mining
+	stop					stop mining
+		<node>				stop phala-node container
+		<pruntime>			stop phala-pruntime container
+		<pherry>			stop phala-pherry container
+		<bench>				stop phala-pruntime-bench container
+	config					
+		<show>				display all configuration of your node
+		<set>				set all configuration
 	status					display the running status of all components
-	update {clean}				update phala node
-	logs {node|pruntime|pherry}		show node module logs
+	update					update all container,and don't clean up the container data
+		<clean>				update all container,and clean up the container data
+		<script>			update the script
+	logs					print all container logs information
+		<node>				print phala-node logs information
+		<pruntime>			print phala-pruntime logs information
+		<pherry>			print phala-pherry logs information
+		<bench>				print phala-pruntime-bench logs information
 	sgx-test				start the mining test program
-	score-test				get the scores of your machine
+	score-test				
+		<Parameter>			get the scores of your machine
 EOF
 exit 0
 }
