@@ -11,7 +11,7 @@ check_version()
  		mkdir /opt/phala
 		cp /tmp/phala/solo-mining-scripts-para/{.env,console.js,docker-compose.yml} /opt/phala
 		cp -r /tmp/phala/solo-mining-scripts-para/scripts/cn /opt/phala/scripts
-		chmod +x /opt/phala/scripts/*
+		chmod +x /opt/phala/scripts/phala.sh
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		log_info "----------本地脚本版本过低，已自动升级。请重新执行命令！----------"
 		exit 1
@@ -30,7 +30,7 @@ update_script()
 	mkdir /opt/phala
 	cp /tmp/phala/solo-mining-scripts-para/{.env,console.js,docker-compose.yml} /opt/phala
 	cp -r /tmp/phala/solo-mining-scripts-para/scripts/cn /opt/phala/scripts
-	chmod +x /opt/phala/scripts/*
+	chmod +x /opt/phala/scripts/phala.sh
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 
 	log_success "----------更新完成----------"
