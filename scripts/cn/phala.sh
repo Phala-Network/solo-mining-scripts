@@ -164,11 +164,9 @@ fi
 
 case "$1" in
 	install)
-		check_version
 		install $2
 		;;
 	config)
-		check_version
 		config $2
 		;;
 	start)
@@ -179,7 +177,6 @@ case "$1" in
 		stop $2
 		;;
 	status)
-		check_version
 		status $2
 		;;
 	update)
@@ -192,11 +189,9 @@ case "$1" in
 		uninstall
 		;;
 	score-test)
-		check_version
 		score_test $2
 		;;
 	sgx-test)
-		check_version
 		sgx_test
 		;;
 	*)
