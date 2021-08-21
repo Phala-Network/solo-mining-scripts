@@ -24,8 +24,8 @@ services:
    ports:
      - "8000:8000"
    devices:
-   - /dev/isgx
-   environment:
+
+    environment:
      - EXTRA_OPTS=--cores=${CORES}
      - ROCKET_ADDRESS=0.0.0.0
 
