@@ -1,18 +1,6 @@
 #!/bin/bash
 
-help_stop()
-{
-cat << EOF
-Usage:
-	node					停止phala-node容器
-	pruntime				停止phala-pruntime容器
-	pherry					停止phala-pherry容器
-	bench					停止phala-pruntime-bench容器
-EOF
-exit 0
-}
-
-stop()
+function stop()
 {
 	case $1 in
 		"")
@@ -34,7 +22,7 @@ stop()
 			else
 				log_info "----------phala-pruntime容器已经停止----------"
 			fi
-			;; 
+			;;
 		pherry)
 			if [ ! -z $(docker container ls -q -f "name=phala-pherry") ]; then
 				docker container rm --force phala-pherry
@@ -50,7 +38,7 @@ stop()
 			fi
 			;;
 		*)
-			help_stop
+			phala_help
 			break
 	esac
 }

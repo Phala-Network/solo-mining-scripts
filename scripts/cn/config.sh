@@ -1,21 +1,11 @@
 #!/bin/bash
 
-help_config()
-{
-cat << EOF
-Usage:
-	help			帮助信息
-	show			查看配置信息（直接看到配置文件所有信息）
-	set			重新配置
-EOF
-}
-
-config_show()
+function config_show()
 {
 	cat $installdir/.env
 }
 
-config_set_all()
+function config_set_all()
 {
 	local cores
 	while true ; do
@@ -51,7 +41,7 @@ config_set_all()
 			gas_adress=$(node $installdir/console.js verify "$mnemonic")
 			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://para1-api.phala.network/ws/" free-balance $gas_adress 2>&1)
 			balance=$(echo $balance | awk -F " " '{print $NF}')
-			balance=$(echo "${balance##*WorkerStat} / 1000000000000"|bc)
+			balance=$(echo "$balance / 1000000000000"|bc)
 			if [ $(echo "$balance > 0.1"|bc) -eq 1 ]; then
 				sed -i "8c MNEMONIC=$mnemonic" $installdir/.env
 				sed -i "9c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
@@ -76,7 +66,7 @@ config_set_all()
 
 function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
 
-config()
+function config()
 {
 	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.10"; then
 		log_info "----------您的内核版本大于5.10，内核版本过高，请降低内核版本！----------"
@@ -94,7 +84,7 @@ config()
 				config_set_all
 				;;
 			*)
-				help_config
+				phala_help
 				break
 		esac
 	else

@@ -1,18 +1,6 @@
 #!/bin/bash
 
-help_stop()
-{
-cat << EOF
-Usage:
-	node					stop phala-node container 
-	pruntime					stop phala-pruntime container
-	pherry					stop phala-pherry container
-	bench					stop phala-bench container
-EOF
-exit 0
-}
-
-stop()
+function stop()
 {
 	case $1 in
 		"")
@@ -50,7 +38,7 @@ stop()
 			fi
 			;;
 		*)
-			help_stop
+			phala_help
 			break
 	esac
 }
