@@ -1,11 +1,11 @@
 #!/bin/bash
 
-config_show()
+function config_show()
 {
 	cat $installdir/.env
 }
 
-config_set_all()
+function config_set_all()
 {
 	local cores
 	while true ; do
@@ -66,7 +66,7 @@ config_set_all()
 
 function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
 
-config()
+function config()
 {
 	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.10"; then
 		log_info "----------您的内核版本大于5.10，内核版本过高，请降低内核版本！----------"

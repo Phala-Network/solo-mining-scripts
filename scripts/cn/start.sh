@@ -1,6 +1,6 @@
 #!/bin/bash
 
-start()
+function start()
 {
 	if [ ! -L /dev/sgx/enclave ]&&[ ! -L /dev/sgx/provision ]&&[ ! -c /dev/sgx_enclave ]&&[ ! -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
 		install

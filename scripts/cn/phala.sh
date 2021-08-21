@@ -13,7 +13,7 @@ source $scriptdir/stop.sh
 source $scriptdir/uninstall.sh
 source $scriptdir/update.sh
 
-phala_help()
+function phala_help()
 {
 cat << EOF
 Usage:
@@ -37,7 +37,7 @@ EOF
 exit 0
 }
 
-sgx_test()
+function sgx_test()
 {
 	if ! type jq curl wget unzip zip docker docker-compose node yq dkms bc > /dev/null 2>&1; then install_depenencies;fi
 	if [ ! -L /dev/sgx/enclave ]&&[ ! -L /dev/sgx/provision ]&&[ ! -c /dev/sgx_enclave ]&&[ ! -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then install_driver;fi
@@ -58,7 +58,7 @@ sgx_test()
 	fi
 }
 
-reportsystemlog()
+function reportsystemlog()
 {
 	mkdir /tmp/systemlog
 	ti=$(date +%s)
@@ -106,7 +106,7 @@ reportsystemlog()
 	rm -r /tmp/systemlog
 }
 
-score_test()
+function score_test()
 {
 	if [ $# != 1 ]; then
 		log_err "---------请填写要使用的机器核心的数量！----------"

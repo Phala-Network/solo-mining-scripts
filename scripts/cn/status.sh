@@ -1,6 +1,6 @@
 #!/bin/bash
 
-status()
+function status()
 {
 	trap "clear;exit" 2
 	while true; do

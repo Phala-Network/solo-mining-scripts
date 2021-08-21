@@ -1,6 +1,6 @@
 #!/bin/bash
 
-uninstall()
+function uninstall()
 {
 	for container_name in phala-node phala-pruntime phala-pherry khala-node phala-pruntime-bench phala-sgx_detect
 	do

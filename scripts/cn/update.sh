@@ -1,6 +1,6 @@
 #!/bin/bash
 
-check_version()
+function check_version()
 {
 	if ! type wget unzip; then apt-get install -y wget unzip;fi
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/main.zip
@@ -19,7 +19,7 @@ check_version()
 	rm -rf /tmp/phala /tmp/main.zip
 }
 
-update_script()
+function update_script()
 {
 	log_info "----------更新 phala 脚本----------"
 
@@ -37,7 +37,7 @@ update_script()
 	rm -rf /tmp/phala /tmp/main.zip
 }
 
-update_clean()
+function update_clean()
 {
 	log_info "----------删除 Docker 镜像----------"
 	log_info "关闭 phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node"
@@ -79,7 +79,7 @@ update_clean()
 	start
 }
 
-update_noclean()
+function update_noclean()
 {
 	log_info "----------更新挖矿套件镜像----------"
 	log_info "关闭 phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node"
@@ -118,7 +118,7 @@ update_noclean()
 	log_success "----------更新成功----------"
 }
 
-update()
+function update()
 {
 	case "$1" in
 		clean)

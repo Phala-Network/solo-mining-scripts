@@ -1,6 +1,6 @@
 #!/bin/bash
 
-stop()
+function stop()
 {
 	case $1 in
 		"")

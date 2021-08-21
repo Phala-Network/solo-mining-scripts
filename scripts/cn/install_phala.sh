@@ -48,9 +48,8 @@ function install_depenencies()
 
 function remove_dirver()
 {
-	log_info "----------删除旧版本 dcap/isgx 驱动----------"
-
 	if [ -f /opt/intel/sgxdriver/uninstall.sh ]; then
+		log_info "----------删除旧版本 dcap/isgx 驱动----------"
 		/opt/intel/sgxdriver/uninstall.sh
 	fi
 }

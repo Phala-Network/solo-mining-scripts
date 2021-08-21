@@ -1,6 +1,6 @@
 #!/bin/bash
 
-logs()
+function logs()
 {
 	case $1 in
 		"")
