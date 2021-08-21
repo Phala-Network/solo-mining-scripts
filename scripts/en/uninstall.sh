@@ -1,6 +1,6 @@
 #!/bin/bash
 
-uninstall()
+function uninstall()
 {
 	cd $installdir
 	docker-compose stop

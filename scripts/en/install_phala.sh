@@ -1,6 +1,6 @@
 #!/bin/bash
 
-install_depenencies()
+function install_depenencies()
 {
 	log_info "----------Apt update----------"
 	apt-get update
@@ -62,7 +62,7 @@ install_depenencies()
 	usermod -aG docker $USER
 }
 
-remove_dirver()
+function remove_dirver()
 {
 	log_info "----------Remove dcap/isgx driver----------"
 	# local contents26=$(cat $installdir/docker-compose.yml|awk 'NR==26')
@@ -80,7 +80,7 @@ remove_dirver()
 	fi
 }
 
-install_driver()
+function install_driver()
 {
 	remove_dirver
 	log_info "----------Download dcap driver----------"
@@ -136,7 +136,7 @@ install_driver()
 	rm /tmp/$dcap_driverbin
 }
 
-install_dcap()
+function install_dcap()
 {
 	remove_dirver
 	log_info "----------Download dcap driver----------"
@@ -169,7 +169,7 @@ install_dcap()
 	rm /tmp/$dcap_driverbin
 }
 
-install_isgx()
+function install_isgx()
 {
 	remove_dirver
 	log_info "----------Download isgx driver----------"
@@ -198,7 +198,7 @@ install_isgx()
 	rm $isgx_driverbin
 }
 
-install()
+function install()
 {
 	release=$(lsb_release -r | grep -o "[0-9]*\.[0-9]*")
 	if [ x"$release" = x"18.04" ]; then

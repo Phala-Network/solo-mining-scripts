@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help_stop()
+function help_stop()
 {
 cat << EOF
 Usage:
@@ -12,7 +12,7 @@ EOF
 exit 0
 }
 
-stop()
+function stop()
 {
 	case $1 in
 		"")

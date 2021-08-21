@@ -1,6 +1,6 @@
 #!/bin/bash
 
-config_help()
+function config_help()
 {
 cat << EOF
 Usage:
@@ -10,12 +10,12 @@ Usage:
 EOF
 }
 
-config_show()
+function config_show()
 {
 	cat $installdir/.env
 }
 
-config_set_all()
+function config_set_all()
 {
 	local cores
 	while true ; do
@@ -77,7 +77,7 @@ config_set_all()
 
 function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
 
-config()
+function config()
 {
 	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.10"; then
 		log_info "----------Your kernel version is greater than 5.10, the kernel version is too high.Please lower the kernel version!----------"

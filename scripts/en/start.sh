@@ -1,6 +1,6 @@
 #!/bin/bash
 
-start()
+function start()
 {
 	local node_name=$(cat $installdir/.env | grep 'NODE_NAME' | awk -F "=" '{print $NF}')
 	local cores=$(cat $installdir/.env | grep 'CORES' | awk -F "=" '{print $NF}')

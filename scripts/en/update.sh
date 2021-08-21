@@ -1,6 +1,6 @@
 #!/bin/bash
 
-check_version()
+function check_version()
 {
 	if ! type jq curl wget unzip zip docker docker-compose node yq dkms; then install_depenencies;fi
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/main.zip
@@ -26,7 +26,7 @@ check_version()
 	rm /tmp/main.zip
 }
 
-update_script()
+function update_script()
 {
 	log_info "----------Update phala script----------"
 
@@ -47,7 +47,7 @@ update_script()
 	rm /tmp/main.zip
 }
 
-update_clean()
+function update_clean()
 {
 	log_info "----------Clean phala node images----------"
 	log_info "Kill phala-node phala-pruntime phala-pherry"
@@ -69,7 +69,7 @@ update_clean()
 	start
 }
 
-update_noclean()
+function update_noclean()
 {
 	log_info "----------Update phala node----------"
 	log_info "Kill phala-node phala-pruntime phala-pherry"
@@ -82,7 +82,7 @@ update_noclean()
 	log_success "----------Update success----------"
 }
 
-update()
+function update()
 {
 	case "$1" in
 		clean)

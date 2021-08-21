@@ -13,7 +13,7 @@ source $scriptdir/stop.sh
 source $scriptdir/uninstall.sh
 source $scriptdir/update.sh
 
-help()
+function help()
 {
 cat << EOF
 Usage:
@@ -32,7 +32,7 @@ EOF
 exit 0
 }
 
-sgx_test()
+function sgx_test()
 {
 	if ! type docker > /dev/null 2>&1; then
 		log_err "----------docker not install----------"
@@ -55,7 +55,7 @@ sgx_test()
 	fi
 }
 
-reportsystemlog()
+function reportsystemlog()
 {
 	mkdir /tmp/systemlog
 	ti=$(date +%s)
@@ -94,7 +94,7 @@ reportsystemlog()
 	rm -r /tmp/systemlog
 }
 
-score_test()
+function score_test()
 {
 	if [ $# != 1 ]; then
 		log_err "---------The parameter of the number of machine cores is missing.----------"

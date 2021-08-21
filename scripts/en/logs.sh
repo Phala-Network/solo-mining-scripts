@@ -1,6 +1,6 @@
 #!/bin/bash
 
-logs()
+function logs()
 {
 	cd $installdir
 	docker-compose logs -f
