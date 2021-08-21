@@ -48,17 +48,17 @@ function status()
 --------------------------------------------------------------------------
 	Service		Status		CurrentBlock
 --------------------------------------------------------------------------
-	phala-node		${node_status}			${node_block}
-	phala-pruntime	${pruntime_status}
-	phala-pherry	${pherry_status}
+	phala-node	${node_status}		${node_block}
+	phala-pruntime  ${pruntime_status}
+	phala-pherry    ${pherry_status}
 --------------------------------------------------------------------------
-	Account information		contents
+	Account information	contents
 --------------------------------------------------------------------------
 	node name           	${node_name}
 	mining core     	${cores}
-	GAS account address      	${gas_address}
-	GAS account balance      	\E[1;32m${balance}\E[0m \E[41;33mWaring!\E[0m
-	pool account address      	${pool_address}
+	GAS account address     ${gas_address}
+	GAS account balance     \E[1;32m${balance}\E[0m \E[41;33mWaring!\E[0m
+	pool account address    ${pool_address}
 	Worker-public-key	${publickey}
 --------------------------------------------------------------------------
 "

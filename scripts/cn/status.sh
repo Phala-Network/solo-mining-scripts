@@ -46,19 +46,19 @@ function status()
 		if [ $(echo "$balance < 2"|bc) -eq 1 ]; then
 			printf "
 --------------------------------------------------------------------------
-	Service		Status		CurrentBlock
+	服务名称		服务状态		本地节点区块高度
 --------------------------------------------------------------------------
-	phala-node	${node_status}		${node_block}
-	phala-pruntime  ${pruntime_status}
-	phala-pherry    ${pherry_status}
+	phala-node		${node_status}			${node_block}
+	phala-pruntime		${pruntime_status}
+	phala-pherry		${pherry_status}
 --------------------------------------------------------------------------
-	Account information	contents
+	账户信息		内容
 --------------------------------------------------------------------------
-	node name           	${node_name}
-	mining core     	${cores}
-	GAS account address     ${gas_address}
-	GAS account balance     \E[1;32m${balance}\E[0m \E[41;33mWaring!\E[0m
-	pool account address    ${pool_address}
+	节点名称           	${node_name}
+	计算机使用核心     	${cores}
+	GAS费账户地址      	${gas_address}
+	GAS费账户余额      	\E[1;32m${balance}\E[0m \E[41;33mWaring!\E[0m
+	抵押池账户地址      	${pool_address}
 	Worker-public-key	${publickey}
 --------------------------------------------------------------------------
 "
