@@ -66,11 +66,7 @@ function config_set_all()
 
 function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
 
-<<<<<<< HEAD
-config()
-=======
 function config()
->>>>>>> main-dev
 {
 	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.10"; then
 		log_info "----------Your kernel version is greater than 5.10, the kernel version is too high.Please lower the kernel version!----------"

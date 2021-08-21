@@ -5,10 +5,7 @@ function uninstall()
 	for container_name in phala-node phala-pruntime phala-pherry khala-node phala-pruntime-bench phala-sgx_detect
 	do
 		if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then
-<<<<<<< HEAD
-=======
 			docker container stop $container_name
->>>>>>> main-dev
 			docker container rm --force $container_name
 			case $container_name in
 				phala-node)
