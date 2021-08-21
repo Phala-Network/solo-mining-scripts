@@ -18,5 +18,7 @@ function start()
 	fi
 	cd $installdir
 	docker-compose up -d
-	docker run -dti --rm --name khala-node -e NODE_NAME=$node_name -e NODE_ROLE=MINER -p 40333:30333 -p 40334:30334 -v /var/khala-dev-node:/root/data phalanetwork/khala-node
+	if [ ! -z $(docker container ls -q -f "name=khala-node") ]; then
+		docker run -dti --rm --name khala-node -e NODE_NAME=$node_name -e NODE_ROLE=MINER -p 40333:30333 -p 40334:30334 -v /var/khala-dev-node:/root/data phalanetwork/khala-node
+	fi
 }

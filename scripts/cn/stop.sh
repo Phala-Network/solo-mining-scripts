@@ -22,7 +22,7 @@ function stop()
 			else
 				log_info "----------phala-pruntime容器已经停止----------"
 			fi
-			;; 
+			;;
 		pherry)
 			if [ ! -z $(docker container ls -q -f "name=phala-pherry") ]; then
 				docker container rm --force phala-pherry

@@ -11,7 +11,7 @@ function install_depenencies()
 
 	log_info "----------安装依赖----------"
 	for i in `seq 0 4`; do
-		for package in jq curl wget unzip zip docker docker-compose node yq dkms bc; do
+		for package in jq curl wget unzip zip docker docker-compose node yq dkms; do
 			if ! type $package > /dev/null 2>&1; then
 				case $package in
 					jq|curl|wget|unzip|zip|dkms|bc)
@@ -42,7 +42,7 @@ function install_depenencies()
 				esac
 			fi
 		done
-		if type jq curl wget unzip zip docker docker-compose node yq dkms bc; then break;fi
+		if type jq curl wget unzip zip docker docker-compose node yq dkms; then break;fi
 	done
 }
 
@@ -125,7 +125,6 @@ function install_driver()
 	remove_dirver
 	install_dcap
 	if [ $? -ne 0 ]; then
-		log_err "----------尝试安装isgx驱动！----------"
 		install_isgx
 		if [ $? -ne 0 ]; then
 			log_err "----------安装DCAP/isgx驱动均失败，请检查安装日志！----------"

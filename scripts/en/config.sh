@@ -1,15 +1,5 @@
 #!/bin/bash
 
-function config_help()
-{
-cat << EOF
-Usage:
-	help			show help information
-	show			show configurations
-	set			set configurations
-EOF
-}
-
 function config_show()
 {
 	cat $installdir/.env
@@ -58,7 +48,6 @@ function config_set_all()
 				break
 			else
 				printf "Account PHA is less than 0.1!\n"
-
 			fi
 		fi
 	done
@@ -95,7 +84,7 @@ function config()
 				config_set_all
 				;;
 			*)
-				help_config
+				phala_help
 				break
 		esac
 	else
