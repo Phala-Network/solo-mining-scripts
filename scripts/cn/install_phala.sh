@@ -99,7 +99,7 @@ function install_isgx()
 		fi
 	done
 
-	if [ -f /tmp/$dcap_driverbin ]; then
+	if [ -f /tmp/$isgx_driverbin ]; then
 		log_info "----------添加运行权限----------"
 		chmod +x /tmp/$isgx_driverbin
 	else
