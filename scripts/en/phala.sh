@@ -196,7 +196,7 @@ case "$1" in
 		update $2
 		;;
 	logs)
-		logs
+		logs $2
 		;;
 	uninstall)
 		uninstall
