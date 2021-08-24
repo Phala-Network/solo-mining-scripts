@@ -57,7 +57,7 @@ function status()
 	节点名称           	${node_name}
 	计算机使用核心     	${cores}
 	GAS费账户地址      	${gas_address}
-	GAS费账户余额      	\E[1;32m${balance}\E[0m \E[41;33mWaring!\E[0m
+	GAS费账户余额      	\E[1;32m${balance}\E[0m \E[41;33mWarning!\E[0m
 	抵押池账户地址      	${pool_address}
 	Worker-public-key	${publickey}
 --------------------------------------------------------------------------
