@@ -24,7 +24,7 @@ function uninstall()
 					if [ -d /var/khala-dev-node ]; then rm -rf /var/khala-dev-node;fi
 					;;
 				phala-pruntime-bench)
-					docker image rm swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime-bench
+					docker image rm phalanetwork/phala-dev-pruntime-bench
 					;;
 				phala-sgx_detect)
 					docker image rm swr.cn-east-3.myhuaweicloud.com/phala/phala-sgx_detect:latest
