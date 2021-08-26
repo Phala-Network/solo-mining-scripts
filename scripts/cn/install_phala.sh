@@ -12,7 +12,7 @@ function install_depenencies()
 	log_info "----------安装依赖----------"
 	for i in `seq 0 4`; do
 		for package in jq curl wget unzip zip docker docker-compose node yq dkms; do
-			if ! type $package > /dev/null 2>&1; then
+			if ! type $package > /dev/null; then
 				case $package in
 					jq|curl|wget|unzip|zip|dkms|bc)
 						apt-get install -y $package
@@ -42,7 +42,7 @@ function install_depenencies()
 				esac
 			fi
 		done
-		if type jq curl wget unzip zip docker docker-compose node yq dkms; then break;fi
+		if type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then break;fi
 	done
 }
 
@@ -153,19 +153,19 @@ function install()
 			;;
 	esac
 
-	if [ -L /dev/sgx/enclave ]&&[ -L /dev/sgx/provision ]&&[ -c /dev/sgx_enclave ]&&[ -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
+	if [ -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
 		log_info "----------您的设备存在：/dev/sgx/enclave /dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision 与DCAP驱动有关，已全部添加到phala-pruntime！----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/enclave","/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
-	elif [ ! -L /dev/sgx/enclave ]&&[ -L /dev/sgx/provision ]&&[ -c /dev/sgx_enclave ]&&[ -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
+	elif [ ! -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
 		log_info "----------您的设备存在：/dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision 与DCAP驱动有关，已全部添加到phala-pruntime！----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
-	elif [ ! -L /dev/sgx/enclave ]&&[ ! -L /dev/sgx/provision ]&&[ -c /dev/sgx_enclave ]&&[ -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
+	elif [ ! -L /dev/sgx/enclave ] && [ ! -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
 		log_info "----------您的设备存在：/dev/sgx_enclave /dev/sgx_provision 与DCAP驱动有关，已全部添加到phala-pruntime！----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
-	elif [ ! -L /dev/sgx/enclave ]&&[ ! -L /dev/sgx/provision ]&&[ ! -c /dev/sgx_enclave ]&&[ -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
+	elif [ ! -L /dev/sgx/enclave ] && [ ! -L /dev/sgx/provision ] && [ ! -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
 		log_info "----------您的设备存在：/dev/sgx_provision 与DCAP驱动有关，已全部添加到phala-pruntime！----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_provision"]' $installdir/docker-compose.yml
-	elif [ ! -L /dev/sgx/enclave ]&&[ ! -L /dev/sgx/provision ]&&[ ! -c /dev/sgx_enclave ]&&[ ! -c /dev/sgx_provision ]&&[ -c /dev/isgx ]; then
+	elif [ ! -L /dev/sgx/enclave ] && [ ! -L /dev/sgx/provision ] && [ ! -c /dev/sgx_enclave ] && [ ! -c /dev/sgx_provision ] && [ -c /dev/isgx ]; then
 		log_info "----------您的设备存在：/dev/isgx 与isgx驱动有关，已全部添加到phala-pruntime！----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
 	else
