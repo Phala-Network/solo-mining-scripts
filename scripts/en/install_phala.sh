@@ -12,7 +12,7 @@ function install_depenencies()
 	log_info "----------Install depenencies----------"
 	for i in `seq 0 4`; do
 		for package in jq curl wget unzip zip docker docker-compose node yq dkms; do
-			if ! type $package > /dev/null 2>&1; then
+			if ! type $package > /dev/null; then
 				case $package in
 					jq|curl|wget|unzip|zip|dkms|bc)
 						apt-get install -y $package
@@ -42,7 +42,7 @@ function install_depenencies()
 				esac
 			fi
 		done
-		if type jq curl wget unzip zip docker docker-compose node yq dkms; then break;fi
+		if type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then break;fi
 	done
 }
 

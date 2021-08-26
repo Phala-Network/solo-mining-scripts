@@ -4,7 +4,7 @@ function start()
 {
 	if [ ! -L /dev/sgx/enclave ]&&[ ! -L /dev/sgx/provision ]&&[ ! -c /dev/sgx_enclave ]&&[ ! -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
 		install
-	elif ! type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null 2>&1; then
+	elif ! type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then
 		install_depenencies
 	fi
 

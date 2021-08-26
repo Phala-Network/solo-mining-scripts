@@ -2,7 +2,7 @@
 
 function check_version()
 {
-	if ! type wget unzip; then apt-get install -y wget unzip;fi
+	if ! type wget unzip > /dev/null; then apt-get install -y wget unzip;fi
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip &> /dev/null
 	unzip -o /tmp/main.zip -d /tmp/phala &> /dev/null
 	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" ]; then
@@ -11,6 +11,7 @@ function check_version()
 		chmod +x /opt/phala/scripts/phala.sh
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		log_info "----------本地脚本版本过低，已自动升级。请重新执行命令！----------"
+		sed -i "15c version=$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" $installdir/.env
 		exit 1
 	fi
 	rm -rf /tmp/phala /tmp/main.zip
@@ -26,6 +27,7 @@ function update_script()
 	chmod +x /opt/phala/scripts/phala.sh
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 	log_success "----------更新完成----------"
+	sed -i "15c version=$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" $installdir/.env
 	rm -rf /tmp/phala /tmp/main.zip
 }
 

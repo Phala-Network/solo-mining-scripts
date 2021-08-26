@@ -2,7 +2,7 @@
 
 function check_version()
 {
-	if ! type wget unzip; then apt-get install -y wget unzip;fi
+	if ! type wget unzip > /dev/null; then apt-get install -y wget unzip;fi
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip &> /dev/null
 	unzip -o /tmp/main.zip -d /tmp/phala &> /dev/null
 	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" ]; then
