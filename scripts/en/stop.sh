@@ -16,6 +16,13 @@ function stop()
 				log_info "----------phala-node already stop----------"
 			fi
 			;;
+		khala)
+			if [ ! -z $(docker container ls -q -f "name=khala-node") ]; then
+				docker container rm --force khala-node
+			else
+				log_info "----------khala-node already stop----------"
+			fi
+			;;
 		pruntime)
 			if [ ! -z $(docker container ls -q -f "name=phala-pruntime") ]; then
 				docker container rm --force phala-pruntime
