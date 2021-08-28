@@ -26,6 +26,7 @@ Options:
 		<isgx>				安装isgx驱动
 	uninstall				卸载phala脚本
 	start					启动挖矿(debug参数允许输出挖矿套件日志信息)
+		<khala>				启动khala-node
 	stop					停止挖矿程序
 		<node>				停止phala-node容器
 		<pruntime>			停止phala-pruntime容器

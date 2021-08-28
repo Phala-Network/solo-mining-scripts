@@ -26,6 +26,7 @@ Options:
 		<isgx>				install isgx driver
 	uninstall				uninstall your phala scripts
 	start					start mining
+		<khala>				start khala-node
 	stop					stop mining
 		<node>				stop phala-node container
 		<pruntime>			stop phala-pruntime container
