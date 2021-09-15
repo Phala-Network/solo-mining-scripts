@@ -42,11 +42,13 @@ function update_clean()
 			case $container_name in
 				phala-node)
 					docker image rm $(awk -F "=" 'NR==1 {print $2}' $installdir/.env)
-					if [ -d $(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env) ]; then rm -rf $(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env);fi
+					local node_dir=$(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
+					if [ -d $node_dir ]; then rm -rf $node_dir;fi
 					;;
 				phala-pruntime) 
 					docker image rm $(awk -F "=" 'NR==2 {print $2}' $installdir/.env)
-					if [ -d $(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env) ]; then rm -rf $(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env);fi
+					local pruntime_dir=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
+					if [ -d $pruntime_dir ]; then rm -rf $pruntime_dir;fi
 					;;
 				phala-pherry)
 					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
