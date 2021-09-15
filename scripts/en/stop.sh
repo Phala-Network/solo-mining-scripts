@@ -4,7 +4,7 @@ function stop()
 {
 	case $1 in
 		"")
-			for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node
+			for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench
 			do
 				if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then docker container rm --force $container_name; fi
 			done
