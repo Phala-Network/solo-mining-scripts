@@ -16,13 +16,6 @@ function stop()
 				log_info "----------phala-node容器已经停止----------"
 			fi
 			;;
-		khala)
-			if [ ! -z $(docker container ls -q -f "name=khala-node") ]; then
-				docker container rm --force khala-node
-			else
-				log_info "----------khala-node容器已经停止----------"
-			fi
-			;;
 		pruntime)
 			if [ ! -z $(docker container ls -q -f "name=phala-pruntime") ]; then
 				docker container rm --force phala-pruntime
