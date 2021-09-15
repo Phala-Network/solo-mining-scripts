@@ -16,18 +16,6 @@ function start()
 		log_err "----------节点未配置，开始配置节点！----------"
 		config set
 	fi
-	case $1 in
-		"")
-			cd $installdir
-			docker-compose up -d
-			;;
-		khala)
-			if [ -z $(docker container ls -q -f "name=khala-node") ]; then
-				docker container rm --force $(docker container ls -q -f "name=khala-node")
-				docker image rm phalanetwork/khala-node
-				rm -rf /var/khala-dev-node
-			fi
-			docker run -dti --rm --name khala-node -e NODE_NAME=$node_name -e NODE_ROLE=MINER -p 40333:30333 -p 40334:30334 -v /var/khala-dev-node:/root/data phalanetwork/khala-node
-			;;
-	esac
+	cd $installdir
+	docker-compose up -d
 }
