@@ -187,6 +187,20 @@ case "$1" in
 		check_version
 		start
 		;;
+	presync)
+		local node_name
+		while true ; do
+			read -p "Enter your node name(not contain spaces): " node_name
+			if [[ $node_name =~ \ |\' ]]; then
+				printf "The node name cannot contain spaces, please re-enter!\n"
+			else
+				sed -i "7c NODE_NAME=$node_name" $installdir/.env
+				break
+			fi
+		done
+		cd $installdir
+		docker-compose up -d
+		;;
 	stop)
 		stop $2
 		;;

@@ -187,6 +187,20 @@ case "$1" in
 		check_version
 		start
 		;;
+	presync)
+		local node_name
+		while true ; do
+			read -p "请输入节点名称（不能包含空格）: " node_name
+			if [[ $node_name =~ \ |\' ]]; then
+				printf "节点名称不能包含空格，请重新输入!\n"
+			else
+				sed -i "7c NODE_NAME=$node_name" $installdir/.env
+				break
+			fi
+		done
+		cd $installdir
+		docker-compose up -d
+		;;
 	stop)
 		stop $2
 		;;

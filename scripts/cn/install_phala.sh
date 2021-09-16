@@ -139,7 +139,6 @@ function install()
 		"")
 			install_depenencies
 			install_driver
-			config set
 			;;
 		dcap)
 			install_dcap
