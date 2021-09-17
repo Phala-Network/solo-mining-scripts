@@ -42,7 +42,12 @@ function install_depenencies()
 				esac
 			fi
 		done
-		if type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then break;fi
+		if type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then
+			break
+		else
+			log_err "----------Failed to install depenencies, please to check install logs!----------"
+			exit 1
+		fi
 	done
 }
 

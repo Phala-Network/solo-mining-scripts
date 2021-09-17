@@ -42,7 +42,12 @@ function install_depenencies()
 				esac
 			fi
 		done
-		if type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then break;fi
+		if type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then
+			break
+		else
+			log_err "----------依赖下载失败，请检查安装日志！----------"
+			exit 1
+		fi
 	done
 }
 
