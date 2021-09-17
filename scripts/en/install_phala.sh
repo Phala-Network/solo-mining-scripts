@@ -14,7 +14,7 @@ function install_depenencies()
 		for package in jq curl wget unzip zip docker docker-compose node yq dkms; do
 			if ! type $package > /dev/null; then
 				case $package in
-					jq|curl|wget|unzip|zip|dkms|bc)
+					jq|curl|wget|unzip|zip|dkms)
 						apt-get install -y $package
 						;;
 					docker)
