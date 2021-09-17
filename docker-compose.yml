@@ -49,4 +49,5 @@ services:
       "--collator-ws-endpoint=ws://phala-node:9944",
       "--pruntime-endpoint=http://phala-pruntime:8000",
       "--operator=${OPERATOR}",
+      "--fetch-blocks 512",
     ]
