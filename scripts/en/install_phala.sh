@@ -9,7 +9,7 @@ function install_depenencies()
 		exit 1
 	fi
 
-	log_info "----------Install depenencies----------"
+	log_info "----------Install dependencies----------"
 	for i in `seq 0 4`; do
 		for package in jq curl wget unzip zip docker docker-compose node yq dkms; do
 			if ! type $package > /dev/null; then
