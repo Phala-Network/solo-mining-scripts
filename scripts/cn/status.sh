@@ -1,6 +1,6 @@
 #!/bin/bash
 
-status()
+function status()
 {
 	trap "clear;exit" 2
 	while true; do
@@ -14,7 +14,7 @@ status()
 		local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
 		local balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain free-balance $gas_address 2>&1)
 		balance=$(echo $balance | awk -F " " '{print $NF}')
-		balance=$(echo $balance / 1000000000000 | bc)
+		balance=$(echo "$balance / 1000000000000"|bc)
 		local node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
 		local get_info=$(curl -X POST -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info)
 		local publickey=$(echo $get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
@@ -94,7 +94,7 @@ status()
 		fi
 		for i in `seq 60 -1 1`
     do
-      echo -ne "---------------------------   ${i}s刷新   ----------------------------------\r"
+      echo -ne "---------------------------  剩余 ${i}s刷新   ----------------------------------\r"
       sleep 1
     done
     printf " 刷新中..."
