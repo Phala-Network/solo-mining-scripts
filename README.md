@@ -52,13 +52,13 @@ sudo phala start
 ```bash
 sudo phala start node
 sudo phala start pruntime
-sudo phala start phost
+sudo phala start pherry
 ```
 - Use debug parameter to output command logs
 ```bash
 sudo phala start node debug
 sudo phala start pruntime debug
-sudo phala start phost debug
+sudo phala start pherry debug
 ```
 
 ##### Stop minner
@@ -69,7 +69,7 @@ sudo phala stop
 ```bash
 sudo phala stop node
 sudo phala stop pruntime
-sudo phala stop phost
+sudo phala stop pherry
 ```
 
 ##### Update Phala Dockers
@@ -103,7 +103,7 @@ sudo phala status
 ```bash
 sudo phala logs node
 sudo phala logs pruntime
-sudo phala logs phost
+sudo phala logs pherry
 ```
 
 ##### Check the config of minner

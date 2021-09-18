@@ -1,61 +1,94 @@
 #!/bin/bash
 
-config_help()
+function config_show()
 {
-cat << EOF
-Usage:
-	help			帮助信息
-	show			查看配置信息
-	set			重新设置
-EOF
+	cat $installdir/.env
 }
 
-config_show()
+function config_set_all()
 {
-	cat $installdir/config.json | jq .
-}
-
-config_set_all()
-{
-	local node_name=""
-	read -p "输入节点名称: " node_name
-	node_name=`echo "$node_name"`
-	while [[ x"$node_name" =~ \ |\' ]]; do
-		read -p "节点名称不能包含空格，请重新输入：" node_name
+	local cores
+	while true ; do
+		read -p "您使用几个核心参与挖矿: " cores
+		expr $cores + 0 &> /dev/null
+		if [ $? -eq 0 ] && [ $cores -ge 1 ] && [ $cores -le 32 ]; then
+			sed -i "6c CORES=$cores" $installdir/.env
+			break
+		else
+			printf "请输入大于1小于32的整数，该数据不正确，请重新输入！\n"
+		fi
 	done
-	sed -i "2c \\  \"nodename\" : \"$node_name\"," $installdir/config.json &>/dev/null
-	log_success "设置节点名称为: '$node_name' 成功"
-	local ipaddr=""
-	read -p "输入你的IP地址: " ipaddr
-	ipaddr=`echo "$ipaddr"`
-	if [ x"$ipaddr" == x"" ] || [ `echo $ipaddr | awk -F . '{print NF}'` -ne 4 ]; then
-		log_err "IP地址格式错误，或者为空"
-		exit 1
-	fi
-	sed -i "3c \\  \"ipaddr\" : \"$ipaddr\"," $installdir/config.json &>/dev/null
-	log_success "设置IP地址为: '$ipaddr' 成功"
+
+	local node_name
+	while true ; do
+		read -p "请输入节点名称（不能包含空格）: " node_name
+		if [[ $node_name =~ \ |\' ]]; then
+			printf "节点名称不能包含空格，请重新输入!\n"
+		else
+			sed -i "7c NODE_NAME=$node_name" $installdir/.env
+			break
+		fi
+	done
 
 	local mnemonic=""
-	read -p "输入你的Controllor账号助记词 : " mnemonic
-	mnemonic=`echo "$mnemonic"`
-	if [ x"$mnemonic" == x"" ]; then
-		log_err "助记词不能为空"
-		exit 1
-	fi
-	sed -i "4c \\  \"mnemonic\" : \"$mnemonic\"" $installdir/config.json &>/dev/null
-	log_success "设置助记词为: '$mnemonic' 成功"
+	local gas_adress=""
+	local balance=""
+	while true ; do
+		read -p "输入你的GAS费账号助记词 : " mnemonic
+		if [ -z "$mnemonic" ] || [ $(node $installdir/console.js utils verify "$mnemonic") == "Cannot decode the input" ]; then
+			printf "请输入合法助记词,且不能为空！\n"
+		else
+			gas_adress=$(node $installdir/console.js utils verify "$mnemonic")
+			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain free-balance $gas_adress 2>&1)
+			balance=$(echo $balance | awk -F " " '{print $NF}')
+			balance=$(echo "$balance / 1000000000000"|bc)
+			if [ $(echo "$balance > 0.1"|bc) -eq 1 ]; then
+				sed -i "8c MNEMONIC=$mnemonic" $installdir/.env
+				sed -i "9c GAS_ACCOUNT_ADDRESS=$gas_adress" $installdir/.env
+				break
+			else
+				printf "账户PHA小于0.1，请重新输入！\n"
+			fi
+		fi
+	done
+
+	local pool_addr=""
+	while true ; do
+		read -p "输入抵押池账户地址 : " pool_addr
+		if [ -z "$pool_addr" ] || [ $(node $installdir/console.js utils verify "$pool_addr") == "Cannot decode the input" ]; then
+			printf "请输入合法抵押池账户地址，且不能为空！\n"
+		else
+			sed -i "10c OPERATOR=$pool_addr" $installdir/.env
+			break
+		fi
+	done
 }
 
-config()
+function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
+
+function config()
 {
-	case "$1" in
-		show)
-			config_show
-			;;
-		set)
-			config_set_all
-			;;
-		*)
-			config_help
-	esac
+	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.10"; then
+		log_info "----------您的内核版本大于5.10，内核版本过高，请降低内核版本！----------"
+		exit 1
+	fi
+	log_info "----------测试信用等级，正在等待Intel下发IAS远程认证报告！----------"
+	local Level=$(phala sgx-test | awk '/confidenceLevel =/ {print $3 }' | tr -cd "[0-9]")
+	if [ -z $Level ]; then
+		log_info "----------Intel IAS认证没有通过，请检查您的主板或网络！----------"
+		exit 1
+	elif [ $(echo "1 <= $Level" | bc) -eq 1 ] && [ $(echo "$Level <= 5" | bc) -eq 1 ]; then
+		log_info "您的信任等级是：$Level"
+		case "$1" in
+			show)
+				config_show
+				;;
+			set)
+				config_set_all
+				;;
+			*)
+				phala_help
+				break
+		esac
+	fi
 }

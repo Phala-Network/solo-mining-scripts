@@ -1,6 +1,6 @@
 #!/bin/bash
 
-install_depenencies()
+function install_depenencies()
 {
 	log_info "----------更新系统源----------"
 	apt-get update
@@ -10,180 +10,139 @@ install_depenencies()
 	fi
 
 	log_info "----------安装依赖----------"
-	apt-get install -y jq curl wget unzip zip
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-	add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-	apt-get install -y docker-ce docker-ce-cli containerd.io dkms
-	if [ $? -ne 0 ]; then
-		log_err "安装依赖失败"
-		exit 1
-	fi
-	usermod -aG docker $USER
+	for i in `seq 0 4`; do
+		for package in jq curl wget unzip zip docker docker-compose node yq dkms; do
+			if ! type $package > /dev/null; then
+				case $package in
+					jq|curl|wget|unzip|zip|dkms)
+						apt-get install -y $package
+						;;
+					docker)
+						curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+						add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+						apt-get install -y docker-ce docker-ce-cli containerd.io
+						usermod -aG docker $USER
+						;;
+					docker-compose)
+						curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+						chmod +x /usr/local/bin/docker-compose
+						;;
+					node)
+						curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+						apt-get install -y nodejs
+						;;
+					yq)
+						wget https://github.com/mikefarah/yq/releases/download/v4.11.2/yq_linux_amd64.tar.gz -O /tmp/yq_linux_amd64.tar.gz
+						tar -xvf /tmp/yq_linux_amd64.tar.gz -C /tmp
+						mv /tmp/yq_linux_amd64 /usr/bin/yq
+						rm /tmp/yq_linux_amd64.tar.gz
+						;;
+					*)
+						break
+				esac
+			fi
+		done
+		if type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then
+			break
+		else
+			log_err "----------依赖下载失败，请检查安装日志！----------"
+			exit 1
+		fi
+	done
 }
 
-download_docker_images()
+function remove_dirver()
 {
-	log_info "----------下载Phala Docker镜像----------"
-	local res=0
-
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-node
-	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-pruntime
-	res=$(($?|$res))
-	docker pull swr.cn-east-3.myhuaweicloud.com/phala/phala-poc4-phost
-	res=$(($?|$res))
-
-	if [ $res -ne 0 ]; then
-		log_err "----------下载 Docker 镜像失败----------"
-		exit 1
-	fi
-}
-
-remove_dirver()
-{
-	log_info "----------删除旧版本 dcap/isgx 驱动----------"
-	local res_isgx=$(ls /dev | grep isgx)
-	local res_sgx=$(ls /dev | grep sgx)
-	if [ x"$res_isgx" == x"isgx" ] || [ x"$res_sgx" == x"sgx" ]; then
+	if [ -f /opt/intel/sgxdriver/uninstall.sh ]; then
+		log_info "----------删除旧版本 dcap/isgx 驱动----------"
 		/opt/intel/sgxdriver/uninstall.sh
-		if [ $? -ne 0 ]; then
-			log_info "----------删除旧版本 dcap/isgx 驱动失败----------"
-			exit 1
-		fi
 	fi
 }
 
-install_driver()
+function install_dcap()
 {
-	remove_dirver
 	log_info "----------下载 DCAP 驱动----------"
-	wget $dcap_driverurl
-
-	if [ $? -ne 0 ]; then
-		log_err "----------下载 DCAP 驱动失败----------"
-		exit 1
-	fi
-
-	log_info "----------添加运行权限----------"
-	chmod +x $dcap_driverbin
-
-	log_info "----------尝试安装DCAP驱动----------"
-	./$dcap_driverbin
-
-	local res_dcap=$(ls /dev | grep sgx)
-	if [ x"$res_dcap" == x"" ]; then
-		log_err "----------安装DCAP驱动失败，尝试安装isgx驱动----------"
-		remove_dirver
-		log_info "----------下载 isgx 驱动----------"
-		wget $isgx_driverurl
-		
+	for i in `seq 0 4`; do
+		wget $dcap_driverurl -O /tmp/$dcap_driverbin
 		if [ $? -ne 0 ]; then
-			log_err "----------下载 isgx 驱动失败----------"
-			exit 1
+			log_err "----------下载 DCAP 驱动失败，重新下载！----------"
+		else
+			break
 		fi
+	done
 
+	if [ -f /tmp/$dcap_driverbin ]; then
 		log_info "----------添加运行权限----------"
-		chmod +x $isgx_driverbin
-
-		log_info "----------安装 isgx 驱动----------"
-		./$isgx_driverbin
-
-		local res_sgx=$(ls /dev | grep isgx)
-		if [ x"$res_sgx" == x"" ]; then
-			log_err "----------安装 isgx 驱动失败，请检查主板BIOS----------"
-			exit 1
-		fi
-
-		log_info "----------删除临时文件----------"
-		rm $isgx_driverbin
-	fi
-
-	log_success "----------删除临时文件----------"
-	rm $dcap_driverbin
-}
-
-install_dcap()
-{
-	remove_dirver
-	log_info "----------下载 DCAP 驱动----------"
-	wget $dcap_driverurl
-
-	if [ $? -ne 0 ]; then
-		log_err "----------下载 DCAP 驱动失败----------"
+		chmod +x /tmp/$dcap_driverbin
+	else
+		log_err "----------未成功下载 DCAP 驱动，请检查您的网络！----------"
 		exit 1
 	fi
-
-	log_info "----------添加运行权限----------" 
-	chmod +x $dcap_driverbin
 
 	log_info "----------安装DCAP驱动----------"
-	./$dcap_driverbin
-
-	local res_dcap=$(ls /dev | grep sgx)
-	if [ x"$res_dcap" == x"" ]; then
-		log_err "----------安装DCAP驱动失败----------"
+	/tmp/$dcap_driverbin
+	if [ $? -ne 0 ]; then
+		log_err "----------安装DCAP驱动失败，请检查驱动安装日志！----------"
 		exit 1
+	else
+		log_success "----------删除临时文件----------"
+		rm /tmp/$dcap_driverbin
 	fi
 
-	log_success "----------删除临时文件----------"
-	rm $dcap_driverbin
+	return 0
 }
 
-install_isgx()
+function install_isgx()
 {
-	remove_dirver
 	log_info "----------下载 isgx 驱动----------"
-	wget $isgx_driverurl
-	
-	if [ $? -ne 0 ]; then
-		log_err "----------下载 isgx 驱动失败----------"
+	for i in `seq 0 4`; do
+		wget $isgx_driverurl -O /tmp/$isgx_driverbin
+		if [ $? -ne 0 ]; then
+			log_err "----------下载 isgx 驱动失败，重新下载！----------"
+		else
+			break
+		fi
+	done
+
+	if [ -f /tmp/$isgx_driverbin ]; then
+		log_info "----------添加运行权限----------"
+		chmod +x /tmp/$isgx_driverbin
+	else
+		log_err "----------未成功下载 isgx 驱动，请检查您的网络！----------"
 		exit 1
 	fi
-
-	log_info "----------添加运行权限----------"
-	chmod +x $isgx_driverbin
 
 	log_info "----------安装 isgx 驱动----------"
-	./$isgx_driverbin
-
-	local res_sgx=$(ls /dev | grep isgx)
-	if [ x"$res_sgx" == x"" ]; then
-		log_err "----------安装 isgx 驱动失败----------"
+	/tmp/$isgx_driverbin
+	if [ $? -ne 0 ]; then
+		log_err "----------安装isgx驱动失败，请检查驱动安装日志！----------"
 		exit 1
+	else
+		log_success "----------删除临时文件----------"
+		rm /tmp/$isgx_driverbin
 	fi
 
-	log_success "----------删除临时文件----------"
-	rm $isgx_driverbin
+	return 0
 }
 
-install()
+function install_driver()
 {
-	release=$(lsb_release -r | grep -o "[0-9]*\.[0-9]*")
-	if [ x"$release" = x"18.04" ]; then
-		dcap_driverbin=sgx_linux_x64_driver_1.41.bin
-		dcap_driverurl=https://download.01.org/intel-sgx/latest/dcap-latest/linux/distro/ubuntu18.04-server/sgx_linux_x64_driver_1.41.bin
-		isgx_driverbin=sgx_linux_x64_driver_2.11.0_2d2b795.bin
-		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu18.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin
-	elif [ x"$release" = x"20.04" ]; then
-		dcap_driverbin=sgx_linux_x64_driver_1.41.bin
-		dcap_driverurl=https://download.01.org/intel-sgx/latest/dcap-latest/linux/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.41.bin
-		isgx_driverbin=sgx_linux_x64_driver_2.11.0_2d2b795.bin
-		isgx_driverurl=https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin
-	else
-		log_err "----------系统版本不支持----------"
-		exit 1
+	remove_dirver
+	install_dcap
+	if [ $? -ne 0 ]; then
+		install_isgx
+		if [ $? -ne 0 ]; then
+			log_err "----------安装DCAP/isgx驱动均失败，请检查安装日志！----------"
+			exit 1
+		fi
 	fi
+}
 
+function install()
+{
 	case "$1" in
 		"")
 			install_depenencies
-			download_docker_images
-			install_driver
-			;;
-		init)
-			install_depenencies
-			download_docker_images
-			config_set_all
 			install_driver
 			;;
 		dcap)
@@ -193,10 +152,43 @@ install()
 			install_isgx
 			;;
 		*)
-			log_err "----------参数错误----------"
+			phala_help
 			exit 1
 			;;
 	esac
 
-	exit 0
+	if [ -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
+		log_info "----------您的设备存在：/dev/sgx/enclave /dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision 与DCAP驱动有关，已全部添加到phala-pruntime！----------"
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/enclave","/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ ! -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
+		log_info "----------您的设备存在：/dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision 与DCAP驱动有关，已全部添加到phala-pruntime！----------"
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ ! -L /dev/sgx/enclave ] && [ ! -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
+		log_info "----------您的设备存在：/dev/sgx_enclave /dev/sgx_provision 与DCAP驱动有关，已全部添加到phala-pruntime！----------"
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ ! -L /dev/sgx/enclave ] && [ ! -L /dev/sgx/provision ] && [ ! -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
+		log_info "----------您的设备存在：/dev/sgx_provision 与DCAP驱动有关，已全部添加到phala-pruntime！----------"
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ ! -L /dev/sgx/enclave ] && [ ! -L /dev/sgx/provision ] && [ ! -c /dev/sgx_enclave ] && [ ! -c /dev/sgx_provision ] && [ -c /dev/isgx ]; then
+		log_info "----------您的设备存在：/dev/isgx 与isgx驱动有关，已全部添加到phala-pruntime！----------"
+		yq e -i '.services.phala-pruntime.devices = ["/dev/isgx"]' $installdir/docker-compose.yml
+	else
+		log_info "----------未找到驱动文件，请检查驱动安装日志！----------"
+		exit 1
+	fi
 }
+
+if [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") == "18.04" ]; then
+	dcap_driverurl=$(awk -F '=' 'NR==11 {print $2}' $installdir/.env)
+	dcap_driverbin=$(awk -F '/' 'NR==11 {print $NF}' $installdir/.env)
+	isgx_driverurl=$(awk -F '=' 'NR==13 {print $2}' $installdir/.env)
+	isgx_driverbin=$(awk -F '/' 'NR==13 {print $NF}' $installdir/.env)
+elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "20.04" ]; then
+	dcap_driverurl=$(awk -F '=' 'NR==12 {print $2}' $installdir/.env)
+	dcap_driverbin=$(awk -F '/' 'NR==12 {print $NF}' $installdir/.env)
+	isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
+	isgx_driverbin=$(awk -F '/' 'NR==14 {print $NF}' $installdir/.env)
+else
+	log_err "----------系统版本不支持，phala目前仅支持Ubuntu 18.04/Ubuntu 20.04----------"
+	exit 1
+fi

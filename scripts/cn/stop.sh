@@ -1,72 +1,44 @@
 #!/bin/bash
 
-stop_phala_node()
+function stop()
 {
-	log_info "----------停止 phala-node 组件----------"
-	docker kill phala-node
-
-	if [ $? -ne 0 ]; then
-		log_err "----------停止 phala-node 组件失败----------"
-		exit 1
-	fi
-}
-
-stop_phala_pruntime()
-{
-	log_info "----------停止 phala-pruntime 组件----------"
-	docker kill phala-pruntime
-
-	if [ $? -ne 0 ]; then
-		log_err "----------停止 phala-pruntime 组件失败----------"
-		exit 1
-	fi
-}
-
-stop_phala_pruntime_bench()
-{
-	log_info "----------停止 phala-pruntime-bench 组件----------"
-	docker kill phala-pruntime-bench
-
-	if [ $? -ne 0 ]; then
-		log_err "----------停止 phala-pruntime-bench 组件失败----------"
-		exit 1
-	fi
-}
-
-stop_phala_phost()
-{
-	log_info "----------停止 phala-phost 组件----------"
-	docker kill phala-phost
-
-	if [ $? -ne 0 ]; then
-		log_err "----------停止 phala-phost 组件失败----------"
-		exit 1
-	fi
-}
-
-stop()
-{
-	case "$1" in
+	case $1 in
+		"")
+			for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench
+			do
+				if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then docker container rm --force $container_name; fi
+			done
+			;;
 		node)
-			stop_phala_node
+			if [ ! -z $(docker container ls -q -f "name=phala-node") ]; then
+				docker container rm --force phala-node
+			else
+				log_info "----------phala-node容器已经停止----------"
+			fi
 			;;
 		pruntime)
-			stop_phala_pruntime
+			if [ ! -z $(docker container ls -q -f "name=phala-pruntime") ]; then
+				docker container rm --force phala-pruntime
+			else
+				log_info "----------phala-pruntime容器已经停止----------"
+			fi
 			;;
-		phost)
-			stop_phala_phost
+		pherry)
+			if [ ! -z $(docker container ls -q -f "name=phala-pherry") ]; then
+				docker container rm --force phala-pherry
+			else
+				log_info "----------phala-pherry容器已经停止----------"
+			fi
 			;;
-		pruntime-bench)
-			stop_phala_pruntime_bench
-			;;
-		"")
-			stop_phala_node
-			stop_phala_pruntime
-			stop_phala_phost
-			stop_phala_pruntime_bench
-			break
+		bench)
+			if [ ! -z $(docker container ls -q -f "name=phala-pruntime-bench") ]; then
+				docker container rm --force phala-pruntime-bench
+			else
+				log_info "----------phala-pruntime-bench容器已经停止----------"
+			fi
 			;;
 		*)
-			log_err "----------参数错误----------"
+			phala_help
+			break
 	esac
 }

@@ -1,76 +1,106 @@
 #!/bin/bash
 
-update_script()
+function check_version()
+{
+	if ! type wget unzip > /dev/null; then apt-get install -y wget unzip;fi
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip &> /dev/null
+	unzip -o /tmp/main.zip -d /tmp/phala &> /dev/null
+	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" ]; then
+		rm -rf /opt/phala/scripts /usr/bin/phala
+		cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
+		chmod +x /opt/phala/scripts/phala.sh
+		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
+		log_info "----------The local script version is too low and has been automatically upgraded. Please execute the command again!----------"
+		exit 1
+	fi
+	rm -rf /tmp/phala /tmp/main.zip
+}
+
+function update_script()
 {
 	log_info "----------Update phala script----------"
-
-	mkdir -p /tmp/phala
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/phala/main.zip
-	unzip /tmp/phala/main.zip -d /tmp/phala
-	rm -rf /opt/phala/scripts
+	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip &> /dev/null
+	unzip -o /tmp/main.zip -d /tmp/phala &> /dev/null
+	rm -rf /opt/phala/scripts /usr/bin/phala
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
-	mv /opt/phala/scripts/phala.sh /usr/bin/phala
-	chmod +x /usr/bin/phala
-	chmod +x /opt/phala/scripts/*
-
+	chmod +x /opt/phala/scripts/phala.sh
+	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 	log_success "----------Update success----------"
-	rm -rf /tmp/phala
+	rm -rf /tmp/phala /tmp/main.zip
 }
 
-update_clean()
+function update_clean()
 {
 	log_info "----------Clean phala node images----------"
-	log_info "Kill phala-node phala-pruntime phala-phost"
-	docker kill phala-phost
-	docker kill phala-pruntime
-	docker kill phala-node
-	docker image prune -a
-
+	log_info "Kill phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node"
 	log_info "----------Clean data----------"
-	rm -r $HOME/phala-node-data
-	rm -r $HOME/phala-pruntime-data
-
-	local res=0
-	log_info "----------Pull docker images----------"
-	docker pull phalanetwork/phala-poc4-node
-	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc4-pruntime
-	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc4-phost
-	res=$(($?|$res))
-
-	if [ $res -ne 0 ]; then
-		log_err "----------docker pull failed----------"
-	fi
-
+	for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node phala-sgx_detect
+	do
+		if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then
+			docker container stop $container_name
+			docker container rm --force $container_name
+			case $container_name in
+				phala-node)
+					docker image rm $(awk -F "=" 'NR==1 {print $2}' $installdir/.env)
+					local node_dir=$(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
+					if [ -d $node_dir ]; then rm -rf $node_dir;fi
+					;;
+				phala-pruntime) 
+					docker image rm $(awk -F "=" 'NR==2 {print $2}' $installdir/.env)
+					local pruntime_dir=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
+					if [ -d $pruntime_dir ]; then rm -rf $pruntime_dir;fi
+					;;
+				phala-pherry)
+					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
+					;;
+				khala-node)
+					docker image rm phalanetwork/khala-node
+					if [ -d /var/khala-dev-node ]; then rm -rf /var/khala-dev-node;fi
+					;;
+				*)
+					break
+			esac
+		fi
+	done
 	log_success "----------Clean success----------"
+
+	start
 }
 
-update_noclean()
+function update_noclean()
 {
 	log_info "----------Update phala node----------"
-	log_info "Kill phala-node phala-pruntime phala-phost"
-	docker kill phala-phost
-	docker kill phala-pruntime
-	docker kill phala-node
-	docker image prune -a
+	log_info "Kill phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node"
+	for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node phala-sgx_detect
+	do
+		if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then
+			docker container stop $container_name
+			docker container rm --force $container_name
+			case $container_name in
+				phala-node)
+					docker image rm $(awk -F "=" 'NR==1 {print $2}' $installdir/.env)
+					;;
+				phala-pruntime)
+					docker image rm $(awk -F "=" 'NR==2 {print $2}' $installdir/.env)
+					;;
+				phala-pherry)
+					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
+					;;
+				khala-node)
+					docker image rm phalanetwork/khala-node
+					if [ -d /var/khala-dev-node ]; then rm -rf /var/khala-dev-node;fi
+					;;
+				*)
+					break
+			esac
+		fi
+	done
 
-	local res=0
-	docker pull phalanetwork/phala-poc4-node
-	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc4-pruntime
-	res=$(($?|$res))
-	docker pull phalanetwork/phala-poc4-phost
-	res=$(($?|$res))
-
-	if [ $res -ne 0 ]; then
-		log_err "----------docker pull failed----------"
-	fi
-
+	start
 	log_success "----------Update success----------"
 }
 
-update()
+function update()
 {
 	case "$1" in
 		clean)
@@ -83,6 +113,7 @@ update()
 			update_noclean
 			;;
 		*)
-			log_err "----------Parameter error----------"
+			phala_help
+			break
 	esac
 }

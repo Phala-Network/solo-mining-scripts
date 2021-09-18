@@ -15,42 +15,52 @@ EOF
 exit 0
 }
 
-install_cnphala_scripts()
+install_cn()
 {
 	echo "--------------安装 phala 脚本程序-------------"
 
-	if [ -f /usr/bin/phala ]; then
+	if [ -f /opt/phala/scripts/phala.sh ]; then
 		echo "删除旧的 Phala 脚本"
-		phala uninstall
+		/opt/phala/scripts/phala.sh uninstall
 	fi
 	echo "安装新的 Phala 脚本"
 	mkdir -p $installdir
-	cp $basedir/config.json $installdir/
+	cp $basedir/{.env,docker-compose.yml,/console.js} $installdir/
 	cp -r $basedir/scripts/cn $installdir/scripts
 
 	echo "安装 Phala 命令行工具"
 	chmod +x $installdir/scripts/phala.sh
 	ln -s $installdir/scripts/phala.sh /usr/bin/phala
+	# sed -i '1c NODE_IMAGE=swr.cn-east-3.myhuaweicloud.com/phala/khala-dev-node' $installdir/.env
+	# sed -i '2c PRUNTIME_IMAGE=swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pruntime' $installdir/.env
+	# sed -i '3c PHERRY_IMAGE=swr.cn-east-3.myhuaweicloud.com/phala/phala-dev-pherry' $installdir/.env
+	# sed -i '4c NODE_VOLUMES=/var/phala-node-data:/root/data' $installdir/.env
+	# sed -i '5c PRUNTIME_VOLUMES=/var/phala-pruntime-data:/root/datas' $installdir/.env
 
 	echo "------------安装成功-------------"
 }
 
-install_enphala_scripts()
+install_en()
 {
-	echo "--------------Install phala node-------------"
+	echo "--------------Install phala scripts-------------"
 
-	if [ -f /usr/bin/phala ]; then
-		echo "Uninstall old phala node"
-		phala uninstall
+	if [ -f /opt/phala/scripts/phala.sh ]; then
+		echo "Uninstall old phala scripts"
+		/opt/phala/scripts/phala.sh uninstall
 	fi
-	echo "Install new phala node"
+	echo "Install new phala scripts"
 	mkdir -p $installdir
-	cp $basedir/config.json $installdir/
+	cp $basedir/{.env,docker-compose.yml,/console.js} $installdir/
 	cp -r $basedir/scripts/en $installdir/scripts
 
 	echo "Install phala command line tool"
 	chmod +x $installdir/scripts/phala.sh
 	ln -s $installdir/scripts/phala.sh /usr/bin/phala
+	# sed -i '1c NODE_IMAGE=phalanetwork/khala-dev-node' $installdir/.env
+	# sed -i '2c PRUNTIME_IMAGE=phalanetwork/phala-dev-pruntime' $installdir/.env
+	# sed -i '3c PHERRY_IMAGE=phalanetwork/phala-dev-pherry' $installdir/.env
+	# sed -i '4c NODE_VOLUMES=/var/phala-node-data:/root/data' $installdir/.env
+	# sed -i '5c PRUNTIME_VOLUMES=/var/phala-pruntime-data:/root/data' $installdir/.env
 
 	echo "------------Install success-------------"
 }
@@ -63,10 +73,10 @@ fi
 
 case "$1" in
 	"cn")
-		install_cnphala_scripts
+		install_cn
 		;;
 	"en")
-		install_enphala_scripts
+		install_en
 		;;
 	*)
 		help
