@@ -21,7 +21,6 @@ function status()
 		local publickey=$(echo $get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
 		local registered=$(echo $get_info | jq '.payload|fromjson.registered' | sed 's/\"//g')
 		local blocknum=$(echo $get_info | jq '.payload|fromjson.blocknum' | sed 's/\"//g')
-		local headernum=$(echo $get_info | jq '.payload|fromjson.headernum' | sed 's/\"//g')
 		local score=$(echo $get_info | jq '.payload|fromjson.score' | sed 's/\"//g')
 
 		check_docker_status phala-node
@@ -51,56 +50,53 @@ function status()
 		clear
 		if [ $(echo "$balance < 2"|bc) -eq 1 ]; then
 			printf "
----------------------------   60s Refresh   ----------------------------------
+---------------------------   60s refresh   ------------------------------
 --------------------------------------------------------------------------
-	Service		Status		CurrentBlock
+	Service			Status		CurrentBlock
 --------------------------------------------------------------------------
 	khala-node		${node_status}			${khala_node_block}
 	kusama-node		${node_status}			${kusama_node_block}
 	phala-pruntime		${pruntime_status}
-	phala-pherry		${pherry_status}			${blocknum} / ${headernum}
+	phala-pherry		${pherry_status}			${blocknum}
 --------------------------------------------------------------------------
 	Account information	contents
 --------------------------------------------------------------------------
 	node name           	${node_name}
 	mining core     	${cores}
-	GAS account address      	${gas_address}
-	GAS account balance      	\E[1;32m${balance}\E[0m \E[41;33mWaring!\E[0m
-	pool account address      	${pool_address}
-	Worker-public-key		${publickey}
-	Worker-register-state		${registered}
-	Worker-score		${score}
+	GAS account address     ${gas_address}
+	GAS account balance     \E[1;32m${balance}\E[0m \E[41;33mWarning!\E[0m
+	pool account address    ${pool_address}
+	Worker-public-key	${publickey}
+	Registration status	${registered}
+	miner score		${score}
 --------------------------------------------------------------------------
 "
 		else
 			printf "
----------------------------   60s Refresh   ----------------------------------
 --------------------------------------------------------------------------
 	Service		Status		CurrentBlock
 --------------------------------------------------------------------------
-	khala-node		${node_status}			${khala_node_block}
-	kusama-node		${node_status}			${kusama_node_block}
-	phala-pruntime		${pruntime_status}
-	phala-pherry		${pherry_status}			${blocknum} / ${headernum}
+	phala-node	${node_status}		${node_block}
+	phala-pruntime  ${pruntime_status}
+	phala-pherry    ${pherry_status}
 --------------------------------------------------------------------------
 	Account information	contents
 --------------------------------------------------------------------------
 	node name           	${node_name}
 	mining core     	${cores}
-	GAS account address      	${gas_address}
-	GAS account balance      	\E[1;32m${balance}\E[0m
-	pool account address      	${pool_address}
-	Worker-public-key		${publickey}
-	Worker-register-state		${registered}
-	Worker-score		${score}
+	GAS account address     ${gas_address}
+	GAS account balance     \E[1;32m${balance}\E[0m
+	pool account address    ${pool_address}
+	Worker-public-key	${publickey}
+	Registration status	${registered}
+	miner score		${score}
 --------------------------------------------------------------------------
 "
 		fi
-		for i in `seq 60 -1 1`
-    do
-      echo -ne "---------------------------  Remaining ${i}s Refresh   ----------------------------------\r"
-      sleep 1
-    done
-    printf " Refreshing..."
-    done
+		for i in `seq 60 -1 1`; do
+			echo -ne "---------------------------  剩余 ${i}s刷新   ----------------------------------\r"
+			sleep 1
+		done
+		printf " 刷新中..."
+	done
 }
