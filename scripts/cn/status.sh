@@ -21,6 +21,7 @@ function status()
 		local publickey=$(echo $get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
 		local registered=$(echo $get_info | jq '.payload|fromjson.registered' | sed 's/\"//g')
 		local blocknum=$(echo $get_info | jq '.payload|fromjson.blocknum' | sed 's/\"//g')
+		local headernum=$(echo $get_info | jq '.payload|fromjson.headernum' | sed 's/\"//g')
 		local score=$(echo $get_info | jq '.payload|fromjson.score' | sed 's/\"//g')
 
 		check_docker_status phala-node
@@ -57,7 +58,7 @@ function status()
 	khala-node		${node_status}			${khala_node_block}
 	kusama-node		${node_status}			${kusama_node_block}
 	phala-pruntime		${pruntime_status}
-	phala-pherry		${pherry_status}			${blocknum}
+	phala-pherry		${pherry_status}			${blocknum} / ${headernum}
 --------------------------------------------------------------------------
 	账户信息		内容
 --------------------------------------------------------------------------
@@ -80,7 +81,7 @@ function status()
 	khala-node		${node_status}			${khala_node_block}
 	kusama-node		${node_status}			${kusama_node_block}
 	phala-pruntime		${pruntime_status}
-	phala-pherry		${pherry_status}			${blocknum}
+	phala-pherry		${pherry_status}			${blocknum} / ${headernum}
 --------------------------------------------------------------------------
 	账户信息		内容
 --------------------------------------------------------------------------
