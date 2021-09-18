@@ -15,7 +15,8 @@ function status()
 		local balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain free-balance $gas_address 2>&1)
 		balance=$(echo $balance | awk -F " " '{print $NF}')
 		balance=$(echo "$balance / 1000000000000"|bc)
-		local node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
+		local khala_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
+		local kusama_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9934 | jq '.result.currentBlock')
 		local get_info=$(curl -X POST -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info)
 		local publickey=$(echo $get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
 		local registered=$(echo $get_info | jq '.payload|fromjson.registered' | sed 's/\"//g')
@@ -53,7 +54,8 @@ function status()
 --------------------------------------------------------------------------
 	服务名称		服务状态		本地节点区块高度
 --------------------------------------------------------------------------
-	phala-node		${node_status}			${node_block}
+	khala-node		${node_status}			${khala_node_block}
+	kusama-node		${node_status}			${kusama_node_block}
 	phala-pruntime		${pruntime_status}
 	phala-pherry		${pherry_status}			${blocknum}
 --------------------------------------------------------------------------
@@ -75,7 +77,8 @@ function status()
 --------------------------------------------------------------------------
 	服务名称		服务状态		本地节点区块高度
 --------------------------------------------------------------------------
-	phala-node		${node_status}			${node_block}
+	khala-node		${node_status}			${khala_node_block}
+	kusama-node		${node_status}			${kusama_node_block}
 	phala-pruntime		${pruntime_status}
 	phala-pherry		${pherry_status}			${blocknum}
 --------------------------------------------------------------------------
