@@ -12,15 +12,20 @@ function status()
 		local mnemonic=$(cat $installdir/.env | grep 'MNEMONIC' | awk -F "=" '{print $NF}')
 		local gas_address=$(cat $installdir/.env | grep 'GAS_ACCOUNT_ADDRESS' | awk -F "=" '{print $NF}')
 		local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
+		local script_version=$(cat $installdir/.env | grep 'version' | awk -F "=" '{print $NF}')
 		local balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain free-balance $gas_address 2>&1)
 		balance=$(echo $balance | awk -F " " '{print $NF}')
 		balance=$(echo "$balance / 1000000000000"|bc)
+		local khala_head_block=$(node $installdir/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain sync-state 2>/dev/null)
+		khala_head_block=$(echo $khala_head_block | awk -F "," '{print $5}' | sed 's/ currentBlock: //g')
 		local khala_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
+		local kusama_head_block=$(node $installdir/console.js --substrate-ws-endpoint "wss://pub.elara.patract.io/kusama" chain sync-state | awk -F " " '/currentBlock/ {print $NF}' | sed 's/,//g')
 		local kusama_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9934 | jq '.result.currentBlock')
 		local get_info=$(curl -X POST -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info)
 		local publickey=$(echo $get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
 		local registered=$(echo $get_info | jq '.payload|fromjson.registered' | sed 's/\"//g')
 		local blocknum=$(echo $get_info | jq '.payload|fromjson.blocknum' | sed 's/\"//g')
+		local headernum=$(echo $get_info | jq '.payload|fromjson.headernum' | sed 's/\"//g')
 		local score=$(echo $get_info | jq '.payload|fromjson.score' | sed 's/\"//g')
 
 		check_docker_status phala-node
@@ -47,57 +52,73 @@ function status()
 			pherry_status="exited"
 		fi
 
-		clear
-		if [ $(echo "$balance < 2"|bc) -eq 1 ]; then
-			printf "
----------------------------   60s refresh   ------------------------------
---------------------------------------------------------------------------
-	Service			Status		CurrentBlock
---------------------------------------------------------------------------
-	khala-node		${node_status}			${khala_node_block}
-	kusama-node		${node_status}			${kusama_node_block}
-	phala-pruntime		${pruntime_status}
-	phala-pherry		${pherry_status}			${blocknum}
---------------------------------------------------------------------------
-	Account information	contents
---------------------------------------------------------------------------
-	node name           	${node_name}
-	mining core     	${cores}
-	GAS account address     ${gas_address}
-	GAS account balance     \E[1;32m${balance}\E[0m \E[41;33mWarning!\E[0m
-	pool account address    ${pool_address}
-	Worker-public-key	${publickey}
-	Registration status	${registered}
-	miner score		${score}
---------------------------------------------------------------------------
-"
+		SYNCED="Synchronization completed"
+		SYNCING="Synchronizing, please wait"
+
+		blockInfo=(${khala_node_block} ${khala_head_block} ${kusama_node_block} ${kusama_head_block} ${blocknum} ${headernum})
+		compareOrder1=(1 3 0 2)
+		compareOrder2=(0 2 4 5)
+
+		for i in `seq 0 3`; do
+			compare[${i}]=$(echo "${blockInfo[${compareOrder1[${i}]}]} - ${blockInfo[${compareOrder2[${i}]}]}")
+			diff[${i}]=$(echo ${compare[${i}]} | bc)
+			if [[ ${diff[${i}]} -lt 2 ]]; then
+				sync_status[${i}]=${SYNCED}
+			else
+				sync_status[${i}]=${SYNCING}
+			fi
+		done
+
+		if [ ${registered} = "true" ]; then
+			registerStatus="Registered, you can use the miner’s public key to add a miner"
 		else
-			printf "
+			registerStatus="Not registered, please wait for the synchronization to complete"
+			publickey="Waiting for the miner to register"
+		fi
+
+		if [ $(echo "$balance < 2"|bc) -eq 1 ]; then
+			gas_balance=$(echo '\E[1;33m'${balance}'\E[0m'"PHA"'\E[41;33m'" 余额不足!"'\E[0m')
+		else
+			gas_balance=$(echo '\E[1;32m'${balance}'\E[0m'"PHA")
+		fi
+
+		clear
+		printf "
+------------------------------ Script version ${script_version} ----------------------------
+	service name		service status		local node block height
 --------------------------------------------------------------------------
-	Service		Status		CurrentBlock
---------------------------------------------------------------------------
-	khala-node		${node_status}			${khala_node_block}
-	kusama-node		${node_status}			${kusama_node_block}
+	khala-node		${node_status}			${khala_node_block} / ${khala_head_block}
+	kusama-node		${node_status}			${kusama_node_block} / ${kusama_head_block}
 	phala-pruntime		${pruntime_status}
-	phala-pherry		${pherry_status}			${blocknum}
+	phala-pherry		${pherry_status}			khala ${blocknum} / kusama ${headernum}
 --------------------------------------------------------------------------
-	Account information	contents
+	Status check						result
 --------------------------------------------------------------------------
-	node name           	${node_name}
-	mining core     	${cores}
-	GAS account address     ${gas_address}
-	GAS account balance     \E[1;32m${balance}\E[0m
-	pool account address    ${pool_address}
-	Worker-public-key	${publickey}
-	Registration status	${registered}
-	miner score		${score}
+	khala chain synchronization status		${sync_status[0]}, difference is ${diff[0]}
+	kusama chain synchronization status		${sync_status[1]}, difference is ${diff[1]}
+	pherry synchronizes khala chain status		${sync_status[2]}, difference is ${diff[2]}
+	pherry syncs kusama chain status  		${sync_status[3]}, difference is ${diff[3]}
+--------------------------------------------------------------------------
+	account information		content
+--------------------------------------------------------------------------
+	node name           		${node_name}
+	core     			${cores}
+	GAS account address      	${gas_address}
+	GAS account balance      	${gas_balance}
+	mortgage pool account address	${pool_address}
+	miner public key		${publickey}
+	miner registration status	${registerStatus}
+	miner score			${score}
 --------------------------------------------------------------------------
 "
-		fi
-		for i in `seq 60 -1 1`; do
-			echo -ne "---------------------------  剩余 ${i}s刷新   ----------------------------------\r"
+
+		echo "Please wait for the miner registration status to change to "registered" before proceeding on-chain operations"
+		echo "If the chain synchronization is completed, but the pherry height is empty, please enter the group and ask"
+
+		for i in `seq 60 -1 0`; do
+			echo -ne "----------------------  Remaining ${i}s refresh   --------------------------\r"
 			sleep 1
 		done
-		printf " 刷新中..."
+		printf "\n Refreshing..."
 	done
 }
