@@ -4,6 +4,7 @@ function status()
 {
 	trap "clear;exit" 2
 	while true; do
+		echo "正在获取公共节点区块信息，可能需要一段时间..."
 		local node_status="stop"
 		local pruntime_status="stop"
 		local pherry_status="stop"
