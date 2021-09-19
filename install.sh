@@ -26,9 +26,9 @@ install_cn()
 	echo "安装新的 Phala 脚本"
 	if [ ! -f $installdir ]; then mkdir -p $installdir; fi
 	if [ -f $installdir/.env ]; then
-		cp $basedir/{docker-compose.yml,/console.js} $installdir/
+		cp $basedir/{docker-compose.yml,console.js} $installdir
 	else
-		cp $basedir/{.env,docker-compose.yml,/console.js} $installdir/
+		cp $basedir/{.env,docker-compose.yml,console.js} $installdir
 	fi
 	cp -r $basedir/scripts/cn $installdir/scripts
 
@@ -54,7 +54,7 @@ install_en()
 	fi
 	echo "Install new phala scripts"
 	if [ ! -f $installdir ]; then mkdir -p $installdir; fi
-	if [ -f $basedir/.env ]; then
+	if [ -f $installdir/.env ]; then
 		cp $basedir/{docker-compose.yml,console.js} $installdir/
 	else
 		cp $basedir/{.env,docker-compose.yml,console.js} $installdir/
