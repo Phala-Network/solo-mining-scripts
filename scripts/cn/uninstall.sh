@@ -31,7 +31,7 @@ function uninstall()
 		fi
 	done
 	remove_dirver
-	rm -rf $installdir/{script,docker-compose.yml,console.js}
+	rm -rf $installdir/{scripts,docker-compose.yml,console.js}
 	rm /usr/bin/phala
 
 	log_success "---------------删除 phala 挖矿套件成功---------------"
