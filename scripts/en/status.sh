@@ -102,7 +102,7 @@ function status()
 	account information		content
 --------------------------------------------------------------------------
 	node name           		${node_name}
-	core     			${cores}
+	cores     			${cores}
 	GAS account address      	${gas_address}
 	GAS account balance      	${gas_balance}
 	mortgage pool account address	${pool_address}
