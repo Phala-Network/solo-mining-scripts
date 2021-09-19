@@ -24,10 +24,8 @@ function status()
 		local get_info=$(curl -X POST -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info)
 		local publickey=$(echo $get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
 		local registered=$(echo $get_info | jq '.payload|fromjson.registered' | sed 's/\"//g')
-		local blocknum=0
-		blocknum=$(echo $get_info | jq '.payload|fromjson.blocknum' | sed 's/\"//g')
-		local headernum=0
-		headernum=$(echo $get_info | jq '.payload|fromjson.headernum' | sed 's/\"//g')
+		local blocknum=$(echo $get_info | jq '.payload|fromjson.blocknum' | sed 's/\"//g')
+		local headernum=$(echo $get_info | jq '.payload|fromjson.headernum' | sed 's/\"//g')
 		local score=$(echo $get_info | jq '.payload|fromjson.score' | sed 's/\"//g')
 
 		check_docker_status phala-node
@@ -56,6 +54,14 @@ function status()
 
 		SYNCED="同步完成"
 		SYNCING="同步中, 请等待"
+
+		if [ -z ${blocknum} ]; then
+			blocknum=0
+		fi
+
+		if [ -z ${headernum} ]; then
+			headernum=0
+		fi
 
 		blockInfo=(${khala_node_block} ${khala_head_block} ${kusama_node_block} ${kusama_head_block} ${blocknum} ${headernum})
 		compareOrder1=(1 3 0 2)
