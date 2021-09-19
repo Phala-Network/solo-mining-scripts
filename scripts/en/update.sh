@@ -35,9 +35,9 @@ function update_script()
 function update_clean()
 {
 	log_info "----------Clean phala node images----------"
-	log_info "Kill phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node"
+	log_info "Kill phala-node phala-pruntime phala-pherry phala-pruntime-bench"
 	log_info "----------Clean data----------"
-	for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node phala-sgx_detect
+	for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench phala-sgx_detect
 	do
 		if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then
 			docker container stop $container_name
@@ -55,10 +55,6 @@ function update_clean()
 					;;
 				phala-pherry)
 					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
-					;;
-				khala-node)
-					docker image rm phalanetwork/khala-node
-					if [ -d /var/khala-dev-node ]; then rm -rf /var/khala-dev-node;fi
 					;;
 				*)
 					break
