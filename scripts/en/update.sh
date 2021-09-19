@@ -85,10 +85,6 @@ function update_noclean()
 				phala-pherry)
 					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
 					;;
-				khala-node)
-					docker image rm phalanetwork/khala-node
-					if [ -d /var/khala-dev-node ]; then rm -rf /var/khala-dev-node;fi
-					;;
 				*)
 					break
 			esac
