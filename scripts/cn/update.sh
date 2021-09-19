@@ -70,8 +70,8 @@ function update_clean()
 function update_noclean()
 {
 	log_info "----------更新挖矿套件镜像----------"
-	log_info "关闭 phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node"
-	for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench khala-node phala-sgx_detect
+	log_info "关闭 phala-node phala-pruntime phala-pherry phala-pruntime-bench"
+	for container_name in phala-node phala-pruntime phala-pherry phala-pruntime-bench phala-sgx_detect
 	do
 		if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then
 			docker container stop $container_name
@@ -85,10 +85,6 @@ function update_noclean()
 					;;
 				phala-pherry)
 					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
-					;;
-				khala-node)
-					docker image rm phalanetwork/khala-node
-					if [ -d /var/khala-dev-node ]; then rm -rf /var/khala-dev-node;fi
 					;;
 				*)
 					break
