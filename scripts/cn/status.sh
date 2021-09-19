@@ -12,14 +12,15 @@ function status()
 		local mnemonic=$(cat $installdir/.env | grep 'MNEMONIC' | awk -F "=" '{print $NF}')
 		local gas_address=$(cat $installdir/.env | grep 'GAS_ACCOUNT_ADDRESS' | awk -F "=" '{print $NF}')
 		local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
+		local script_version=$(cat $installdir/.env | grep 'version' | awk -F "=" '{print $NF}')
 		local balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain free-balance $gas_address 2>&1)
 		balance=$(echo $balance | awk -F " " '{print $NF}')
 		balance=$(echo "$balance / 1000000000000"|bc)
 		local khala_head_block=$(node $installdir/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain sync-state 2>/dev/null)
 		khala_head_block=$(echo $khala_head_block | awk -F "," '{print $5}' | sed 's/ currentBlock: //g')
-		local khala_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://node.phala.asia:9933 | jq '.result.currentBlock')
+		local khala_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
 		local kusama_head_block=$(node $installdir/console.js --substrate-ws-endpoint "wss://pub.elara.patract.io/kusama" chain sync-state | awk -F " " '/currentBlock/ {print $NF}' | sed 's/,//g')
-		local kusama_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://node.phala.asia:9934 | jq '.result.currentBlock')
+		local kusama_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9934 | jq '.result.currentBlock')
 		local get_info=$(curl -X POST -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info)
 		local publickey=$(echo $get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
 		local registered=$(echo $get_info | jq '.payload|fromjson.registered' | sed 's/\"//g')
@@ -69,9 +70,10 @@ function status()
 		done
 
 		if [ ${registered} = "true" ]; then
-			registerStatus="已注册"
+			registerStatus="已注册，可以使用矿工公钥添加矿机"
 		else
 			registerStatus="未注册"
+			publickey="等待矿机注册中"
 		fi
 
 		if [ $(echo "$balance < 2"|bc) -eq 1 ]; then
@@ -82,7 +84,7 @@ function status()
 
 		clear
 		printf "
---------------------------------------------------------------------------
+------------------------------ 脚本版本 ${script_version} ----------------------------
 	服务名称		服务状态		本地节点区块高度
 --------------------------------------------------------------------------
 	khala-node		${node_status}			${khala_node_block} / ${khala_head_block}
@@ -111,10 +113,10 @@ function status()
 "
 
 		echo "------------- 请等待矿工注册状态变为「已注册」再进行链上操作 -------------"
-		echo "----------- 如果矿工公钥为空，请等待 khala 与 kusama 节点同步 ------------"
+		echo "------------- 如果链同步完成，但pherry高度为空，请进群询问 --------------"
 
-		for i in `seq 60 -1 1`; do
-			echo -ne "--------------------------  剩余 ${i}s刷新   ------------------------------\r"
+		for i in `seq 60 -1 0`; do
+			echo -ne "--------------------------  剩余 ${i}s 刷新   ------------------------------\r"
 			sleep 1
 		done
 		printf "\n 刷新中..."
