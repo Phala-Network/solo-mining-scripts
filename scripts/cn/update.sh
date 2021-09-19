@@ -7,12 +7,8 @@ function check_version()
 	unzip -o /tmp/para.zip -d /tmp/phala &> /dev/null
 	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-para/.env | awk -F "=" 'NR==15 {print $NF}')" ]; then
 		rm -rf /opt/phala/scripts /usr/bin/phala
-<<<<<<< HEAD
-		cp -r /tmp/phala/solo-mining-scripts-para/scripts/cn /opt/phala/scripts
-=======
 		cp -r /tmp/phala/solo-mining-scripts-main/scripts/cn /opt/phala/scripts
 		cp -r /tmp/phala/solo-mining-scripts-main/docker-compose.yml /opt/phala
->>>>>>> main
 		chmod +x /opt/phala/scripts/phala.sh
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		log_info "----------本地脚本版本过低，已自动升级。请重新执行命令！----------"
@@ -28,12 +24,8 @@ function update_script()
 	wget https://github.com/Phala-Network/solo-mining-scripts/archive/para.zip -O /tmp/para.zip &> /dev/null
 	unzip -o /tmp/para.zip -d /tmp/phala &> /dev/null
 	rm -rf /opt/phala/scripts /usr/bin/phala
-<<<<<<< HEAD
-	cp -r /tmp/phala/solo-mining-scripts-para/scripts/cn /opt/phala/scripts
-=======
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/cn /opt/phala/scripts
 	cp -r /tmp/phala/solo-mining-scripts-main/docker-compose.yml /opt/phala
->>>>>>> main
 	chmod +x /opt/phala/scripts/phala.sh
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 	log_success "----------更新完成----------"
