@@ -76,9 +76,10 @@ function status()
 --------------------------------------------------------------------------
 	Service		Status		CurrentBlock
 --------------------------------------------------------------------------
-	phala-node	${node_status}		${node_block}
-	phala-pruntime  ${pruntime_status}
-	phala-pherry    ${pherry_status}
+	khala-node		${node_status}			${khala_node_block}
+	kusama-node		${node_status}			${kusama_node_block}
+	phala-pruntime		${pruntime_status}
+	phala-pherry		${pherry_status}			${blocknum}
 --------------------------------------------------------------------------
 	Account information	contents
 --------------------------------------------------------------------------
