@@ -72,7 +72,7 @@ function status()
 		if [ ${registered} = "true" ]; then
 			registerStatus="已注册，可以使用矿工公钥添加矿机"
 		else
-			registerStatus="未注册"
+			registerStatus="未注册，请等待同步完成"
 			publickey="等待矿机注册中"
 		fi
 
