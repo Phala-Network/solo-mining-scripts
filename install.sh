@@ -24,8 +24,12 @@ install_cn()
 		/opt/phala/scripts/phala.sh uninstall
 	fi
 	echo "安装新的 Phala 脚本"
-	mkdir -p $installdir
-	cp $basedir/{.env,docker-compose.yml,/console.js} $installdir/
+	if [ ! -f $installdir ]; then mkdir -p $installdir; fi
+	if [ -f $installdir/.env ]; then
+		cp $basedir/{docker-compose.yml,/console.js} $installdir/
+	else
+		cp $basedir/{.env,docker-compose.yml,/console.js} $installdir/
+	fi
 	cp -r $basedir/scripts/cn $installdir/scripts
 
 	echo "安装 Phala 命令行工具"
@@ -49,8 +53,12 @@ install_en()
 		/opt/phala/scripts/phala.sh uninstall
 	fi
 	echo "Install new phala scripts"
-	mkdir -p $installdir
-	cp $basedir/{.env,docker-compose.yml,/console.js} $installdir/
+	if [ ! -f $installdir ]; then mkdir -p $installdir; fi
+	if [ -f $basedir/.env ]; then
+		cp $basedir/{docker-compose.yml,console.js} $installdir/
+	else
+		cp $basedir/{.env,docker-compose.yml,console.js} $installdir/
+	fi
 	cp -r $basedir/scripts/en $installdir/scripts
 
 	echo "Install phala command line tool"

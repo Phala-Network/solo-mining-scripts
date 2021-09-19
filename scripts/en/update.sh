@@ -8,6 +8,7 @@ function check_version()
 	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" ]; then
 		rm -rf /opt/phala/scripts /usr/bin/phala
 		cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
+		cp -r /tmp/phala/solo-mining-scripts-main/docker-compose.yml /opt/phala
 		chmod +x /opt/phala/scripts/phala.sh
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		log_info "----------The local script version is too low and has been automatically upgraded. Please execute the command again!----------"
@@ -23,6 +24,8 @@ function update_script()
 	unzip -o /tmp/main.zip -d /tmp/phala &> /dev/null
 	rm -rf /opt/phala/scripts /usr/bin/phala
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
+	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
+	cp -r /tmp/phala/solo-mining-scripts-main/docker-compose.yml /opt/phala
 	chmod +x /opt/phala/scripts/phala.sh
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 	log_success "----------Update success----------"
