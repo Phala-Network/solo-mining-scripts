@@ -216,6 +216,9 @@ case "$1" in
 	uninstall)
 		uninstall
 		;;
+	score-test)
+		score_test $2
+		;;
 	sgx-test)
 		sgx_test
 		;;
