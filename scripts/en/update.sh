@@ -12,6 +12,7 @@ function check_version()
 		chmod +x /opt/phala/scripts/phala.sh
 		ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 		log_info "----------The local script version is too low and has been automatically upgraded. Please execute the command again!----------"
+		sed -i "15c version=$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" $installdir/.env
 		exit 1
 	fi
 	rm -rf /tmp/phala /tmp/main.zip
@@ -24,11 +25,11 @@ function update_script()
 	unzip -o /tmp/main.zip -d /tmp/phala &> /dev/null
 	rm -rf /opt/phala/scripts /usr/bin/phala
 	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
-	cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
 	cp -r /tmp/phala/solo-mining-scripts-main/docker-compose.yml /opt/phala
 	chmod +x /opt/phala/scripts/phala.sh
 	ln -s /opt/phala/scripts/phala.sh /usr/bin/phala
 	log_success "----------Update success----------"
+	sed -i "15c version=$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" $installdir/.env
 	rm -rf /tmp/phala /tmp/main.zip
 }
 
@@ -48,13 +49,13 @@ function update_clean()
 					local node_dir=$(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
 					if [ -d $node_dir ]; then rm -rf $node_dir;fi
 					;;
-				phala-pruntime) 
+				phala-pruntime)
 					docker image rm $(awk -F "=" 'NR==2 {print $2}' $installdir/.env)
 					local pruntime_dir=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
 					if [ -d $pruntime_dir ]; then rm -rf $pruntime_dir;fi
 					;;
 				phala-pherry)
-					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
+					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env)
 					;;
 				*)
 					break
@@ -83,7 +84,7 @@ function update_noclean()
 					docker image rm $(awk -F "=" 'NR==2 {print $2}' $installdir/.env)
 					;;
 				phala-pherry)
-					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
+					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env)
 					;;
 				*)
 					break
