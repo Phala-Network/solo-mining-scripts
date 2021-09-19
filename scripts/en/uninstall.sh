@@ -31,7 +31,7 @@ function uninstall()
 		fi
 	done
 	remove_dirver
-	rm -rf $installdir/script $installdir/{docker-compose.yml,console.js}
+	rm -rf $installdir/{script,docker-compose.yml,console.js}
 	rm /usr/bin/phala
 
 	log_success "---------------Uninstall phala node sucess---------------"
