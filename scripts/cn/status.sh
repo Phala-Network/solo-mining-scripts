@@ -4,6 +4,7 @@ function status()
 {
 	trap "clear;exit" 2
 	while true; do
+		echo "正在获取公共节点区块信息，可能需要一段时间..."
 		local node_status="stop"
 		local pruntime_status="stop"
 		local pherry_status="stop"
@@ -54,6 +55,14 @@ function status()
 
 		SYNCED="同步完成"
 		SYNCING="同步中, 请等待"
+
+		if [ -z ${blocknum} ]; then
+			blocknum=0
+		fi
+
+		if [ -z ${headernum} ]; then
+			headernum=0
+		fi
 
 		blockInfo=(${khala_node_block} ${khala_head_block} ${kusama_node_block} ${kusama_head_block} ${blocknum} ${headernum})
 		compareOrder1=(1 3 0 2)
