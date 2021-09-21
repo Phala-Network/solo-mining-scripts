@@ -65,6 +65,14 @@ function status()
 		fi
 
 		blockInfo=(${khala_node_block} ${khala_head_block} ${kusama_node_block} ${kusama_head_block} ${blocknum} ${headernum})
+		for i in `seq 0 5`; do
+			if [ -z ${blockInfo[${i}]} ]; then
+				blockInfo[${i}]=0
+			fi
+		done
+
+
+
 		compareOrder1=(1 3 0 2)
 		compareOrder2=(0 2 4 5)
 
