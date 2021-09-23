@@ -3,9 +3,16 @@
 function check_version()
 {
 	if ! type wget unzip > /dev/null; then apt-get install -y wget unzip;fi
-	wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip &> /dev/null
+	for i in `seq 0 4`; do
+		wget https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip -O /tmp/main.zip &> /dev/null
+		if [ $? -ne 0 ]; then
+			log_err "----------Script download failed, download again!----------"
+		else
+			break
+		fi
+	done
 	unzip -o /tmp/main.zip -d /tmp/phala &> /dev/null
-	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" ]; then
+	if [ "$(cat $installdir/.env | awk -F "=" 'NR==15 {print $NF}')" != "$(cat /tmp/phala/solo-mining-scripts-main/.env | awk -F "=" 'NR==15 {print $NF}')" ]&&[ -d /tmp/phala ]; then
 		rm -rf /opt/phala/scripts /usr/bin/phala
 		cp -r /tmp/phala/solo-mining-scripts-main/scripts/en /opt/phala/scripts
 		cp -r /tmp/phala/solo-mining-scripts-main/docker-compose.yml /opt/phala
