@@ -16,6 +16,12 @@ function start()
 		log_err "----------节点未配置，开始配置节点！----------"
 		config set
 	fi
+
+	local pruntime_devices=$(cat $installdir/docker-compose.yml | grep 'sgx')
+	if [ -z "$pruntime_devices" ]; then
+		log_err "---------- 请重新安装驱动！----------"
+	fi
+
 	cd $installdir
 	docker-compose up -d
 }
