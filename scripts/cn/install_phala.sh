@@ -188,6 +188,11 @@ elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "20.04" ]; then
 	dcap_driverbin=$(awk -F '/' 'NR==12 {print $NF}' $installdir/.env)
 	isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
 	isgx_driverbin=$(awk -F '/' 'NR==14 {print $NF}' $installdir/.env)
+elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "20.10" ]; then
+	dcap_driverurl=$(awk -F '=' 'NR==12 {print $2}' $installdir/.env)
+	dcap_driverbin=$(awk -F '/' 'NR==12 {print $NF}' $installdir/.env)
+	isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
+	isgx_driverbin=$(awk -F '/' 'NR==14 {print $NF}' $installdir/.env) 
 else
 	log_err "----------系统版本不支持，phala目前仅支持Ubuntu 18.04/Ubuntu 20.04----------"
 	exit 1
