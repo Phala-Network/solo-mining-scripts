@@ -83,6 +83,8 @@ function update_noclean()
 		if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then
 			docker container stop $container_name
 			docker container rm --force $container_name
+		fi
+		if [ -z $(docker images -q $container_name) ]; then
 			case $container_name in
 				phala-node)
 					docker image rm $(awk -F "=" 'NR==1 {print $2}' $installdir/.env)
@@ -91,7 +93,7 @@ function update_noclean()
 					docker image rm $(awk -F "=" 'NR==2 {print $2}' $installdir/.env)
 					;;
 				phala-pherry)
-					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env)
+					docker image rm $(awk -F "=" 'NR==3 {print $2}' $installdir/.env) 
 					;;
 				*)
 					break

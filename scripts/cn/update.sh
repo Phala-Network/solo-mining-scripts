@@ -56,7 +56,7 @@ function update_clean()
 					local node_dir=$(awk -F '[=:]' 'NR==4 {print $2}' $installdir/.env)
 					if [ -d $node_dir ]; then rm -rf $node_dir;fi
 					;;
-				phala-pruntime) 
+				phala-pruntime)
 					docker image rm $(awk -F "=" 'NR==2 {print $2}' $installdir/.env)
 					local pruntime_dir=$(awk -F '[=:]' 'NR==5 {print $2}' $installdir/.env)
 					if [ -d $pruntime_dir ]; then rm -rf $pruntime_dir;fi
@@ -83,6 +83,8 @@ function update_noclean()
 		if [ ! -z $(docker container ls -q -f "name=$container_name") ]; then
 			docker container stop $container_name
 			docker container rm --force $container_name
+		fi
+		if [ -z $(docker images -q $container_name) ]; then
 			case $container_name in
 				phala-node)
 					docker image rm $(awk -F "=" 'NR==1 {print $2}' $installdir/.env)
