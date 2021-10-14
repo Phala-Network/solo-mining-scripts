@@ -35,11 +35,11 @@ function config_set_all()
 	local balance=""
 	while true ; do
 		read -p "Enter your gas account mnemonic: " mnemonic
-		if [ -z "$mnemonic" ] || [ "$(node $installdir/console.js utils verify "$mnemonic")" == "Cannot decode the input" ]; then
+		if [ -z "$mnemonic" ] || [ "$(node $installdir/scripts/console.js utils verify "$mnemonic")" == "Cannot decode the input" ]; then
 			printf "Please enter a legal mnemonic, and it cannot be empty!\n"
 		else
-			gas_adress=$(node $installdir/console.js utils verify "$mnemonic")
-			balance=$(node $installdir/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain free-balance $gas_adress 2>&1)
+			gas_adress=$(node $installdir/scripts/console.js utils verify "$mnemonic")
+			balance=$(node $installdir/scripts/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain free-balance $gas_adress 2>&1)
 			balance=$(echo $balance | awk -F " " '{print $NF}')
 			balance=$(echo "$balance / 1000000000000"|bc)
 			if [ `echo "$balance > 0.1"|bc` -eq 1 ]; then
@@ -55,7 +55,7 @@ function config_set_all()
 	local pool_addr=""
 	while true ; do
 		read -p "Enter your pool address: " pool_addr
-		if [ -z "$pool_addr" ] || [ "$(node $installdir/console.js utils verify "$pool_addr")" == "Cannot decode the input" ]; then
+		if [ -z "$pool_addr" ] || [ "$(node $installdir/scripts/console.js utils verify "$pool_addr")" == "Cannot decode the input" ]; then
 			printf "Please enter a legal pool address, and it cannot be empty!\n"
 		else
 			sed -i "10c OPERATOR=$pool_addr" $installdir/.env
