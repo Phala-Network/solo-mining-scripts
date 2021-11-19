@@ -105,7 +105,7 @@ function status()
 	cores     			${cores}
 	GAS account address      	${gas_address}
 	GAS account balance      	${gas_balance}
-	mortgage pool account address	${pool_address}
+	stake pool account address	${pool_address}
 	miner public key		${publickey}
 	miner registration status	${registerStatus}
 	miner score			${score}
