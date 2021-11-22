@@ -66,6 +66,9 @@ sudo reboot
     ```bash
     sudo phala sgx-test
     ```
+    
+<h1 align="center">
+</h1>
 
 #### Install the Phala Scripts
 
@@ -104,6 +107,9 @@ sudo phala config show
 sudo phala update script
 ```
 
+<h1 align="center">
+</h1>
+
 #### Script Usage
 
 ##### Installation
@@ -135,6 +141,9 @@ sudo phala stop
 ```bash
 sudo phala status
 ```
+
+<h1 align="center">
+</h1>
 
 #### Phala & Docker 🐳
 
