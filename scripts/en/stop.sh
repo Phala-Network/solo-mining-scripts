@@ -13,28 +13,28 @@ function stop()
 			if [ ! -z $(docker container ls -q -f "name=phala-node") ]; then
 				docker container rm --force phala-node
 			else
-				log_info "----------phala-node already stop----------"
+				log_info "----------phala-node already stopped----------"
 			fi
 			;;
 		pruntime)
 			if [ ! -z $(docker container ls -q -f "name=phala-pruntime") ]; then
 				docker container rm --force phala-pruntime
 			else
-				log_info "----------phala-pruntime already stop----------"
+				log_info "----------phala-pruntime already stopped----------"
 			fi
 			;;
 		pherry)
 			if [ ! -z $(docker container ls -q -f "name=phala-pherry") ]; then
 				docker container rm --force phala-pherry
 			else
-				log_info "----------phala-pherry already stop----------"
+				log_info "----------phala-pherry already stopped----------"
 			fi
 			;;
 		bench)
 			if [ ! -z $(docker container ls -q -f "name=phala-pruntime-bench") ]; then
 				docker container rm --force phala-pruntime-bench
 			else
-				log_info "----------phala-pruntime-bench already stop----------"
+				log_info "----------phala-pruntime-bench already stopped----------"
 			fi
 			;;
 		*)
