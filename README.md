@@ -26,6 +26,7 @@ EN | [中文](./README.cn.md)
     - [Docker :whale:](#stop-the-miner)
         - [Starting Phala Docker Containers Separately](#start-docker-separately)
         - [Stopping Phala Docker Containers Separately](#stop-docker-separately)
+    - [:raising_hand_man: Troubleshooting](#troubleshooting)
 
 
 ## Instructions
@@ -58,6 +59,11 @@ rm -r main.zip #cleaning up the installation
 ```bash
 sudo chmod +x sgx_enable
 sudo ./sgx_enable
+```
+
+It is now recommended to reboot you machine. 
+
+```bash
 sudo reboot
 ```
 
@@ -184,3 +190,56 @@ sudo phala update
 ```bash
 sudo phala update clean
 ```
+
+<h1 align="center">
+</h1>
+
+## :raising_hand_woman::raising_hand_man:
+
+#### Troubleshooting
+
+If you experience issues running your node, try starting the node by:
+
+```bash
+sudo phala stop
+```
+
+And attempt a restart with 
+```bash
+sudo phala start
+```
+
+If you still have issues attempt to [update the script](#update-the-script).
+
+##### Advanced Troubleshooting 
+
+In some cases, it might be beter to reinstall the mining script. 
+To do this, first uninstall the script: 
+
+```bash
+sudo phala uninstall
+```
+
+And delete the mining script repository by executing:
+
+```bash
+yes | sudo rm -r solo-mining-scripts-main
+```
+
+Now you may reinstall the mining script.
+
+```bash
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
+sudo apt install wget unzip
+cd ~
+```
+
+```bash
+wget https://github.com/Phala-Network/solo-mining-scripts/archive/refs/heads/main.zip
+unzip main.zip
+rm -r main.zip #cleaning up the installation
+cd solo-mining-scripts-main/ #note this depends on your current directory
+chmod +x install.sh
+sudo ./install.sh en
+```
+##### _Head back [to top](#navigate) :point_up: to navigate to other sections._
