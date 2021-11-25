@@ -68,12 +68,6 @@ It is now recommended to reboot you machine.
 sudo reboot
 ```
 
--   #### Check if Mainboard is Supported
-    - Use the `sudo phala install` command to install all dependencies without their configuration
-
-    ```bash
-    sudo phala sgx-test
-    ```
     
 <h1 align="center">
 </h1>
@@ -88,6 +82,13 @@ chmod +x install.sh
 sudo ./install.sh en
 ```
 
+-   #### Check if Mainboard is Supported
+    - Use the `sudo phala install` command to install all dependencies without their configuration
+
+    ```bash
+    sudo phala sgx-test
+    ```
+    
 #### Get the Scores of your Machine 
 
 Note: The number of cores depends on your machine.
