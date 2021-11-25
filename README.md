@@ -50,6 +50,7 @@ sudo apt install wget unzip
 cd ~
 wget https://github.com/Phala-Network/solo-mining-scripts/archive/refs/heads/main.zip
 unzip main.zip
+rm -r main.zip #cleaning up the installation
 ```
 
 -   Run the **egx_enable** if your SGX setting in BIOS is **Software Controlled**
