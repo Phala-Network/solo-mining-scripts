@@ -45,7 +45,7 @@ function install_depenencies()
 		if type jq curl wget unzip zip docker docker-compose node yq dkms > /dev/null; then
 			break
 		else
-			log_err "----------Failed to install dependencies, please to check install logs!----------"
+			log_err "----------Failed to install dependencies, please check installation logs----------"
 			exit 1
 		fi
 	done
@@ -82,7 +82,7 @@ function install_dcap()
 	log_info "----------Installing dcap driver----------"
 	/tmp/$dcap_driverbin
 	if [ $? -ne 0 ]; then
-		log_err "----------Failed to install the DCAP driver, please check the driver installation logs!----------"
+		log_err "----------Failed to install the DCAP driver, please check the driver's installation logs!----------"
 		exit 1
 	else
 		log_success "----------Delete temporary files----------"
@@ -118,7 +118,7 @@ function install_isgx()
 		log_err "----------Failed to install the isgx driver, please check the driver installation logs!----------"
 		exit 1
 	else
-		log_success "----------Delete temporary files----------"
+		log_success "----------Deleteted temporary files----------"
 		rm /tmp/$isgx_driverbin
 	fi
 
@@ -189,6 +189,6 @@ elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "20.04" ]; then
 	isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
 	isgx_driverbin=$(awk -F '/' 'NR==14 {print $NF}' $installdir/.env)
 else
-	log_err "----------The system does not support, phala currently only supports Ubuntu 18.04/Ubuntu 20.04----------"
+	log_err "----------Your system is not supported. Phala currently only supports Ubuntu 18.04/Ubuntu 20.04----------"
 	exit 1
 fi
