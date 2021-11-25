@@ -32,7 +32,7 @@ EN | [中文](./README.cn.md)
 
 #### Before Getting Started
 
-> * Check at [Intel Ark](https://ark.intel.com/content/www/us/en/ark.html#@Processors) that your processor is [Intel SGX](https://www.intel.com/content/www/us/en/developer/tools/software-guard-extensions/overview.html) compatible.
+> * Check at [Intel© Ark](https://ark.intel.com/content/www/us/en/ark.html#@Processors) that your processor is [Intel© SGX](https://www.intel.com/content/www/us/en/developer/tools/software-guard-extensions/overview.html) compatible.
 > 
 > * Have [Ubuntu 18.04](https://releases.ubuntu.com/18.04/), [Ubuntu 20.04](https://releases.ubuntu.com/20.04/) or [Ubuntu 21.04](https://releases.ubuntu.com/21.04/) installed. Compatible kernel versions may vary.
 
@@ -40,7 +40,7 @@ EN | [中文](./README.cn.md)
 
     -   Disable Secure Boot
     -   Boot Mode must be **UEFI**
-    -   SGX Settings must be **Enabled** or **Software Controlled**
+    -   Intel© SGX Settings must be **Enabled** or **Software Controlled**
 
 - Download the Script
 
