@@ -28,8 +28,6 @@ EN | [中文](./README.cn.md)
         - [Stopping Phala Docker Containers Separately](#stop-docker-separately)
     - [:raising_hand_man: Troubleshooting](#troubleshooting)
         - ['Failed to install the DCAP driver'](#failed-to-install-the-dcap-driver)
-        - 
-
 
 ## Instructions
 
@@ -59,6 +57,7 @@ rm -r main.zip #cleaning up the installation
 -   Run the **egx_enable** if your SGX setting in BIOS is **Software Controlled**
 
 ```bash
+cd solo-mining-scripts-main/ #note this depends on your current directory
 sudo chmod +x sgx_enable
 sudo ./sgx_enable
 ```
