@@ -27,6 +27,8 @@ EN | [中文](./README.cn.md)
         - [Starting Phala Docker Containers Separately](#start-docker-separately)
         - [Stopping Phala Docker Containers Separately](#stop-docker-separately)
     - [:raising_hand_man: Troubleshooting](#troubleshooting)
+        - ['Failed to install the DCAP driver'](#failed-to-install-the-dcap-driver)
+        - 
 
 
 ## Instructions
@@ -242,4 +244,26 @@ cd solo-mining-scripts-main/ #note this depends on your current directory
 chmod +x install.sh
 sudo ./install.sh en
 ```
+
+You may now restart your node.
+
+```bash
+sudo phala start
+``` 
+
+##### Failed to install the DCAP driver
+:information_source: The most common issue is that your mainboard may not support a DCAP driver. In this case, the script cannot automatically install the `isgx` driver and results in the following error message.
+
+<p align="center">
+  <a href="https://phala.network/">
+    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/143471619-1116c12f-7ef5-4313-93a5-51f3ed30c355.png" height="250">
+  </a>
+</p>
+
+In this case, prior to running `sudo phala start`, you need to manually install the `isgx` driver:
+
+```bash
+sudo phala install isgx
+```
+
 ##### _Head back [to top](#navigate) :point_up: to navigate to other sections._
