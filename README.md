@@ -28,6 +28,7 @@ EN | [中文](./README.cn.md)
         - [Stopping Phala Docker Containers Separately](#stop-docker-separately)
     - [:raising_hand_man: Troubleshooting](#troubleshooting)
         - ['Failed to install the DCAP driver'](#failed-to-install-the-dcap-driver)
+        - [Khala Node Stops Synching](#khala-node-stops-synching)
 
 ## Instructions
 
@@ -200,7 +201,7 @@ sudo phala update clean
 
 #### Troubleshooting
 
-If you experience issues running your node, try starting the node by:
+Most symptoms are solved by restarting your node. If you experience issues running your node, try stopping the node by:
 
 ```bash
 sudo phala stop
@@ -260,10 +261,38 @@ sudo phala start
   </a>
 </p>
 
+(image of the terminal showing the DCAP driver error message) 
+
+
 In this case, prior to running `sudo phala start`, you need to manually install the `isgx` driver:
 
 ```bash
 sudo phala install isgx
+```
+
+##### Khala Node Stops Synching
+
+If the Khala Chain stops synching and is stuck at a specific block and does not continue to sync, we advise you first to [restart your node](#troubleshooting).
+
+If the synchronization still fails, you try to delete the khala chain database on your miner's node.  
+It is located in `/var/khala-dev-node/chains/khala`.
+
+<p align="center">
+  <a href="https://phala.network/">
+    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/143770078-26a3c457-ce1d-447c-8e26-81ea0e1beb9b.png" height="100">
+  </a>
+</p>
+
+(image showing the khala blockchain files of the miner node) 
+
+It is located in `/var/khala-dev-node/chains/khala`.
+
+To delete the khala blockchain database on your node, execute the following commands:
+
+```bash
+rm -r /var/khala-dev-node/chains/khala/db
+rm -r /var/khala-dev-node/chains/khala/keystore
+rm -r /var/khala-dev-node/chains/khala/network
 ```
 
 ##### _Head back [to top](#navigate) :point_up: to navigate to other sections._
