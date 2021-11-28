@@ -106,7 +106,7 @@ function status()
 	GAS account address      	${gas_address}
 	GAS account balance      	${gas_balance}
 	stake pool account address	${pool_address}
-	miner public key		${publickey}
+	miner/worker public key 	${publickey}
 	miner registration status	${registerStatus}
 	miner score			${score}
 --------------------------------------------------------------------------
