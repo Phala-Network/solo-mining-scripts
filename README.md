@@ -274,7 +274,7 @@ sudo phala install isgx
 
 If the Khala Chain stops synching and is stuck at a specific block and does not continue to sync, we advise you first to [restart your node](#troubleshooting).
 
-If the synchronization still fails, you try to delete the khala chain database on your miner's node.  
+If the synchronization still fails, you may try to delete the khala chain database on your miner's node.  
 It is located in `/var/khala-dev-node/chains/khala`.
 
 <p align="center">
@@ -287,6 +287,12 @@ It is located in `/var/khala-dev-node/chains/khala`.
 
 It is located in `/var/khala-dev-node/chains/khala`.
 
+First, stop your node with:
+
+```bash
+sudo phala stop
+```
+
 To delete the khala blockchain database on your node, execute the following commands:
 
 ```bash
@@ -294,5 +300,7 @@ rm -r /var/khala-dev-node/chains/khala/db
 rm -r /var/khala-dev-node/chains/khala/keystore
 rm -r /var/khala-dev-node/chains/khala/network
 ```
+
+Now [restart your node](#troubleshooting).
 
 ##### _Head back [to top](#navigate) :point_up: to navigate to other sections._
