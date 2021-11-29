@@ -199,6 +199,6 @@ elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.04" ]; then
 	isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
 	isgx_driverbin=$(awk -F '/' 'NR==14 {print $NF}' $installdir/.env)
 else
-	log_err "----------Your system is not supported. Phala currently only supports Ubuntu 18.04/Ubuntu 20.04----------"
+	log_err "----------Your system is not supported. Phala currently supports Ubuntu 18.04/Ubuntu 20.04 & limited support for Ubuntu 21.04/21.10 ----------"
 	exit 1
 fi
