@@ -68,8 +68,8 @@ function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" 
 
 function config()
 {
-	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.10"; then
-		log_info "----------Your kernel version is greater than 5.10, the kernel version is too high.Please lower the kernel version!----------"
+	if version_gt $(uname -r|awk -F "-" '{print $1}') "5.14"; then
+		log_info "----------Your kernel version is greater than 5.13, the kernel version is too high. Please lower the kernel version!----------"
 		exit 1
 	fi
 	log_info "----------Test confidenceLevel, waiting for Intel to issue IAS remote certification report!----------"
