@@ -59,7 +59,7 @@ function sgx_test()
 	if [ -c /dev/sgx_vepc ]&&[ -c /dev/sgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx --device /dev/sgx_provision --device /dev/sgx_enclave --device /dev/sgx_vepc phalanetwork/phala-sgx_detect
 	elif [ -L /dev/sgx/enclave ]&&[ -L /dev/sgx/provision ]&&[ -c /dev/sgx_enclave ]&&[ -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
-		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision --device /dev/sgx_enclave --device /dev/sgx_provision phalanetwork/phala-sgx_detect:latest
+  	docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/enclave --device /dev/sgx/provision --device /dev/sgx_enclave --device /dev/sgx_provision phalanetwork/phala-sgx_detect:latest
 	elif [ ! -L /dev/sgx/enclave ]&&[ -L /dev/sgx/provision ]&&[ -c /dev/sgx_enclave ]&&[ -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
 		docker run -ti --rm --name phala-sgx_detect --device /dev/sgx/provision --device /dev/sgx_enclave --device /dev/sgx_provision phalanetwork/phala-sgx_detect:latest
 	elif [ ! -L /dev/sgx/enclave ]&&[ ! -L /dev/sgx/provision ]&&[ -c /dev/sgx_enclave ]&&[ -c /dev/sgx_provision ]&&[ ! -c /dev/isgx ]; then
