@@ -160,6 +160,9 @@ function install()
 	if [ -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
 		log_info "----------Your device exists: /dev/sgx/enclave /dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision is related to the DCAP driver, all have been added to phala-pruntime!----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/enclave","/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
+	elif [ ! -L /dev/sgx ] && [ -L /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ -c /dev/sgx_vepc ]; then
+		log_info "----------Your device exists: /dev/sgx /dev/sgx_enclave /dev/sgx_provision /dev/sgx_vepc is related to the DCAP driver, all have been added to phala-pruntime!----------"
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx","/dev/sgx_enclave","/dev/sgx_provision"."/dev/sgx_vepc"]' $installdir/docker-compose.yml
 	elif [ ! -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
 		log_info "----------Your device exists: /dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision is related to the DCAP driver, all have been added to phala-pruntime!----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
