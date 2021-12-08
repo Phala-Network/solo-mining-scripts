@@ -9,7 +9,7 @@ function install_depenencies()
 		exit 1
 	fi
 
-	log_info "----------Install dependencies----------"
+	log_info "----------Installing dependencies----------"
 	for i in `seq 0 4`; do
 		for package in jq curl wget unzip zip docker docker-compose node yq dkms; do
 			if ! type $package > /dev/null; then
@@ -61,18 +61,18 @@ function remove_dirver()
 
 function install_dcap()
 {
-	log_info "----------Download dcap driver----------"
+	log_info "----------Downloading dcap driver----------"
 	for i in `seq 0 4`; do
 		wget $dcap_driverurl -O /tmp/$dcap_driverbin
 		if [ $? -ne 0 ]; then
-			log_err "----------Download isgx dirver failed, try again!----------"
+			log_err "----------Downloading isgx dirver failed, try again!----------"
 		else
 			break
 		fi
 	done
 
 	if [ -f /tmp/$dcap_driverbin ]; then
-		log_info "----------Give dcap driver executable permission----------" 
+		log_info "----------Giving dcap driver executable permission----------" 
 		chmod +x /tmp/$dcap_driverbin
 	else
 		log_err "----------The DCAP driver was not successfully downloaded, please check your network!----------"
@@ -82,10 +82,19 @@ function install_dcap()
 	log_info "----------Installing dcap driver----------"
 	/tmp/$dcap_driverbin
 	if [ $? -ne 0 ]; then
-		log_err "----------Failed to install the DCAP driver, please check the driver's installation logs!----------"
-		exit 1
+		log_info "----------Failed to install the DCAP driver, please check the driver's installation logs!----------"
+		if [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.10" ]; then
+			log_info "----------Trying one more thing, as you have Ubuntu 21.10. Cheking for an existing driver installation----------"
+			if [ -e /dev/sgx ] && [ -e /dev/sgx_enclave ] && [ -e /dev/sgx_provision ] && [ -e /dev/sgx_vepc ]; then
+				log_info "----------Your DCAP drivers were found, thank you for reading our wiki!----------"
+			else
+				exit 1
+			fi
+		else
+			exit 1
+		fi
 	else
-		log_success "----------Delete temporary files----------"
+		log_success "----------Deleteting temporary files----------"
 		rm /tmp/$dcap_driverbin
 	fi
 
@@ -94,11 +103,11 @@ function install_dcap()
 
 function install_isgx()
 {
-	log_info "----------Download isgx driver----------"
+	log_info "----------Downloading isgx driver----------"
 	for i in `seq 0 4`; do
 		wget $isgx_driverurl -O /tmp/$isgx_driverbin
 		if [ $? -ne 0 ]; then
-			log_err "----------Download isgx dirver failed----------"
+			log_err "----------Downloading isgx dirver failed----------"
 		else
 			break
 		fi
@@ -118,7 +127,7 @@ function install_isgx()
 		log_err "----------Failed to install the isgx driver, please check the driver installation logs!----------"
 		exit 1
 	else
-		log_success "----------Deleteted temporary files----------"
+		log_success "----------Deleting temporary files----------"
 		rm /tmp/$isgx_driverbin
 	fi
 
