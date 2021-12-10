@@ -111,7 +111,7 @@ function snapshot_download()
         fi       
         }
     else
-        echo "You decided not to download and setup the snapshot."
+        echo "Skipping the download and snapshot setup."
 fi
 }
 
@@ -230,7 +230,7 @@ function start_node()
         sudo phala status
 
     else
-        echo "You decided not to start the node now, exit status was $?."
+        echo "You decided not to strat the node now, exit status was $?."
         exit 1
 fi
 }
