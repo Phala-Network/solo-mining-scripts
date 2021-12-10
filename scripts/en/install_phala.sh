@@ -83,7 +83,8 @@ function install_dcap()
 	/tmp/$dcap_driverbin
 	if [ $? -ne 0 ]; then
 		log_info "----------Failed to install the DCAP driver, please check the driver's installation logs!----------"
-		if [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.10" ]; then
+		kernel_version=`uname -a|awk '{print $3}'`
+		if [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.10" ] && [ $kernel_version == "5.13.0-22-generic" ]; then
 			log_info "----------Trying one more thing, as you have Ubuntu 21.10. Cheking for an existing driver installation----------"
 			if [ -e /dev/sgx ] && [ -e /dev/sgx_enclave ] && [ -e /dev/sgx_provision ] && [ -e /dev/sgx_vepc ]; then
 				log_info "----------Your DCAP drivers were found, thank you for reading our wiki!----------"
@@ -166,12 +167,12 @@ function install()
 			;;
 	esac
 
-	if [ -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
-		log_info "----------Your device exists: /dev/sgx/enclave /dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision is related to the DCAP driver, all have been added to phala-pruntime!----------"
-		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/enclave","/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
-	elif [ ! -L /dev/sgx ] && [ -L /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ -c /dev/sgx_vepc ]; then
+	if [ -e /dev/sgx ] && [ -e /dev/sgx_enclave ] && [ -e /dev/sgx_provision ] && [ -e /dev/sgx_vepc ]; then
 		log_info "----------Your device exists: /dev/sgx /dev/sgx_enclave /dev/sgx_provision /dev/sgx_vepc is related to the DCAP driver, all have been added to phala-pruntime!----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx","/dev/sgx_enclave","/dev/sgx_provision"."/dev/sgx_vepc"]' $installdir/docker-compose.yml
+	elif [ ! -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
+		log_info "----------Your device exists: /dev/sgx/enclave /dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision is related to the DCAP driver, all have been added to phala-pruntime!----------"
+		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/enclave","/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
 	elif [ ! -L /dev/sgx/enclave ] && [ -L /dev/sgx/provision ] && [ -c /dev/sgx_enclave ] && [ -c /dev/sgx_provision ] && [ ! -c /dev/isgx ]; then
 		log_info "----------Your device exists: /dev/sgx/provision /dev/sgx_enclave /dev/sgx_provision is related to the DCAP driver, all have been added to phala-pruntime!----------"
 		yq e -i '.services.phala-pruntime.devices = ["/dev/sgx/provision","/dev/sgx_enclave","/dev/sgx_provision"]' $installdir/docker-compose.yml
