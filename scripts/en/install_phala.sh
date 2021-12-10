@@ -88,8 +88,6 @@ function install_dcap()
 			log_info "----------Trying one more thing, as you have Ubuntu 21.10. Cheking for an existing driver installation----------"
 			if [ -e /dev/sgx ] && [ -e /dev/sgx_enclave ] && [ -e /dev/sgx_provision ] && [ -e /dev/sgx_vepc ]; then
 				log_info "----------Your DCAP drivers were found, thank you for reading our wiki!----------"
-				yq e -i '.services.phala-pruntime.devices = ["/dev/sgx","/dev/sgx_enclave","/dev/sgx_provision"."/dev/sgx_vepc"]' $installdir/docker-compose.yml
-			#add elif to install the driver if not found
 			else
 				exit 1
 			fi
