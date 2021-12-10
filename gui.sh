@@ -112,7 +112,6 @@ function snapshot_download()
         }
     else
         echo "You decided not to download and setup the snapshot."
-        exit 1
 fi
 }
 
