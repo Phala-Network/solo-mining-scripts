@@ -210,7 +210,7 @@ function node_config()
                 printf "Please enter a legal pool address, and it cannot be empty!\n"
             else
                 sed -i "10c OPERATOR=$pool_addr" $installdir/.env
-                echo "----------Successfully verified mnemonic seed!----------"
+                echo "----------Successfully verified pool address!----------"
                 sleep 2
                 break
             fi
