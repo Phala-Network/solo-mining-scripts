@@ -69,7 +69,7 @@ function status()
 			fi
 		done
 
-		if [ ${registered} = "true" ]; then
+		if [ "${registered"} = "true" ]; then
 			registerStatus="Registered, you can use the miner’s public key to add a miner"
 		else
 			registerStatus="Not registered, please wait for the synchronization to complete"
