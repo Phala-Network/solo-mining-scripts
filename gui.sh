@@ -241,7 +241,7 @@ download_script
 enable_SGX
 install_SGX_drivers
 getting_miner_ready
-extracting_snapshot
+#extracting_snapshot
 snapshot_download
 node_config
 start_node
