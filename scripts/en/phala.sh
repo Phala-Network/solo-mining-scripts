@@ -192,7 +192,7 @@ case "$1" in
 	presync)
 		local node_name
 		while true ; do
-			read -p "Enter your node name(not contain spaces): " node_name
+			read -p "Enter your node name (no spaces): " node_name
 			if [[ $node_name =~ \ |\' ]]; then
 				printf "The node name cannot contain spaces, please re-enter!\n"
 			else
