@@ -209,7 +209,7 @@ sudo phala update clean
 ### Troubleshooting
 
 The community is here to help!
-Check for [existing posts](https://forum.phala.network/c/mai/42-category/42) on our forum if you are stuck. In rare circumstances, your issue may be new; feel free to post it then so that we can help. For us to be able to help you, please read the [investigating the issue](#investigating-the-issue) first, so you know how and where to get your logs from prior to [posting].
+Check for [existing posts](https://forum.phala.network/c/mai/42-category/42) on our forum if you are stuck. In rare circumstances, your issue may be new; feel free to post it then so that we can help. For us to be able to help you, please read the [investigating the issue](#investigating-the-issue) first, so you know how and where to get your logs from prior to posting.
 
 ### General
 
@@ -250,7 +250,7 @@ You should have three containers running as shown in this example:
   </a>
 </p>
 
-(image showing the khala blockchain files of the miner node) 
+(image showing the miner node's running docker containers) 
 
 To get the most recent logs of each container, you may execute:
 
