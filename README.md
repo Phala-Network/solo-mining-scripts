@@ -46,6 +46,15 @@ EN | [中文](./README.cn.md)
     -   Boot Mode must be **UEFI**
     -   Intel© SGX Settings must be **Enabled** or **Software Controlled**
 
+:point_down: More details about the hardware requirements: 
+
+[![Phala Wiki](https://user-images.githubusercontent.com/37558304/145890328-35ee96db-2713-4f53-8d62-d90aad16ab8c.png)](https://wiki.phala.network/en-us/docs/khala-mining/1-0-hardware-requirements/)
+
+<h1 align="center">
+</h1>
+
+#### Manual Installation
+
 - Download the Script
 
 ```bash
@@ -70,7 +79,6 @@ It is now recommended to reboot you machine.
 ```bash
 sudo reboot
 ```
-
     
 <h1 align="center">
 </h1>
@@ -259,7 +267,7 @@ docker logs <container_ID/container_name> -n 100 -f
 ```
 Note that `<container_ID/container_name>` must be replaced with the container you wish the receive the logs from. In the example above the `container_ID` is `8dc34f63861e` and `container_name` would be `phala-pherry`.
 \
-If you attempt to post on the phala forum and do not know where the issue lies, please post the logs of all three docker containers. Copy-paste the container logs from the terminal into the forum post. 
+If you attempt to post on the phala forum and do not know where the issue lies, please post [the logs](#get-logs) of all three docker containers. Copy-paste the container logs from the terminal into the forum post. 
 
 ##### Advanced Troubleshooting
 In some cases, it might be beter to reinstall the mining script. 
