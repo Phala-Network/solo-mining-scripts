@@ -27,6 +27,8 @@ EN | [中文](./README.cn.md)
         - [Starting Phala Docker Containers Separately](#start-docker-separately)
         - [Stopping Phala Docker Containers Separately](#stop-docker-separately)
     - [:raising_hand_man: Troubleshooting](#troubleshooting)
+        - [Forum](https://forum.phala.network/c/mai/42-category/42)
+        - [Peer Connectivity](#peer-connectivity)
         - ['Failed to install the DCAP driver'](#failed-to-install-the-dcap-driver)
         - [Khala Node Stops Synching](#khala-node-stops-synching)
 
@@ -156,6 +158,11 @@ sudo phala status
 <h1 align="center">
 </h1>
 
+##### _Head back [to top](#navigate) :point_up: to navigate to other sections._
+
+<h1 align="center">
+</h1>
+
 #### Phala & Docker 🐳
 
 ##### Start Docker Separately
@@ -199,7 +206,12 @@ sudo phala update clean
 
 ## :raising_hand_woman::raising_hand_man:
 
-#### Troubleshooting
+### Troubleshooting
+
+The community is here to help!
+Check for [existing posts](https://forum.phala.network/c/mai/42-category/42) on our forum if you are stuck. In rare circumstances, your issue may be new; feel free to post it then so that we can help. For us to be able to help you, please read the [investigating the issue](#investigating-the-issue) first, so you know how and where to get your logs from prior to [posting].
+
+### General
 
 Most symptoms are solved by restarting your node. If you experience issues running your node, try stopping the node by:
 
@@ -214,8 +226,42 @@ sudo phala start
 
 If you still have issues attempt to [update the script](#update-the-script).
 
-##### Advanced Troubleshooting 
+<h1 align="center">
+</h1>
 
+##### _Head back [to top](#navigate) :point_up: to navigate to other sections._
+
+<h1 align="center">
+</h1>
+
+##### Investigating the Issue
+
+First, check if all required containers are running. 
+
+```bash
+sudo docker ps
+```
+
+You should have three containers running as shown in this example:
+
+<p align="center">
+  <a href="https://phala.network/">
+    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/145825263-50d69b7e-a7e1-45c9-9eca-cc2d7d3a6b69.png" height="100">
+  </a>
+</p>
+
+(image showing the khala blockchain files of the miner node) 
+
+To get the most recent logs of each container, you may execute:
+
+```bash
+docker logs <container_ID/container_name> -n 100 -f
+```
+Note that `<container_ID/container_name>` must be replaced with the container you wish the receive the logs from. In the example above the `container_ID` is `8dc34f63861e` and `container_name` would be `phala-pherry`.
+\
+If you attempt to post on the phala forum and do not know where the issue lies, please post the logs of all three docker containers. Copy-paste the container logs from the terminal into the forum post. 
+
+##### Advanced Troubleshooting
 In some cases, it might be beter to reinstall the mining script. 
 To do this, first uninstall the script: 
 
@@ -252,6 +298,28 @@ You may now restart your node.
 sudo phala start
 ``` 
 
+<h1 align="center">
+</h1>
+
+##### Peer Connectivity
+Some users running nodes may find their nodes are struggling to connect to peers, which causes nodes to be dropped from the network.
+You can check your node connections through executing:
+
+```bash
+sudo docker logs -f phala-node
+```
+
+For an optimal setup, you should have between 40 and 50 peers.
+
+If you have insufficient peers do the following:
+* Check your firewall settings
+* Ensure there are no NAT or Policy-based filters
+
+Feel free to read [NAT](https://en.wikipedia.org/wiki/Network_address_translation) for more information if you are curious about the root causes. Also, do not hesitate to look for existing [Phala forum posts](https://forum.phala.network/c/mai/42-category/42) before posing your issue if you are stuck. 
+
+<h1 align="center">
+</h1>
+
 ##### Failed to install the DCAP driver
 :information_source: The most common issue is that your mainboard may not support a DCAP driver. In this case, the script cannot automatically install the `isgx` driver and results in the following error message.
 
@@ -269,6 +337,9 @@ In this case, prior to running `sudo phala start`, you need to manually install 
 ```bash
 sudo phala install isgx
 ```
+
+<h1 align="center">
+</h1>
 
 ##### Khala Node Stops Synching
 
