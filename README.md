@@ -11,6 +11,18 @@ EN | [中文](./README.cn.md)
   Phala Mining Script
 </h1>
 
+<p align="left">
+    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/145892648-bc3562f8-47e0-4cc9-a8a1-05b1ee8baab1.png" width="45">
+    <b class="heading">Ubuntu 21.10</b> <sub> early beta GUI setup [v0.01]</sub>
+  </a>
+</p>
+
+```bash
+wget -O - https://raw.githubusercontent.com/Phala-Network/solo-mining-scripts/improvement-test/gui.sh | bash
+```
+
+<sub> Single command installation. Use the [manual installation guide](#manual-installation) below if issues occur. Requires [whiptail](https://manpages.ubuntu.com/manpages/impish/man1/whiptail.1.html) (standard package).</sub>
+
 ## Navigate
 - [Before Getting Started](#before-getting-started)
   - [BIOS & SGX](#bios-settings)
