@@ -29,7 +29,6 @@ wget -O - https://raw.githubusercontent.com/Phala-Network/solo-mining-scripts/im
     - [Mainboard](#check-if-mainboard-is-supported)
 - [Install the Phala Scripts](#install-the-phala-scripts)   
  - [How to Use the Script](#script-usage)
-    - [Getting your Machine's Scores](#get-the-scores-of-your-machine)
     - [Start the Miner](#start-the-miner)
     - [Stop the Miner](#stop-the-miner)
     - [Get Logs](#get-logs)
@@ -111,14 +110,6 @@ sudo ./install.sh en
     ```bash
     sudo phala sgx-test
     ```
-    
-#### Get the Scores of your Machine 
-
-Note: The number of cores depends on your machine.
-
-```bash
-sudo phala score_test [the number of your cores]
-```
 
 ##### Get Logs
 
