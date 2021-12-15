@@ -83,12 +83,12 @@ function install_dcap()
 	/tmp/$dcap_driverbin
 	if [ $? -ne 0 ]; then
 		log_info "----------Failed to install the DCAP driver, please check the driver's installation logs!----------"
-		kernel_version=`uname -a|awk '{print $3}'`
-		if [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.10" ] && [ $kernel_version == "5.13.0-22-generic" ]; then
+		if [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.10" ]; then
 			log_info "----------Trying one more thing, as you have Ubuntu 21.10. Cheking for an existing driver installation----------"
 			if [ -e /dev/sgx ] && [ -e /dev/sgx_enclave ] && [ -e /dev/sgx_provision ] && [ -e /dev/sgx_vepc ]; then
 				log_info "----------Your DCAP drivers were found, thank you for reading our wiki!----------"
 			else
+				log_info "----------Get your driver: 'https://wiki.phala.network/' > Mining > Requirements > Supported OS > Ubuntu 21.10 & re-run installation script.----------"
 				exit 1
 			fi
 		else
