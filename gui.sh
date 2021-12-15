@@ -31,6 +31,7 @@ function download_script()
     chmod +x install.sh
     sudo yes | sudo ./install.sh en
     # cleaning up the installation
+    cd ~
     yes | rm solo-mining-scripts-improvement-test
 }
 
