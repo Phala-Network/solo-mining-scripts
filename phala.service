@@ -1,0 +1,12 @@
+[Unit]
+Description=Phala miner deamon
+After=network.target
+
+[Service]
+### Uncomment the following line for custom phala datastore location
+# Environment=PHALA_PATH=/path/to/your/phala/datastore
+ExecStart=sudo phala start
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

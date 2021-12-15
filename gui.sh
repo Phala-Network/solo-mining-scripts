@@ -31,8 +31,6 @@ function download_script()
     chmod +x install.sh
     sudo yes | sudo ./install.sh en
     # cleaning up the installation
-    cd ~
-    yes | rm solo-mining-scripts-improvement-test
 }
 
 function enable_SGX()
@@ -45,10 +43,9 @@ function enable_SGX()
         whiptail --title "Phala Miner Intel© SGX" --msgbox "Intel© SGX Successfully Activated\nHit OK to proceed setting up your drivers." 8 78
 	else 
 		whiptail --title "Phala Miner Intel© SGX" --msgbox "Error Activating Intel© SGX. The installation was aborted. \nPlease check wiki.phala.network for more info.\nHit OK to proceed." 8 78
-        set -a
-        exit 1
-
-    # enable SGX
+        # cleaning up the installation in case of an error
+        cd ~
+        yes | rm -r solo-mining-scripts-improvement-test
 fi
 }
 
@@ -233,19 +230,38 @@ function node_config()
     fi
 }
 
+function auto_start_node()
+{
+    if (whiptail --title "Phala Miner Installation" --yesno "Do you wish to auto start your miner after reboot automatically?\nThis is usefull in case your hardware crashes accidently you miner will automatically continue mining after a reboot." 8 78); then
+        echo "----------Setting up autostart after reboot...----------"
+        cd ~
+        cd solo-mining-scripts-improvement-test
+        mv phala.service /etc/systemd/system/
+        sudo systemctl enable
+        cd ~
+        yes | rm -r solo-mining-scripts-improvement-test
+
+    else
+        echo "You decided not to use node autostart during reboot, exit status was $?."
+        exit 1
+fi
+}
+
 function start_node()
 {
     if (whiptail --title "Phala Miner Installation" --yesno "Do you wish to start your node now?" 8 78); then
-        echo "----------Your node is strating now hang tight...----------"
+        echo "----------Your node is starting now hang tight...----------"
         sudo phala start
         echo "----------Almost done. Loading your Miner's status...----------"
         sudo phala status
 
     else
-        echo "You decided not to strat the node now, exit status was $?."
+        echo "You decided not to start the node now, exit status was $?."
         exit 1
 fi
 }
+
+
 
 info_entry_question
 download_script
@@ -255,4 +271,5 @@ getting_miner_ready
 #extracting_snapshot
 snapshot_download
 node_config
+auto_start_node
 start_node
