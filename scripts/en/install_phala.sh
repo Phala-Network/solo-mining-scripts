@@ -84,10 +84,11 @@ function install_dcap()
 	if [ $? -ne 0 ]; then
 		log_info "----------Failed to install the DCAP driver, please check the driver's installation logs!----------"
 		if [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.10" ]; then
-			log_info "----------Trying one more thing, as you have Ubuntu 21.10. Cheking for an existing driver installation----------"
+			log_info "----------Trying one more thing, as you have Ubuntu 21.10. Cheking for an existing driver installation on your system----------"
 			if [ -e /dev/sgx ] && [ -e /dev/sgx_enclave ] && [ -e /dev/sgx_provision ] && [ -e /dev/sgx_vepc ]; then
 				log_info "----------Your DCAP drivers were found, thank you for reading our wiki!----------"
 			else
+				log_err "----------No existing drives found on your system. Your System seems to be compatible & requires a manual driver installation.----------"
 				log_info "----------Get your driver: 'https://wiki.phala.network/' > Mining > Requirements > Supported OS > Ubuntu 21.10 & re-run installation script.----------"
 				exit 1
 			fi

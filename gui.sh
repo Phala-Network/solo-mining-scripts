@@ -3,6 +3,8 @@
 installdir=/opt/phala
 scriptdir=$installdir/scripts
 
+set -a 
+
 function info_entry_question()
 {
     if (whiptail --title "Phala Miner Installation" --yesno "This will install a Phala Miner on your System do you wish to proceed? \nAny existing Phala Miner installations will be overwritten" 8 78); then
@@ -23,7 +25,7 @@ function download_script()
     # change for main below
     # Progress Bar for download
     wget --progress=dot 'https://github.com/Phala-Network/solo-mining-scripts/archive/refs/heads/improvement-test.zip' 2>&1 | sed -un 's/.* \([0-9]\+\)% .*/\1/p' | whiptail --gauge "Download" 7 50 0
-    unzip improvement-test.zip
+    yes | unzip improvement-test.zip
     rm -r improvement-test.zip #cleaning up the installation
     cd solo-mining-scripts-improvement-test/ #note this depends on your current directory
     chmod +x install.sh
@@ -32,6 +34,7 @@ function download_script()
 
 function enable_SGX()
 {
+    cd ~
     cd solo-mining-scripts-improvement-test/
     sudo chmod +x sgx_enable
     sudo ./sgx_enable
@@ -39,6 +42,7 @@ function enable_SGX()
         whiptail --title "Phala Miner Intel© SGX" --msgbox "Intel© SGX Successfully Activated\nHit OK to proceed setting up your drivers." 8 78
 	else 
 		whiptail --title "Phala Miner Intel© SGX" --msgbox "Error Activating Intel© SGX. The installation was aborted. \nPlease check wiki.phala.network for more info.\nHit OK to proceed." 8 78
+        set -a
         exit 1
 
     # enable SGX
@@ -51,24 +55,29 @@ function install_SGX_drivers()
 }
 
 function getting_miner_ready()
-{ 
+{   
     sudo phala install
-    {           
-            i="0"
-            while (true)
-            do
-                proc=$(ps aux | grep -v grep | grep -e "phala install")
-                if [[ "$proc" == "" ]]; then break; fi
-                # Sleep for a longer period if the process takes too long 
-                sleep 1
-                echo $i
-                i=$(expr $i + 1)
-            done
-            # If it is done then display 100%
-            echo 100
-            # Give it some time to display the progress to the user.
-            sleep 2
-    } | whiptail --title "Intel© SGX Driver Installation" --gauge "Phala Miner Driver Check" 8 78 0
+    if [ $? -eq 0 ]; then
+        {           
+                i="0"
+                while (true)
+                do
+                    proc=$(ps aux | grep -v grep | grep -e "phala install")
+                    if [[ "$proc" == "" ]]; then break; fi
+                    # Sleep for a longer period if the process takes too long 
+                    sleep 1
+                    echo $i
+                    i=$(expr $i + 1)
+                done
+                # If it is done then display 100%
+                echo 100
+                # Give it some time to display the progress to the user.
+                sleep 2
+        } | whiptail --title "Intel© SGX Driver Installation" --gauge "Phala Miner Driver Check" 8 78 0
+    else
+        whiptail --title "Phala Miner Installation Error" --msgbox "Error Installing the Miner. The installation was aborted. \nPlease check the logs displayed in the terminal.\nwiki.phala.network for more info.\nHit OK to proceed." 8 78
+        exit 1
+    fi
 }
 
 function extracting_snapshot()
