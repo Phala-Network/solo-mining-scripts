@@ -273,6 +273,7 @@ Note that `<container_ID/container_name>` must be replaced with the container yo
 If you attempt to post on the phala forum and do not know where the issue lies, please post [the logs](#get-logs) of all three docker containers. Copy-paste the container logs from the terminal into the forum post. 
 
 ##### Advanced Troubleshooting
+
 In some cases, it might be beter to reinstall the mining script. 
 To do this, first uninstall the script: 
 
@@ -313,6 +314,7 @@ sudo phala start
 </h1>
 
 ##### Peer Connectivity
+
 Some users running nodes may find their nodes are struggling to connect to peers, which causes nodes to be dropped from the network.
 You can check your node connections through executing:
 
@@ -332,6 +334,7 @@ Feel free to read [NAT](https://en.wikipedia.org/wiki/Network_address_translatio
 </h1>
 
 ##### Failed to install the DCAP driver
+
 :information_source: The most common issue is that your mainboard may not support a DCAP driver. In this case, the script cannot automatically install the `isgx` driver and results in the following error message.
 
 <p align="center">
