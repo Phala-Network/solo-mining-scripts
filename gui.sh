@@ -30,6 +30,8 @@ function download_script()
     cd solo-mining-scripts-improvement-test/ #note this depends on your current directory
     chmod +x install.sh
     sudo yes | sudo ./install.sh en
+    # cleaning up the installation
+    yes | rm solo-mining-scripts-improvement-test
 }
 
 function enable_SGX()
