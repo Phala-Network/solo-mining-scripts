@@ -232,12 +232,13 @@ function node_config()
 
 function auto_start_node()
 {
-    if (whiptail --title "Phala Miner Installation" --yesno "Do you wish to auto start your miner after reboot automatically?\nThis is usefull in case your hardware crashes accidently you miner will automatically continue mining after a reboot." 8 78); then
+    if (whiptail --title "Phala Miner Installation" --yesno "Do you wish to auto start your miner after reboot automatically?\nThis is usefull in case your hardware crashes accidently your miner\n will automatically continue mining after a reboot." 8 78); then
         echo "----------Setting up autostart after reboot...----------"
         cd ~
         cd solo-mining-scripts-improvement-test
         mv phala.service /etc/systemd/system/
-        sudo systemctl enable
+        sudo systemctl enable phala
+        # cleaning up
         cd ~
         yes | rm -r solo-mining-scripts-improvement-test
 
