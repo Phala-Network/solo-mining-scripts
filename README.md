@@ -8,7 +8,10 @@ EN | [中文](./README.cn.md)
 
 
 <h1 align="center">
-  Phala Mining Script Early Beta GUI
+  Phala Mining Script
+</h1>
+<h1 align="center">
+  Early Beta for GUI Installation
 </h1>
 
 <p align="left">
