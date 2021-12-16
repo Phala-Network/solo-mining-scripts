@@ -11,13 +11,24 @@ EN | [中文](./README.cn.md)
   Phala Mining Script
 </h1>
 
+<p align="left">
+    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/145892648-bc3562f8-47e0-4cc9-a8a1-05b1ee8baab1.png" width="45">
+    <b class="heading">Ubuntu 21.10</b> <sub> early beta GUI setup [v0.01]</sub>
+  </a>
+</p>
+
+```bash
+wget -O - https://raw.githubusercontent.com/Phala-Network/solo-mining-scripts/improvement-test/gui.sh | bash
+```
+
+<sub> Single command installation. Use the [manual installation guide](#manual-installation) below if issues occur. Requires [whiptail](https://manpages.ubuntu.com/manpages/impish/man1/whiptail.1.html) (standard package).</sub>
+
 ## Navigate
 - [Before Getting Started](#before-getting-started)
   - [BIOS & SGX](#bios-settings)
     - [Mainboard](#check-if-mainboard-is-supported)
 - [Install the Phala Scripts](#install-the-phala-scripts)   
  - [How to Use the Script](#script-usage)
-    - [Getting your Machine's Scores](#get-the-scores-of-your-machine)
     - [Start the Miner](#start-the-miner)
     - [Stop the Miner](#stop-the-miner)
     - [Get Logs](#get-logs)
@@ -27,6 +38,8 @@ EN | [中文](./README.cn.md)
         - [Starting Phala Docker Containers Separately](#start-docker-separately)
         - [Stopping Phala Docker Containers Separately](#stop-docker-separately)
     - [:raising_hand_man: Troubleshooting](#troubleshooting)
+        - [Forum](https://forum.phala.network/c/mai/42-category/42)
+        - [Peer Connectivity](#peer-connectivity)
         - ['Failed to install the DCAP driver'](#failed-to-install-the-dcap-driver)
         - [Khala Node Stops Synching](#khala-node-stops-synching)
 
@@ -43,6 +56,15 @@ EN | [中文](./README.cn.md)
     -   Disable Secure Boot
     -   Boot Mode must be **UEFI**
     -   Intel© SGX Settings must be **Enabled** or **Software Controlled**
+
+:point_down: More details about the hardware requirements: 
+
+[![Phala Wiki](https://user-images.githubusercontent.com/37558304/145890328-35ee96db-2713-4f53-8d62-d90aad16ab8c.png)](https://wiki.phala.network/en-us/docs/khala-mining/1-0-hardware-requirements/)
+
+<h1 align="center">
+</h1>
+
+#### Manual Installation
 
 - Download the Script
 
@@ -68,7 +90,6 @@ It is now recommended to reboot you machine.
 ```bash
 sudo reboot
 ```
-
     
 <h1 align="center">
 </h1>
@@ -89,14 +110,6 @@ sudo ./install.sh en
     ```bash
     sudo phala sgx-test
     ```
-    
-#### Get the Scores of your Machine 
-
-Note: The number of cores depends on your machine.
-
-```bash
-sudo phala score_test [the number of your cores]
-```
 
 ##### Get Logs
 
@@ -156,6 +169,11 @@ sudo phala status
 <h1 align="center">
 </h1>
 
+##### _Head back [to top](#navigate) :point_up: to navigate to other sections._
+
+<h1 align="center">
+</h1>
+
 #### Phala & Docker 🐳
 
 ##### Start Docker Separately
@@ -199,7 +217,12 @@ sudo phala update clean
 
 ## :raising_hand_woman::raising_hand_man:
 
-#### Troubleshooting
+### Troubleshooting
+
+The community is here to help!
+Check for [existing posts](https://forum.phala.network/c/mai/42-category/42) on our forum if you are stuck. In rare circumstances, your issue may be new; feel free to post it then so that we can help. For us to be able to help you, please read the [investigating the issue](#investigating-the-issue) first, so you know how and where to get your logs from prior to posting.
+
+### General
 
 Most symptoms are solved by restarting your node. If you experience issues running your node, try stopping the node by:
 
@@ -214,7 +237,42 @@ sudo phala start
 
 If you still have issues attempt to [update the script](#update-the-script).
 
-##### Advanced Troubleshooting 
+<h1 align="center">
+</h1>
+
+##### _Head back [to top](#navigate) :point_up: to navigate to other sections._
+
+<h1 align="center">
+</h1>
+
+##### Investigating the Issue
+
+First, check if all required containers are running. 
+
+```bash
+sudo docker ps
+```
+
+You should have three containers running as shown in this example:
+
+<p align="center">
+  <a href="https://phala.network/">
+    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/145825263-50d69b7e-a7e1-45c9-9eca-cc2d7d3a6b69.png" height="100">
+  </a>
+</p>
+
+(image showing the miner node's running docker containers) 
+
+To get the most recent logs of each container, you may execute:
+
+```bash
+docker logs <container_ID/container_name> -n 100 -f
+```
+Note that `<container_ID/container_name>` must be replaced with the container you wish the receive the logs from. In the example above the `container_ID` is `8dc34f63861e` and `container_name` would be `phala-pherry`.
+\
+If you attempt to post on the phala forum and do not know where the issue lies, please post [the logs](#get-logs) of all three docker containers. Copy-paste the container logs from the terminal into the forum post. 
+
+##### Advanced Troubleshooting
 
 In some cases, it might be beter to reinstall the mining script. 
 To do this, first uninstall the script: 
@@ -252,7 +310,31 @@ You may now restart your node.
 sudo phala start
 ``` 
 
+<h1 align="center">
+</h1>
+
+##### Peer Connectivity
+
+Some users running nodes may find their nodes are struggling to connect to peers, which causes nodes to be dropped from the network.
+You can check your node connections through executing:
+
+```bash
+sudo docker logs -f phala-node
+```
+
+For an optimal setup, you should have between 40 and 50 peers.
+
+If you have insufficient peers do the following:
+* Check your firewall settings
+* Ensure there are no NAT or Policy-based filters
+
+Feel free to read [NAT](https://en.wikipedia.org/wiki/Network_address_translation) for more information if you are curious about the root causes. Also, do not hesitate to look for existing [Phala forum posts](https://forum.phala.network/c/mai/42-category/42) before posing your issue if you are stuck. 
+
+<h1 align="center">
+</h1>
+
 ##### Failed to install the DCAP driver
+
 :information_source: The most common issue is that your mainboard may not support a DCAP driver. In this case, the script cannot automatically install the `isgx` driver and results in the following error message.
 
 <p align="center">
@@ -269,6 +351,9 @@ In this case, prior to running `sudo phala start`, you need to manually install 
 ```bash
 sudo phala install isgx
 ```
+
+<h1 align="center">
+</h1>
 
 ##### Khala Node Stops Synching
 
