@@ -358,6 +358,19 @@ sudo phala install isgx
 ##### Khala Node Stops Synching
 
 If the Khala Chain stops synching and is stuck at a specific block and does not continue to sync, we advise you first to [restart your node](#troubleshooting).
+Prior to restarting your miner confirm that your node is stuck, through execututing:
+
+```bash
+docker logs phala-node -n 100 -f
+```
+
+Within the logs if there is an issue in synchronizing a block, it will typically look as follows:
+
+<p align="center">
+  <a href="https://phala.network/">
+    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/146648049-4f1a098f-63ef-4263-9b18-8020d686bd8a.png" height="100">
+  </a>
+</p>
 
 If the synchronization still fails, you may try to delete the khala chain database on your miner's node.  
 It is located in `/var/khala-dev-node/chains/khala`.
