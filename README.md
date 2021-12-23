@@ -281,7 +281,7 @@ To do this, first uninstall the script:
 sudo phala uninstall
 ```
 
-Delete the mining script repository (if still on your machine) by executing, you may first need to find your home directory, where `solo-mining-scripts-main` should reside. To find this out, execute: 
+Delete the mining script repository (if still on your machine) by executing: 
 
 ```bash
 rm -rf $HOME/solo-mining-scripts-main
