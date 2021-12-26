@@ -247,7 +247,30 @@ If you still have issues attempt to [update the script](#update-the-script).
 
 ##### Investigating the Issue
 
-First, check if all required containers are running. 
+Get an overview of your miner's status first.
+
+```bash
+sudo phala status
+```
+
+In case your node is stuck, a typical scenario would look like the following:
+
+<p align="center">
+  <a href="https://phala.network/">
+    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/147273109-d4d1d5e3-5098-43d1-99f5-2ba995ecd1b6.png" height="250">
+  </a>
+</p>
+(image showing stuck node on the miner)
+
+With the symptom in the scenario above, the right method to solve the issue would be restarting the `node` container only, with the commands mentioned [here](stop-docker-separately), and restarting the containers.
+
+Now check the status of the node again.
+
+<h1 align="center">
+</h1>
+
+
+If the local node block height is empty first, check if all required containers are running.
 
 ```bash
 sudo docker ps
@@ -272,6 +295,21 @@ Note that `<container_ID/container_name>` must be replaced with the container yo
 \
 If you attempt to post on the phala forum and do not know where the issue lies, please post [the logs](#get-logs) of all three docker containers. Copy-paste the container logs from the terminal into the forum post. 
 
+If a container is missing, you may attempt to restart it separately with the respective commands below.
+Use the applicable command for your missing container:
+
+```bash
+sudo phala start node
+```
+
+```bash
+sudo phala start pruntime
+```
+
+```bash
+sudo phala start pherry
+```
+
 ##### Advanced Troubleshooting
 
 In some cases, it might be beter to reinstall the mining script. 
@@ -281,12 +319,10 @@ To do this, first uninstall the script:
 sudo phala uninstall
 ```
 
-And delete the mining script repository by executing:
+Delete the mining script repository (if still on your machine) by executing: 
 
 ```bash
-home_path=eval echo ~$USER
-$home_path
-sudo rm -rf sudo rm -rf
+rm -rf $HOME/solo-mining-scripts-main
 ```
 
 Now you may reinstall the mining script.
