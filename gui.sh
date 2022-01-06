@@ -244,7 +244,7 @@ function auto_start_node()
 
     else
         echo "You decided not to use node autostart during reboot, exit status was $?."
-        exit 1
+        break
 fi
 }
 
