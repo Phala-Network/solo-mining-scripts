@@ -94,7 +94,7 @@ function install_dcap()
 				exit 1
 			fi
 		else
-			exit 1
+			break
 		fi
 	else
 		log_success "----------Deleteting temporary files----------"
