@@ -19,8 +19,8 @@ fi
 function download_script()
 {
     # downloading the solo mining script & executing it
-    sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
-    sudo apt install wget unzip
+    yes | sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
+    yes | sudo apt install wget unzip
     cd ~
     # change for main below
     # Progress Bar for download
