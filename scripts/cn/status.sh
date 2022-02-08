@@ -2,6 +2,9 @@
 
 function status()
 {
+  local khala_rpc="wss://khala.api.onfinality.io/public-ws"
+  local ksm_rpc="wss://kusama.api.onfinality.io/public-ws"
+
 	trap "clear;exit" 2
 	while true; do
 		echo "正在获取公共节点区块信息，可能需要一段时间..."
@@ -14,13 +17,13 @@ function status()
 		local gas_address=$(cat $installdir/.env | grep 'GAS_ACCOUNT_ADDRESS' | awk -F "=" '{print $NF}')
 		local pool_address=$(cat $installdir/.env | grep 'OPERATOR' | awk -F "=" '{print $NF}')
 		local script_version=$(cat $installdir/.env | grep 'version' | awk -F "=" '{print $NF}')
-		local balance=$(node $installdir/scripts/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain free-balance $gas_address 2>&1)
+		local balance=$(node $installdir/scripts/console.js --substrate-ws-endpoint $khala_rpc chain free-balance $gas_address 2>&1)
 		balance=$(echo $balance | awk -F " " '{print $NF}')
 		balance=$(echo "$balance / 1000000000000"|bc)
-		local khala_head_block=$(node $installdir/scripts/console.js --substrate-ws-endpoint "wss://khala.api.onfinality.io/public-ws" chain sync-state 2>/dev/null)
+		local khala_head_block=$(node $installdir/scripts/console.js --substrate-ws-endpoint $khala_rpc chain sync-state 2>/dev/null)
 		khala_head_block=$(echo $khala_head_block | awk -F "," '{print $5}' | sed 's/ currentBlock: //g')
 		local khala_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
-		local kusama_head_block=$(node $installdir/scripts/console.js --substrate-ws-endpoint "wss://pub.elara.patract.io/kusama" chain sync-state | awk -F " " '/currentBlock/ {print $NF}' | sed 's/,//g')
+		local kusama_head_block=$(node $installdir/scripts/console.js --substrate-ws-endpoint $ksm_rpc chain sync-state | awk -F " " '/currentBlock/ {print $NF}' | sed 's/,//g')
 		local kusama_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9934 | jq '.result.currentBlock')
 		local get_info=$(curl -X POST -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info)
 		local publickey=$(echo $get_info | jq '.payload|fromjson.public_key' | sed 's/\"//g' | sed 's/^/0x/')
@@ -29,6 +32,7 @@ function status()
 		local headernum=$(echo $get_info | jq '.payload|fromjson.headernum' | sed 's/\"//g')
 		local score=$(echo $get_info | jq '.payload|fromjson.score' | sed 's/\"//g')
 
+		#Checking docker status
 		check_docker_status phala-node
 		local res=$?
 		if [ $res -eq 0 ]; then
@@ -56,6 +60,23 @@ function status()
 		SYNCED="同步完成"
 		SYNCING="同步中, 请等待"
 
+    #Checking if successfully obtained the parameters
+		if [ -z ${khala_node_block} ]; then
+			khala_node_block=0
+		fi
+
+		if [ -z ${khala_head_block} ]; then
+			khala_head_block=0
+		fi
+
+		if [ -z ${kusama_node_block} ]; then
+			kusama_node_block=0
+		fi
+
+		if [ -z ${kusama_head_block} ]; then
+			kusama_head_block=0
+		fi
+
 		if [ -z ${blocknum} ]; then
 			blocknum=0
 		fi
@@ -64,12 +85,7 @@ function status()
 			headernum=0
 		fi
 
-		for i in ${khala_node_block} ${khala_head_block} ${kusama_node_block} ${kusama_head_block} ${blocknum} ${headernum}; do
-			if [ -z ${blockInfo[${i}]} ]; then
-				blockInfo[${i}]=0
-			fi
-		done
-
+		#Comparing parameters to get difference
 		blockInfo=(${khala_node_block} ${khala_head_block} ${kusama_node_block} ${kusama_head_block} ${blocknum} ${headernum})
 
 		compareOrder1=(1 3 0 2)
@@ -85,6 +101,7 @@ function status()
 			fi
 		done
 
+    #Hide publickey if miner did not registered to the chain
 		if [ ${registered} = "true" ]; then
 			registerStatus="已注册，可以使用矿工公钥添加矿机"
 		else
