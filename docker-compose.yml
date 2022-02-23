@@ -14,7 +14,6 @@ services:
    environment:
     - NODE_NAME=${NODE_NAME}
     - NODE_ROLE=MINER
-
    volumes:
     - ${NODE_VOLUMES}
 
