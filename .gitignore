@@ -1,3 +1,11 @@
+tmp/
+conf/
+log/
+build/
+backup/
+.env
+docker-compose.yml
+
 /hugo
 docs/public*
 /.idea
