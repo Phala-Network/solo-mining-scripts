@@ -56,11 +56,11 @@ function phala_scripts_install_otherdependencies(){
           if [ ! -f /usr/local/bin/docker-compose ];then
             if [ "${PHALA_LANG}" == "CN" ];then
               # curl -L "https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o ${phala_scripts_tmp_dir}/docker-compose && \
-              curl -L "${phala_scripts_install_docker-compose-cn}" -o ${phala_scripts_tmp_dir}/docker-compose && \
+              curl -L "${phala_scripts_install_docker_compose_cn}" -o ${phala_scripts_tmp_dir}/docker-compose && \
               mv ${phala_scripts_tmp_dir}/docker-compose /usr/local/bin/
             else
               # curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o ${phala_scripts_tmp_dir}/docker-compose && \
-              curl -L "${phala_scripts_install_docker-compose}" -o ${phala_scripts_tmp_dir}/docker-compose && \
+              curl -L "${phala_scripts_install_docker_compose}" -o ${phala_scripts_tmp_dir}/docker-compose && \
               mv ${phala_scripts_tmp_dir}/docker-compose /usr/local/bin/
             fi
           fi
@@ -128,9 +128,9 @@ function phala_scripts_install_sgx() {
 function phala_scripts_install_sgx_default() {
   # install aesm encalave
   # curl -fsSL https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key | apt-key add - && \
-  curl -fsSL ${phala_scripts_install_intel-sgx-deb} | apt-key add - && \
+  curl -fsSL ${phala_scripts_install_intel_sgx_deb} | apt-key add - && \
   # add-apt-repository -y "deb https://download.01.org/intel-sgx/sgx_repo/ubuntu focal main" && \
-  add-apt-repository -y "${phala_scripts_install_intel-addapt-deb}" && \
+  add-apt-repository -y "${phala_scripts_install_intel_addapt_deb}" && \
   # reinstall : fix apt upgrade
   # 21.10 sgx-aesm-service error skip aesm
   # apt reinstall -y libsgx-enclave-common sgx-aesm-service
@@ -144,7 +144,7 @@ function phala_scripts_install_sgx_k5_4(){
   type make dkms >/dev/null 2>&1 || apt install -y make dkms
   [ -f ${phala_scripts_tools_dir}/sgx_linux_x64_driver_1.41.bin ] || {
     # curl -fsSL https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.41.bin -o ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_1.41.bin && \
-    curl -fsSL ${phala_scripts_install_intel-old-device} -o ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_1.41.bin && \
+    curl -fsSL ${phala_scripts_install_intel_old_device} -o ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_1.41.bin && \
     mv ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_1.41.bin ${phala_scripts_tools_dir}/
   }
   bash ${phala_scripts_tools_dir}/sgx_linux_x64_driver_1.41.bin

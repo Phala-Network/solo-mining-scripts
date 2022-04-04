@@ -33,12 +33,12 @@ phala_scripts_dependencies_other_soft=(
 phala_pro_msg="MAINNET"
 phala_dev_msg="TESTNET"
 
-phala_scripts_utils_apt-source-cn="https://mirrors.163.com"
-phala_scripts_install_docker-compose-cn="https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
-phala_scripts_install_docker-compose="https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
-phala_scripts_install_intel-sgx-deb="https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key"
-phala_scripts_install_intel-addapt-deb="deb https://download.01.org/intel-sgx/sgx_repo/ubuntu focal main"
-phala_scripts_install_intel-old-device="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.41.bin"
+phala_scripts_utils_apt_source_cn="https://mirrors.163.com"
+phala_scripts_install_docker_compose_cn="https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
+phala_scripts_install_docker_compose="https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
+phala_scripts_install_intel_sgx_deb="https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key"
+phala_scripts_install_intel_addapt_deb="deb https://download.01.org/intel-sgx/sgx_repo/ubuntu focal main"
+phala_scripts_install_intel_old_device="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.41.bin"
 phala_scripts_install_setupnode="https://deb.nodesource.com/setup_lts.x"
 
 export phala_scripts_version \
@@ -48,12 +48,12 @@ export phala_scripts_version \
        phala_scripts_dependencies_other_soft \
        phala_pro_msg \
        phala_dev_msg \
-       phala_scripts_utils_apt-source-cn \
-       phala_scripts_install_docker-compose-cn \
-       phala_scripts_install_docker-compose \
-       phala_scripts_install_intel-sgx-deb \
-       phala_scripts_install_intel-addapt-deb \
-       phala_scripts_install_intel-old-device \
+       phala_scripts_utils_apt_source_cn \
+       phala_scripts_install_docker_compose_cn \
+       phala_scripts_install_docker_compose \
+       phala_scripts_install_intel_sgx_deb \
+       phala_scripts_install_intel_addapt_deb \
+       phala_scripts_install_intel_old_device \
        phala_scripts_install_setupnode
 
 phala_scripts_config_default() {
@@ -330,6 +330,20 @@ function phala_scripts_config_set() {
 
   set -e
 
+  # add old scripts check (testnet is skip)
+  if [ -d /var/khala-dev-node ] && [ -d /var/khala-pruntime-data ] && [ ! -L /var/khala-dev-node ] && [ ! -L /var/khala-pruntime-data ] && [ "${_phala_env}" != "${phala_dev_msg}" ];then
+    phala_scripts_log info "Old scripts found"
+    phala_scripts_config_set_migrate="y"
+    phala_scripts_config_set_migrate=$(phala_scripts_utils_read "migrate(y/n)?"  "${phala_scripts_config_set_migrate}"| tr A-Z a-z)
+    while true;do
+      if [ "${phala_scripts_config_set_migrate}" == "y" ] || [ "${phala_scripts_config_set_migrate}" == "n" ];then
+        break
+      else
+        :
+      fi
+    done
+  fi
+
   # set custom datadir
   khala_data_path_default=$(phala_scripts_utils_read "Enter your Khala DATA PATH"  "${khala_data_path_default}")
   
@@ -339,6 +353,13 @@ function phala_scripts_config_set() {
     khala_data_path_default="${khala_data_path_default%/}_dev"
   else
     khala_data_path_default="${khala_data_path_default%/}"
+    # add old scripts migrate
+    if [ "${phala_scripts_config_set_migrate}" == "y" ];then
+      phala_scripts_log info "migrate [ /var/khala-dev-node ] to [ ${khala_data_path_default}/node-data ]"
+      mv /var/khala-dev-node ${khala_data_path_default}/node-data
+      phala_scripts_log info "migrate [ /var/khala-pruntime-data ] to [ ${khala_data_path_default}/pruntime-data ]"
+      mv /var/khala-pruntime-data ${khala_data_path_default}/pruntime-data
+    fi
   fi
 
   # save conf as env file

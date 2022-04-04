@@ -90,6 +90,12 @@ msgstr "Intel IAS认证没有通过，请检查您的主板或网络！"
 msgid "Your confidenceLevel is：%s"
 msgstr "您的信任等级是：%s"
 
+msgid "Old scripts found"
+msgstr "找到旧脚本"
+
+msgid "migrate(y/n)?"
+msgstr "是否迁移?"
+
 msgid "You use several cores to participate in mining"
 msgstr "您使用几个核心参与挖矿"
 
@@ -172,6 +178,9 @@ msgstr "Usage:\n"
 #####          status.sh             #####
 #####     phala_scripts_status       #####
 ##########################################
+msgid "Getting public node block information, it may take some time..."
+msgstr "正在获取公共节点区块信息，可能需要一段时间..."
+
 msgid "Synchronizing, please wait"
 msgstr "同步中, 请等待"
 

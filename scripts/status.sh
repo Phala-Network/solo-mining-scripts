@@ -44,6 +44,7 @@ function phala_scripts_status_kusama() {
 }
 
 function phala_scripts_status(){
+  printf "$(phala_scripts_utils_gettext 'Getting public node block information, it may take some time...')\n"
   # echo "正在获取公共节点区块信息，可能需要一段时间..."
   trap "clear;exit" INT
 
