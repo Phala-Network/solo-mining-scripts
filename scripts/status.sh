@@ -117,26 +117,31 @@ function phala_scripts_status(){
   done
 
   clear
-  printf "\r$(phala_scripts_status_msg)\n" \
-        "${phala_scripts_version}" "${PHALA_ENV}"\
-        "${node_status}" "${khala_node_block}" "${khala_head_block}" \
-        "${node_status}" "${kusama_node_block}" "${kusama_head_block}" \
-        "${pruntime_status}" \
-        "${pherry_status}" "${blocknum}" "${headernum}" \
-        "${sync_status[0]}" "${diff[0]}" \
-        "${sync_status[1]}" "${diff[1]}" \
-        "${sync_status[2]}" "${diff[2]}" \
-        "${sync_status[3]}" "${diff[3]}" \
-        "${NODE_NAME}" \
-        "${CORES}" \
-        "${GAS_ACCOUNT_ADDRESS}" \
-        "${gas_balance}" \
-        "${OPERATOR}" \
-        "${publickey}" \
-        "${registerStatus}" \
-        "${score}" \
-        "$(phala_scripts_utils_green $(phala_scripts_utils_gettext 'registered'))" \
-        "$(date +'%F %H:%M:%S')"
+  # add alarm
+  if [ ${registered} = "true" ] && [[ ${diff[0]} -gt 200 ]];then
+    printf "\r$(phala_scripts_utils_red $(phala_scripts_utils_gettext 'abnormal node data found, please try to restart')!!!)\n"
+  else
+    printf "\r$(phala_scripts_status_msg)\n" \
+          "${phala_scripts_version}" "${PHALA_ENV}"\
+          "${node_status}" "${khala_node_block}" "${khala_head_block}" \
+          "${node_status}" "${kusama_node_block}" "${kusama_head_block}" \
+          "${pruntime_status}" \
+          "${pherry_status}" "${blocknum}" "${headernum}" \
+          "${sync_status[0]}" "${diff[0]}" \
+          "${sync_status[1]}" "${diff[1]}" \
+          "${sync_status[2]}" "${diff[2]}" \
+          "${sync_status[3]}" "${diff[3]}" \
+          "${NODE_NAME}" \
+          "${CORES}" \
+          "${GAS_ACCOUNT_ADDRESS}" \
+          "${gas_balance}" \
+          "${OPERATOR}" \
+          "${publickey}" \
+          "${registerStatus}" \
+          "${score}" \
+          "$(phala_scripts_utils_green $(phala_scripts_utils_gettext 'registered'))" \
+          "$(date +'%F %H:%M:%S')"
+  fi
 
   for seq_time in $(seq -w 60 -1 1);do
     printf "\r$(phala_scripts_utils_gettext ' -------------------------------------------  Remaining %s refresh  --------------------------------------------')" "${seq_time}s"

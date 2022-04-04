@@ -205,6 +205,9 @@ msgstr "已注册"
 msgid "Refreshing"
 msgstr "刷新中"
 
+msgid "abnormal node data found, please try to restart"
+msgstr "发现异常节点数据，请尝试重新启动"
+
 msgid "Phala Status:\n"
 "----------------------------------------- Script version %s [ %s ] --------------------------------------\n"
 "	service name		service status			local node block height\n"
