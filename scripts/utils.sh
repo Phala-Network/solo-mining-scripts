@@ -44,6 +44,7 @@ function phala_scripts_utils_setlocale() {
     US)
       export LANG="en_US.UTF-8"
       export LANGUAGE="en_US.UTF-8"
+      [ -f /etc/apt/sources.list.phala.bak ] && mv /etc/apt/sources.list.phala.bak /etc/apt/sources.list
     ;;
     *)
       export LANG="en_US.UTF-8"
