@@ -33,13 +33,28 @@ phala_scripts_dependencies_other_soft=(
 phala_pro_msg="MAINNET"
 phala_dev_msg="TESTNET"
 
+phala_scripts_utils_apt-source-cn="https://mirrors.163.com"
+phala_scripts_install_docker-compose-cn="https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
+phala_scripts_install_docker-compose="https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
+phala_scripts_install_intel-sgx-deb="https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key"
+phala_scripts_install_intel-addapt-deb="deb https://download.01.org/intel-sgx/sgx_repo/ubuntu focal main"
+phala_scripts_install_intel-old-device="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.41.bin"
+phala_scripts_install_setupnode="https://deb.nodesource.com/setup_lts.x"
+
 export phala_scripts_version \
        phala_scripts_support_system \
        phala_scripts_support_kernel \
        phala_scripts_dependencies_default_soft \
        phala_scripts_dependencies_other_soft \
        phala_pro_msg \
-       phala_dev_msg
+       phala_dev_msg \
+       phala_scripts_utils_apt-source-cn \
+       phala_scripts_install_docker-compose-cn \
+       phala_scripts_install_docker-compose \
+       phala_scripts_install_intel-sgx-deb \
+       phala_scripts_install_intel-addapt-deb \
+       phala_scripts_install_intel-old-device \
+       phala_scripts_install_setupnode
 
 phala_scripts_config_default() {
 
