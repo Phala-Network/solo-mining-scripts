@@ -138,7 +138,7 @@ function phala_scripts_check_sgxtest() {
 
 function phala_scripts_check_envf() {
   if [ ! -f "${phala_scripts_docker_envf}" ];then
-    phala_scripts_log warn "The node is not configured, start configuring the node!"
+    phala_scripts_log warn "The node is not configured. Start configuring the node!"
     phala_scripts_config_set
   fi
 }

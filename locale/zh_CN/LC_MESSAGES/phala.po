@@ -11,7 +11,7 @@ msgstr "不受支持的内核! %s"
 msgid "Please first run [ sudo %s ]!"
 msgstr "请先运行 [ sudo %s ]!"
 
-msgid "The node is not configured, start configuring the node!"
+msgid "The node is not configured. Start configuring the node!"
 msgstr "节点未配置，开始配置节点"
 
 msgid "The driver file was not found, please check the driver installation logs!"
