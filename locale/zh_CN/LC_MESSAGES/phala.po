@@ -1,0 +1,273 @@
+##########################################
+#####            check.sh            #####
+#####                                #####
+##########################################
+msgid "Unsupported system! %s"
+msgstr "不受支持的系统! %s"
+
+msgid "Unsupported Kernel! %s"
+msgstr "不受支持的内核! %s"
+
+msgid "Please first run [ sudo %s ]!"
+msgstr "请先运行 [ sudo %s ]!"
+
+msgid "The node is not configured. Start configuring the node!"
+msgstr "节点未配置，开始配置节点"
+
+msgid "The driver file was not found, please check the driver installation logs!"
+msgstr "未找到驱动文件，请检查驱动安装日志!"
+
+##########################################
+#####           install.sh           #####
+#####                                #####
+##########################################
+msgid "Apt update failed!"
+msgstr "系统源更新失败!"
+#待补充
+
+
+##########################################
+#####           update.sh            #####
+#####                                #####
+##########################################
+msgid "Update Phala images"
+msgstr "更新 phala 套件镜像"
+
+msgid "Update phala script"
+msgstr "更新 phala 脚本"
+
+msgid "Update successful"
+msgstr "更新成功"
+
+msgid "Update failed"
+msgstr "更新失败"
+
+msgid "Clean blockchain data"
+msgstr "删除节点数据"
+
+msgid "version [ %s ] is up to date"
+msgstr "[ %s ] 版本已是最新"
+
+##########################################
+#####            utils.sh            #####
+#####       phala_scripts_trap       #####
+##########################################
+msgid "\t [ %s ]\t unknown error!"
+msgstr "\t [ %s ]\t 发生未知的错误!"
+
+##########################################
+#####             log.sh             #####
+#####       phala_scripts_log        #####
+##########################################
+msgid "log type or msg not found!"
+msgstr "logtype 或 msg 为空!"
+
+##########################################
+#####           config.sh            #####
+#####                                #####
+##########################################
+msgid "Set successful"
+msgstr "设置成功"
+
+msgid "Set Language"
+msgstr "设置语言"
+
+msgid "Choices"
+msgstr "选择"
+
+msgid "%s\nTemplate file not found!"
+msgstr "%s\n模板文件未找到!"
+##########################################
+#####           config.sh            #####
+#####    phala_scripts_config_set    #####
+##########################################
+msgid "Test confidenceLevel, waiting for Intel to issue IAS remote certification report!"
+msgstr "测试信用等级，正在等待Intel下发IAS远程认证报告！"
+
+msgid "Intel IAS certification has not passed, please check your motherboard or network!"
+msgstr "Intel IAS认证没有通过，请检查你的主板或网络！"
+
+msgid "Your confidenceLevel is：%s"
+msgstr "您的信任等级是：%s"
+
+msgid "Old scripts found"
+msgstr "找到旧脚本"
+
+msgid "migrate(y/n)?"
+msgstr "是否迁移?"
+
+msgid "You will use multiple cores to mine"
+msgstr "您使用几个核心参与挖矿"
+
+msgid "Please enter an integer greater than 1 and less than %s. Your input is incorrect. Please re-enter!"
+msgstr "请输入大于1小于%s 的整数，该数据不正确，请重新输入！"
+
+msgid "Enter your node name (without spaces)"
+msgstr "请输入节点名称（不能包含空格)"
+
+msgid "The node name cannot contain spaces, please re-enter!"
+msgstr "节点名称不能包含空格，请重新输入!"
+
+msgid "Enter your gas account mnemonic"
+msgstr "输入你的GAS费账号助记词"
+
+msgid "Please enter a valid mnemonic, and it cannot be empty!"
+msgstr "请输入合法助记词,且不能为空！"
+
+msgid "You have less than 0.1 PHA in your account!"
+msgstr "账户PHA小于0.1，请重新输入！"
+
+msgid "Enter your pool owner's address"
+msgstr "输入抵押池账户地址"
+
+msgid "Please enter a valid pool owner's address, and it cannot be empty!"
+msgstr "请输入合法抵押池账户地址，且不能为空！"
+
+##########################################
+#####             main.sh            #####
+#####       phala_scripts_help       #####
+##########################################
+msgid "Usage:\n"
+"	phala [OPTION]...\n"
+"\n"
+"Options:\n"
+"	help					display help information\n"
+"	install					install your phala node\n"
+"	uninstall				uninstall your phala scripts\n"
+"	start					start mining\n"
+"		<node | pruntime | pherry>\n"
+"	stop					stop mining\n"
+"		<node | pruntime | pherry>\n"
+"	config\n"
+"		<show>				display all configuration of your node\n"
+"		<testnet | locale>\n"
+"	status					display the running status of all components\n"
+"	update					update all containers without cleaning up the data\n"
+"		<clean>				update all containers, and clean up the data\n"
+"		<script>			update the script\n"
+"	logs					print all container logs information\n"
+"		<node | pruntime | pherry>\n"
+"		<clean>				clean log\n"
+"	sgx-test				start the mining test program\n"
+"	version					display script version\n"
+msgstr "Usage:\n"
+"	phala [OPTION]...\n"
+"\n"
+"Options:\n"
+"	help					展示帮助信息\n"
+"	install					安装Phala挖矿套件\n"
+"	uninstall				卸载phala脚本\n"
+"	start					启动挖矿(debug参数允许输出挖矿套件日志信息)\n"
+"		<node | pruntime | pherry>\n"
+"	stop					停止挖矿程序\n"
+"		<node | pruntime | pherry>\n"
+"	config					配置\n"
+"		<show>				查看配置信息（直接看到配置文件所有信息）\n"
+"		<testnet | locale>\n"
+"	status					查看挖矿套件运行状态\n"
+"	update					不清理容器数据，更新容器\n"
+"		<clean>				清理容器数据，更新容器\n"
+"		<script>			更新脚本\n"
+"	logs					打印所有容器日志信息\n"
+"		<clean>				清理日志\n"
+"		<node | pruntime | pherry>\n"
+"	sgx-test				运行挖矿测试程序\n"
+"	version					打印脚本版本\n"
+
+##########################################
+#####          status.sh             #####
+#####     phala_scripts_status       #####
+##########################################
+msgid "Getting the block info from a public node. It may take some time..."
+msgstr "正在获取公共节点区块信息，可能需要一段时间..."
+
+msgid "Synchronizing, please wait"
+msgstr "同步中, 请等待"
+
+msgid "Synchronization completed"
+msgstr "同步完成"
+
+msgid "Not registered, please wait for the synchronization to complete"
+msgstr "未注册，请等待同步完成"
+
+msgid "Registered, you can use the miner’s public key to add a miner"
+msgstr "已注册，可以使用矿工公钥添加矿机"
+
+msgid "Waiting for the miner to be registered"
+msgstr "等待矿机注册中"
+
+msgid "Insufficient balance!"
+msgstr "余额不足!"
+
+msgid "registered"
+msgstr "已注册"
+
+msgid "Refreshing"
+msgstr "刷新中"
+
+msgid "abnormal node data found, please try to restart"
+msgstr "发现异常节点数据，请尝试重新启动"
+
+msgid "Phala Status:\n"
+"----------------------------------------- Script version %s [ %s ] --------------------------------------\n"
+"	service name		service status			local node block height\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"	khala-node			%s				%s / %s\n"
+"	kusama-node			%s				%s / %s\n"
+"	phala-pruntime			%s\n"
+"	phala-pherry			%s				khala %s / kusama %s\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"	Status check							result\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"	khala chain synchronization status		%s, difference is %s\n"
+"	kusama chain synchronization status		%s, difference is %s\n"
+"	pherry synchronizes khala chain status		%s, difference is %s\n"
+"	pherry syncs kusama chain status  		%s, difference is %s\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"	account information		content\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"	node name           		%s\n"
+"	cores     			%s\n"
+"	GAS account address      	%s\n"
+"	GAS account balance      	%s\n"
+"	stake pool account address	%s\n"
+"	miner/worker public key 	%s\n"
+"	miner registration status	%s\n"
+"	miner score			%s\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"Please wait for the miner registration status to change to %s before proceeding on-chain operations\n"
+"If the chain synchronization is completed, but the pherry height is empty, please enter the group and ask\n"
+"----------------------------------- last refresh time [ %s ] ------------------------------------"
+msgstr "Phala 状态:\n"
+"---------------------------------------- 脚本版本 %s [ %s ] ---------------------------------------------\n"
+"        服务名称                服务状态                本地节点区块高度\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"        khala-node              %s                      %s / %s\n"
+"        kusama-node             %s                      %s / %s\n"
+"        phala-pruntime          %s\n"
+"        phala-pherry            %s                      khala %s / kusama %s\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"        状态检查                        结果\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"        khala链同步状态                 %s, 差值为 %s\n"
+"        kusama链同步状态                %s, 差值为 %s\n"
+"        pherry同步khala链状态           %s, 差值为 %s\n"
+"        pherry同步kusama链状态          %s, 差值为 %s\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"        账户信息                        内容\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"        节点名称                        %s\n"
+"        计算机使用核心                  %s\n"
+"        GAS费账户地址                   %s\n"
+"        GAS费账户余额                   %s\n"
+"        抵押池账户地址                  %s\n"
+"        矿工公钥                        %s\n"
+"        矿工注册状态                    %s\n"
+"        矿工评分                        %s\n"
+"------------------------------------------------------------------------------------------------------------------\n"
+"------------------------------- 请等待矿工注册状态变为「%s」再进行链上操作 -----------------------------------\n"
+"-------------------------------  如果链同步完成，但pherry高度为空，请进群询问 ------------------------------------\n"
+"------------------------------------  上次更新时间 [ %s ] ---------------------------------------"
+msgid " -------------------------------------------  Remaining %s refresh  --------------------------------------------"
+msgstr " ----------------------------------------------  剩余 %s 刷新 --------------------------------------------------"
+
