@@ -334,14 +334,16 @@ function phala_scripts_config_set() {
   if [ -d /var/khala-dev-node ] && [ -d /var/khala-pruntime-data ] && [ ! -L /var/khala-dev-node ] && [ ! -L /var/khala-pruntime-data ] && [ "${_phala_env}" != "${phala_dev_msg}" ];then
     phala_scripts_log info "Old scripts found"
     phala_scripts_config_set_migrate="y"
-    phala_scripts_config_set_migrate=$(phala_scripts_utils_read "migrate(y/n)?"  "${phala_scripts_config_set_migrate}"| tr A-Z a-z)
-    while true;do
-      if [ "${phala_scripts_config_set_migrate}" == "y" ] || [ "${phala_scripts_config_set_migrate}" == "n" ];then
-        break
-      else
-        :
-      fi
-    done
+    # modify old scripts auto migrate
+    # phala_scripts_config_set_migrate=$(phala_scripts_utils_read "migrate(y/n)?"  "${phala_scripts_config_set_migrate}"| tr A-Z a-z)
+    # while true;do
+    #   if [ "${phala_scripts_config_set_migrate}" == "y" ] || [ "${phala_scripts_config_set_migrate}" == "n" ];then
+    #     break
+    #   else
+    #     phala_scripts_config_set_migrate="y"
+    #     phala_scripts_config_set_migrate=$(phala_scripts_utils_read "migrate(y/n)?"  "${phala_scripts_config_set_migrate}"| tr A-Z a-z)
+    #   fi
+    # done
   fi
 
   # set custom datadir
