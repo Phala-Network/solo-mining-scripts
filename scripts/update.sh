@@ -5,10 +5,10 @@ function phala_scripts_update_container() {
   phala_scripts_config_dockeryml
   local _container_name=$(awk -F':' '/container_name/ {print $NF}' ${phala_scripts_docker_ymlf} 2>/dev/null|grep "\-${1}$")
   if [ -z "$1" ];then
-    phala_scripts_log info "Update phala images" cut
+    phala_scripts_log info "Update Phala images" cut
     phala_scripts_utils_docker pull
   elif [ ! -z "${_container_name}" ];then
-    phala_scripts_log info "Update phala images" cut
+    phala_scripts_log info "Update Phala images" cut
     phala_scripts_utils_docker pull ${_container_name}
   else
     phala_scripts_help
@@ -16,7 +16,7 @@ function phala_scripts_update_container() {
   fi
 #   phala_scripts_stop_container $*
   phala_scripts_start $*
-  phala_scripts_log info "Update success" cut
+  phala_scripts_log info "Update successful" cut
 }
 
 function phala_scripts_update_script() {
@@ -38,13 +38,13 @@ function phala_scripts_update_script() {
   curl -fsSL ${phala_scripts_update_url} -o ${_download_file_path} && {
     unzip -oq ${_download_file_path} -d ${_update_tmp_dir}
   } || {
-    phala_scripts_log error "Update Fail" cut
+    phala_scripts_log error "Update failed" cut
   }
   local _get_update_dir=$(find ${_update_tmp_dir} -maxdepth 1 -type d |sed 1d)
   chattr -i -R ${phala_scripts_temp_dir}
   cp -arf ${_get_update_dir}/* ${phala_scripts_dir}
   chattr +i -R ${phala_scripts_temp_dir}
-  phala_scripts_log info "Update success" cut
+  phala_scripts_log info "Update successful" cut
 
   # rm -rf ${phala_scripts_tmp_dir}/update_phala-main.zip ${_update_tmp_dir}
   
@@ -57,7 +57,7 @@ function phala_scripts_update() {
     ;;
     clean)
       phala_scripts_stop_container
-      phala_scripts_log info "Clean data" cut
+      phala_scripts_log info "Clean blockchain data" cut
       rm -rf ${khala_data_path_default} ${khala_data_path_default}_dev
       phala_scripts_update_container
     ;;

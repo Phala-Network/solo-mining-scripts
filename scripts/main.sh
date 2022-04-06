@@ -25,8 +25,8 @@ phala_scripts_utils_gettext "Usage:\n"\
 "		<show>				display all configuration of your node\n"\
 "		<testnet | locale>\n"\
 "	status					display the running status of all components\n"\
-"	update					update all container,and don't clean up the container data\n"\
-"		<clean>				update all container,and clean up the container data\n"\
+"	update					update all containers without cleaning up the data\n"\
+"		<clean>				update all containers, and clean up the data\n"\
 "		<script>			update the script\n"\
 "	logs					print all container logs information\n"\
 "		<node | pruntime | pherry>\n"\

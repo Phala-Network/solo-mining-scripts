@@ -44,7 +44,7 @@ function phala_scripts_status_kusama() {
 }
 
 function phala_scripts_status(){
-  printf "$(phala_scripts_utils_gettext 'Getting public node block information, it may take some time...')\n"
+  printf "$(phala_scripts_utils_gettext 'Getting the block info from a public node. It may take some time...')\n"
   # echo "正在获取公共节点区块信息，可能需要一段时间..."
   trap "clear;exit" INT
 
@@ -96,7 +96,7 @@ function phala_scripts_status(){
     registerStatus=$(phala_scripts_utils_gettext "Registered, you can use the miner’s public key to add a miner")
   else
     registerStatus=$(phala_scripts_utils_gettext "Not registered, please wait for the synchronization to complete")
-    publickey=$(phala_scripts_utils_gettext "Waiting for the miner to register")
+    publickey=$(phala_scripts_utils_gettext "Waiting for the miner to be registered")
   fi
 
   SYNCED=$(phala_scripts_utils_green $(phala_scripts_utils_gettext "Synchronization completed"))
