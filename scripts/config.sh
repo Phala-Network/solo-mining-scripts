@@ -151,7 +151,7 @@ function phala_scripts_config_show() {
 function phala_scripts_config_set_nodename() {
   # set nodename
   while true ; do
-    local _node_name=$(phala_scripts_utils_read "Enter your node name(not contain spaces)")
+    local _node_name=$(phala_scripts_utils_read "Enter your node name (without spaces)")
     if [[ "${_node_name}" =~ \ |\' ]]; then
       phala_scripts_log warn "The node name cannot contain spaces, please re-enter!" cut
     else
@@ -274,14 +274,14 @@ function phala_scripts_config_set() {
   local _cpu_sockets=$(awk -F ':' '/^siblings/ {print $NF+0;exit}' /proc/cpuinfo)
   local _my_cpu_core_number=$((${_cpu_s}*${_cpu_sockets}))
   while true ; do
-    local _cores=$(phala_scripts_utils_read "You use several cores to participate in mining")
+    local _cores=$(phala_scripts_utils_read "You will use multiple cores to mine")
     expr ${_cores} + 0 > /dev/null 2>&1
     if [ $? -eq 0 ] && [ $_cores -ge 1 ] && [ $_cores -le ${_my_cpu_core_number} ]; then
       export phala_scripts_config_input_cores=${_cores}
       break
     else
       _phala_scripts_utils_printf_value=${_my_cpu_core_number}
-      phala_scripts_log warn "Please enter an integer greater than 1 and less than %s, and your enter is incorrect, please re-enter!"  cut
+      phala_scripts_log warn "Please enter an integer greater than 1 and less than %s. Your input is incorrect. Please re-enter!"  cut
     fi
   done
 
@@ -299,7 +299,7 @@ function phala_scripts_config_set() {
   while true ; do
     _mnemonic=$(phala_scripts_utils_read "Enter your gas account mnemonic")
     if [ -z "${_mnemonic}" ] || [ "$(node ${phala_scripts_tools_dir}/console.js utils verify "$_mnemonic")" == "Cannot decode the input" ]; then
-      phala_scripts_log warn "Please enter a legal mnemonic, and it cannot be empty!" cut
+      phala_scripts_log warn "Please enter a valid mnemonic, and it cannot be empty!" cut
     else
       _gas_adress=$(node ${phala_scripts_tools_dir}/console.js utils verify "$_mnemonic")
       _balance=$(node  ${phala_scripts_tools_dir}/console.js --substrate-ws-endpoint "${phala_scripts_public_ws}" chain free-balance $_gas_adress 2>&1)
@@ -311,7 +311,7 @@ function phala_scripts_config_set() {
         export phala_scripts_config_gas_account_address=${_gas_adress}
         break
       else
-        phala_scripts_log warn "Account PHA is less than 0.1!" cut
+        phala_scripts_log warn "You have less than 0.1 PHA in your account!" cut
       fi
     fi
   done
@@ -319,9 +319,9 @@ function phala_scripts_config_set() {
   # set operator
   local _pool_addr=""
   while true ; do
-    local _pool_addr=$(phala_scripts_utils_read "Enter your pool address")
+    local _pool_addr=$(phala_scripts_utils_read "Enter your pool owner's address")
     if [ -z "${_pool_addr}" ] || [ "$(node ${phala_scripts_tools_dir}/console.js utils verify "$_pool_addr")" == "Cannot decode the input" ]; then
-      phala_scripts_log warn "Please enter a legal pool address, and it cannot be empty!"
+      phala_scripts_log warn "Please enter a valid pool owner's address, and it cannot be empty!"
     else
       export phala_scripts_config_input_operator=${_pool_addr}
       break
@@ -398,7 +398,7 @@ function phala_scripts_config_set() {
   phala_scripts_start
   
   # print sucess
-  phala_scripts_log info "Set successed" cut
+  phala_scripts_log info "Set successful" cut
 
 }
 

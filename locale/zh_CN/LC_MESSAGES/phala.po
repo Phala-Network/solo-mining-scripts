@@ -59,14 +59,14 @@ msgstr "\t [ %s ]\t 发生未知的错误!"
 #####             log.sh             #####
 #####       phala_scripts_log        #####
 ##########################################
-msgid "log type or msg not found!!!"
-msgstr "logtype 或 msg 为空!!!"
+msgid "log type or msg not found!"
+msgstr "logtype 或 msg 为空!"
 
 ##########################################
 #####           config.sh            #####
 #####                                #####
 ##########################################
-msgid "Set successed"
+msgid "Set successful"
 msgstr "设置成功"
 
 msgid "Set Language"
@@ -85,7 +85,7 @@ msgid "Test confidenceLevel, waiting for Intel to issue IAS remote certification
 msgstr "测试信用等级，正在等待Intel下发IAS远程认证报告！"
 
 msgid "Intel IAS certification has not passed, please check your motherboard or network!"
-msgstr "Intel IAS认证没有通过，请检查您的主板或网络！"
+msgstr "Intel IAS认证没有通过，请检查你的主板或网络！"
 
 msgid "Your confidenceLevel is：%s"
 msgstr "您的信任等级是：%s"
@@ -96,13 +96,13 @@ msgstr "找到旧脚本"
 msgid "migrate(y/n)?"
 msgstr "是否迁移?"
 
-msgid "You use several cores to participate in mining"
+msgid "You will use multiple cores to mine"
 msgstr "您使用几个核心参与挖矿"
 
-msgid "Please enter an integer greater than 1 and less than %s, and your enter is incorrect, please re-enter!"
+msgid "Please enter an integer greater than 1 and less than %s. Your input is incorrect. Please re-enter!"
 msgstr "请输入大于1小于%s 的整数，该数据不正确，请重新输入！"
 
-msgid "Enter your node name(not contain spaces)"
+msgid "Enter your node name (without spaces)"
 msgstr "请输入节点名称（不能包含空格)"
 
 msgid "The node name cannot contain spaces, please re-enter!"
@@ -111,16 +111,16 @@ msgstr "节点名称不能包含空格，请重新输入!"
 msgid "Enter your gas account mnemonic"
 msgstr "输入你的GAS费账号助记词"
 
-msgid "Please enter a legal mnemonic, and it cannot be empty!"
+msgid "Please enter a valid mnemonic, and it cannot be empty!"
 msgstr "请输入合法助记词,且不能为空！"
 
-msgid "Account PHA is less than 0.1!"
+msgid "You have less than 0.1 PHA in your account!"
 msgstr "账户PHA小于0.1，请重新输入！"
 
-msgid "Enter your pool address"
+msgid "Enter your pool owner's address"
 msgstr "输入抵押池账户地址"
 
-msgid "Please enter a legal pool address, and it cannot be empty!"
+msgid "Please enter a valid pool owner's address, and it cannot be empty!"
 msgstr "请输入合法抵押池账户地址，且不能为空！"
 
 ##########################################

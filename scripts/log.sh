@@ -17,7 +17,7 @@ function phala_scripts_log() {
 
   local datetime=$(date +'%F %H:%M:%S')
   if [ -z "$1" ] && [ -z "$2" ] ;then
-    phala_scripts_utils_red "[$datetime]\t" $(phala_scripts_utils_gettext 'log type or msg not found!!!')
+    phala_scripts_utils_red "[$datetime]\t" $(phala_scripts_utils_gettext 'log type or msg not found!')
     return 1
   fi
     
