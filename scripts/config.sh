@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-phala_scripts_version=v0.2.0
-# phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip"
-phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/v2.zip"
+phala_scripts_version=v0.2.1
+phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip"
+# phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/v2.zip"
 
 phala_scripts_support_system=(
   "Ubuntu 18.04"
@@ -12,6 +12,7 @@ phala_scripts_support_system=(
 phala_scripts_support_kernel=(
   "4.15"
   "5.4"
+  "5.8"
   "5.11"
   "5.13"
 )
@@ -357,6 +358,11 @@ function phala_scripts_config_set() {
     khala_data_path_default="${khala_data_path_default%/}"
     # add old scripts migrate
     if [ "${phala_scripts_config_set_migrate}" == "y" ];then
+      if [ -f /opt/phala/docker-compose.yml ];then
+        cd /opt/phala
+        docker-compose stop
+        docker-compose rm -f
+      fi
       phala_scripts_log info "migrate [ /var/khala-dev-node ] to [ ${khala_data_path_default}/node-data ]"
       mv /var/khala-dev-node ${khala_data_path_default}/node-data
       phala_scripts_log info "migrate [ /var/khala-pruntime-data ] to [ ${khala_data_path_default}/pruntime-data ]"
