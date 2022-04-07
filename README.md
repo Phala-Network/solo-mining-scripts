@@ -11,18 +11,6 @@ EN | [中文](./README.cn.md)
   Phala Mining Script
 </h1>
 
-<p align="left">
-    <img alt="Phala Network" src="https://user-images.githubusercontent.com/37558304/145892648-bc3562f8-47e0-4cc9-a8a1-05b1ee8baab1.png" width="45">
-    <b class="heading">Ubuntu 21.10</b> <sub> early beta GUI setup [v0.01]</sub>
-  </a>
-</p>
-
-```bash
-wget -O - https://raw.githubusercontent.com/Phala-Network/solo-mining-scripts/improvement-test/gui.sh | bash
-```
-
-<sub> Single command installation. Use the [manual installation guide](#manual-installation) below if issues occur. Requires [whiptail](https://manpages.ubuntu.com/manpages/impish/man1/whiptail.1.html) (standard package).</sub>
-
 ## Navigate
 - [Before Getting Started](#before-getting-started)
   - [BIOS & SGX](#bios-settings)
@@ -184,13 +172,6 @@ sudo phala start pruntime
 sudo phala start pherry
 ```
 
-- Use debug parameter to output command logs
-```bash
-sudo phala start node debug
-sudo phala start pruntime debug
-sudo phala start pherry debug
-```
-
 ##### Stop Docker Separately
 ```bash
 sudo phala stop node
@@ -309,47 +290,6 @@ sudo phala start pruntime
 ```bash
 sudo phala start pherry
 ```
-
-##### Advanced Troubleshooting
-
-In some cases, it might be beter to reinstall the mining script. 
-To do this, first uninstall the script: 
-
-```bash
-sudo phala uninstall
-```
-
-Delete the mining script repository (if still on your machine) by executing: 
-
-```bash
-rm -rf $HOME/solo-mining-scripts-main
-```
-
-Now you may reinstall the mining script.
-
-```bash
-sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
-sudo apt install wget unzip
-cd ~
-```
-
-```bash
-wget https://github.com/Phala-Network/solo-mining-scripts/archive/refs/heads/main.zip
-unzip main.zip
-rm -r main.zip #cleaning up the installation
-cd solo-mining-scripts-main/ #note this depends on your current directory
-chmod +x install.sh
-sudo ./install.sh en
-```
-
-You may now restart your node.
-
-```bash
-sudo phala start
-``` 
-
-<h1 align="center">
-</h1>
 
 ##### Peer Connectivity
 
