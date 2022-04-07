@@ -363,6 +363,7 @@ function phala_scripts_config_set() {
         docker-compose stop
         docker-compose rm -f
       fi
+      [ -d ${khala_data_path_default} ] || mkdir -p ${khala_data_path_default}
       phala_scripts_log info "migrate [ /var/khala-dev-node ] to [ ${khala_data_path_default}/node-data ]"
       mv /var/khala-dev-node ${khala_data_path_default}/node-data
       phala_scripts_log info "migrate [ /var/khala-pruntime-data ] to [ ${khala_data_path_default}/pruntime-data ]"
