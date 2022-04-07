@@ -88,8 +88,7 @@ Go to the **Phala** folder
 
 ```bash
 cd solo-mining-scripts-main/ #note this depends on your current directory
-chmod +x install.sh
-sudo ./install.sh en
+sudo ./phala.sh install
 ```
 
 -   #### Check if Mainboard is Supported
