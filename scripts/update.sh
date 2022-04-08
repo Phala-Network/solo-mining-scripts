@@ -21,7 +21,7 @@ function phala_scripts_update_container() {
 
 function phala_scripts_update_script() {
   type dig >/dev/null 2>&1 || apt install -y dnsutils
-  local _update_txt_domain=""
+  local _update_txt_domain="solo-mining-version.phala.network"
   local _get_new_vesion="$(dig txt ${_update_txt_domain} +short | sed 's#"##g')"
   if [ "${_get_new_vesion}" == "${phala_scripts_version}" ] && [ "$1" != "now" ];then
     _phala_scripts_utils_printf_value=${phala_scripts_version}
