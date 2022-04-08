@@ -145,7 +145,15 @@ function phala_scripts_install_sgx_k5_4(){
   [ -f ${phala_scripts_tools_dir}/sgx_linux_x64_driver_1.41.bin ] || {
     # curl -fsSL https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.41.bin -o ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_1.41.bin && \
     curl -fsSL ${phala_scripts_install_intel_old_device} -o ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_1.41.bin && \
-    mv ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_1.41.bin ${phala_scripts_tools_dir}/
+    mv ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_1.41.bin ${phala_scripts_tools_dir}/ 
   }
-  bash ${phala_scripts_tools_dir}/sgx_linux_x64_driver_1.41.bin
+  bash ${phala_scripts_tools_dir}/sgx_linux_x64_driver_1.41.bin || {
+    # curl -fsSL https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin -o ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_2.11.0_2d2b795.bin && \
+    [ -f ${phala_scripts_tools_dir}/sgx_linux_x64_driver_2.11.0_2d2b795.bin ] || {
+      curl -fsSL ${phala_scripts_install_intel_old_device_2_11} -o ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_2.11.0_2d2b795.bin && \
+      mv ${phala_scripts_tmp_dir}/sgx_linux_x64_driver_2.11.0_2d2b795.bin ${phala_scripts_tools_dir}/
+    }
+    bash ${phala_scripts_tools_dir}/sgx_linux_x64_driver_2.11.0_2d2b795.bin
+  }
+
 }
