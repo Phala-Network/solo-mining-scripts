@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-phala_scripts_version=v0.2.2
+phala_scripts_version=v0.2.3
 phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip"
 # phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/v2.zip"
 
@@ -40,7 +40,8 @@ phala_scripts_install_docker_compose="https://github.com/docker/compose/releases
 phala_scripts_install_intel_sgx_deb="https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key"
 phala_scripts_install_intel_addapt_deb="deb https://download.01.org/intel-sgx/sgx_repo/ubuntu focal main"
 phala_scripts_install_intel_old_device="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_1.41.bin"
-phala_scripts_install_intel_old_device_2_11="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin"
+# phala_scripts_install_intel_old_device_2_11="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin"
+phala_scripts_install_intel_old_device_2_11="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.054c9c4c.bin"
 phala_scripts_install_setupnode="https://deb.nodesource.com/setup_lts.x"
 
 export phala_scripts_version \
