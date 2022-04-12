@@ -67,7 +67,7 @@ function phala_scripts_status(){
   local kusama_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9934 | jq '.result.currentBlock')
 
   local get_info=$(curl -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info -X POST)
-  local publickey=$(echo $get_info | jq -r '.payload|fromjson.public_key')
+  local publickey=$(echo $get_info | jq -r '.payload|fromjson.public_key'|sed 's/\"//g' | sed 's/^/0x/')
   local registered=$(echo $get_info | jq -r '.payload|fromjson.registered')
   local blocknum=$(echo $get_info | jq -r '.payload|fromjson.blocknum')
   local headernum=$(echo $get_info | jq -r '.payload|fromjson.headernum')
