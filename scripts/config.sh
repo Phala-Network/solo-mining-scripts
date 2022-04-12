@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-phala_scripts_version=v0.2.3
+phala_scripts_version=v0.2.4
 phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip"
 # phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/v2.zip"
 
