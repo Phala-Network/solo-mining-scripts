@@ -72,7 +72,9 @@ function phala_scripts_check_sgxdevice() {
   _sgx_libsgx_encalve=$(awk '/libsgx_enclave_common/ {print $1}' ${_sgx_msg_file})
   [ "${DISTRIB_RELEASE}" == "18.04" ] && _sgx_libsgx_encalve=yes
   _sgx_msg_device_path=$(awk -F "[()]" '/SGX kernel device/ {print $2}' ${_sgx_msg_file})
-  _sgx_error_help=$(awk '!/AESM service/ {print}' ${_sgx_msg_file} | awk -F':' '/^help/ {print $1}'|wc -l )
+  #_sgx_error_help=$(awk '!/AESM service/ {print}' ${_sgx_msg_file} | awk -F':' '/^help/ {print $1}'|wc -l )
+  # skip isgx_flc
+  _sgx_error_help=$(awk '!/AESM service/ {print}' ${_sgx_msg_file} |awk '!/> CPU configuration/{print}' | awk '!/> Production mode/{print}' | awk -F':' '/^help/{print $1}'|wc -l )
 
   # 'help: SGX system software > Able to launch enclaves > Debug mode' error msg
   # _sgx_launch_enclaves=$(awk '/Able to launch enclaves/ {print $1}' ${_sgx_msg_file})
@@ -108,7 +110,9 @@ function phala_scripts_check_sgxdevice() {
   ${phala_scripts_tools_dir}/sgx-detect > ${_sgx_msg_file}
   _sgx_msg_device_path=$(awk -F "[()]" '/SGX kernel device/ {print $2}' ${_sgx_msg_file})
   # _sgx_error_help=$(awk -F':' '/SGX system software >/ {print $1}' ${_sgx_msg_file})
-  _sgx_error_help=$(awk '!/AESM service/ {print}' ${_sgx_msg_file} | awk -F':' '/^help/ {print $1}'|wc -l )
+  #_sgx_error_help=$(awk '!/AESM service/ {print}' ${_sgx_msg_file} | awk -F':' '/^help/ {print $1}'|wc -l )
+  # skip isgx_flc
+  _sgx_error_help=$(awk '!/AESM service/ {print}' ${_sgx_msg_file} |awk '!/> CPU configuration/{print}' | awk '!/> Production mode/{print}' | awk -F':' '/^help/{print $1}'|wc -l)
   # if [ ! -z "${_sgx_msg_device_path}" ];then
   if [ -z "${_sgx_msg_device_path}" ] || [ ${_sgx_error_help} -ne 0 ];then
     phala_scripts_log warn "\t RUN [ ${phala_scripts_tools_dir}/sgx-detect ]"
