@@ -377,7 +377,7 @@ rm -rf /var/khala-dev-node/chains/khala
 To delete the Kusama blockchain , run:
 
 ```bash
-rm -rf /var/khala-dev-node/chains/polkadot
+rm -rf /var/khala-dev-node/polkadot
 ```
 
 Now [restart your node](#troubleshooting).
