@@ -209,7 +209,12 @@ elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.04" ]; then
 	dcap_driverbin=$(awk -F '/' 'NR==12 {print $NF}' $installdir/.env)
 	isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
 	isgx_driverbin=$(awk -F '/' 'NR==14 {print $NF}' $installdir/.env)
-	elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.10" ]; then
+elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "21.10" ]; then
+	dcap_driverurl=$(awk -F '=' 'NR==12 {print $2}' $installdir/.env)
+	dcap_driverbin=$(awk -F '/' 'NR==12 {print $NF}' $installdir/.env)
+	isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
+	isgx_driverbin=$(awk -F '/' 'NR==14 {print $NF}' $installdir/.env)
+elif [ $(lsb_release -r | grep -o "[0-9]*\.[0-9]*") = "22.04" ]; then
 	dcap_driverurl=$(awk -F '=' 'NR==12 {print $2}' $installdir/.env)
 	dcap_driverbin=$(awk -F '/' 'NR==12 {print $NF}' $installdir/.env)
 	isgx_driverurl=$(awk -F '=' 'NR==14 {print $2}' $installdir/.env)
