@@ -1,0 +1,72 @@
+version: "3"
+services:
+ phala-node:
+   image: ${NODE_IMAGE}
+   container_name: phala-node
+   hostname: phala-node
+   ports:
+    - "9933:9933"
+    - "9934:9934"
+    - "9944:9944"
+    - "9945:9945"
+    - "30333:30333"
+    - "30334:30334"
+   environment:
+    - NODE_NAME=${NODE_NAME}
+    - NODE_ROLE=ARCHIVE
+    - PARACHAIN_EXTRA_ARGS=--rpc-methods Unsafe --state-cache-size 0 --max-runtime-instances 16
+    - RELAYCHAIN_EXTRA_ARGS=--rpc-external --rpc-methods Unsafe --pruning 648000 --max-runtime-instances 16
+   volumes:
+    - ${NODE_VOLUMES}
+
+ phala-headers-cache:
+   image: ${HEADERS_IMAGE}
+   container_name: phala-headers-cache
+   hostname: phala-headers-cache
+   ports:
+    - "8002:8002"
+   environment:
+    - ROCKET_PORT=8002
+    - ROCKET_ADDRESS=0.0.0.0
+   volumes:
+    - ${HEADERS_VOLUMES}
+   entrypoint:
+    - "/root/headers-cache"
+    - "serve"
+
+ phala-pruntime:
+   image: ${PRUNTIME_IMAGE}
+   container_name: phala-pruntime
+   hostname: phala-pruntime
+   ports:
+    - "8000:8000"
+   devices:phala_template_ymlvalue
+   environment:
+    - EXTRA_OPTS=--cores=${CORES}
+    - ROCKET_ADDRESS=0.0.0.0
+   volumes:
+    - ${PRUNTIME_VOLUMES}
+
+ phala-pherry:
+   image: ${PHERRY_IMAGE}
+   container_name: phala-pherry
+   hostname: phala-pherry
+   depends_on:
+    - phala-node
+    - phala-headers-cache
+    - phala-pruntime
+   restart: always
+   entrypoint:
+    [
+      "/root/pherry",
+      "-r",
+      "--parachain",
+      "--mnemonic=${MNEMONIC}",
+      "--substrate-ws-endpoint=ws://phala-node:9945",
+      "--collator-ws-endpoint=ws://phala-node:9944",
+      "--headers-cache-uri=http://phala-headers-cache:8002",
+      "--pruntime-endpoint=http://phala-pruntime:8000",
+      "--operator=${OPERATOR}",
+      "--fetch-blocks=512",
+      "--auto-restart"
+    ]

@@ -61,6 +61,9 @@ function phala_scripts_update() {
       rm -rf ${khala_data_path_default} ${khala_data_path_default}_dev
       phala_scripts_update_container
     ;;
+    headers)
+      phala_scripts_headers
+    ;;
     *)
       phala_scripts_update_container $*
     ;;
