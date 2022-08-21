@@ -296,17 +296,17 @@ function phala_scripts_config_set() {
   if [ "${PHALA_MODEL}" == "PRUNE" ];then
     if [ ${_full_model} -eq 0 ];then
       _phala_scripts_utils_printf_value=${khala_data_path_default}/node-data/polkadot
-      phala_scripts_log warn "首次切换PRUNE 需要删除数据 %s" cut
-      local _del_yn=$(phala_scripts_utils_read "是否继续 ( y/n )"|tr a-z A-Z)
+      phala_scripts_log warn "Must delete Kusama database when switch to prune mode %s" cut
+      local _del_yn=$(phala_scripts_utils_read "Continue? (y/n)"|tr a-z A-Z)
       if [ ${_del_yn} == "Y" ];then
         phala_scripts_stop_container node
         _phala_scripts_utils_printf_value=${khala_data_path_default}/node-data/polkadot
-        phala_scripts_log warn "%s 删除中"
+        phala_scripts_log warn "%s Deleting"
         rm -rf ${khala_data_path_default}/node-data/polkadot
         _phala_scripts_utils_printf_value=${khala_data_path_default}/node-data/polkadot
-        phala_scripts_log info "%s 文件已删除"
+        phala_scripts_log info "%s Kusama database have deleted"
       else
-        phala_scripts_log info "用户取消切换，模式恢复为FULL模式"
+        phala_scripts_log info "Cancled, switch to full mode"
         export PHALA_MODEL=FULL
       fi
     fi
@@ -459,7 +459,7 @@ function phala_scripts_config_set() {
   # add model message
   if [ "${PHALA_MODEL}" == "PRUNE" ];then
     _phala_scripts_utils_printf_value="sudo phala update headers"
-    phala_scripts_log info "如果是首次运行prune模式，请手工执行 [ %s ] 进行同步" cut
+    phala_scripts_log info "This is first time to run prune mode, run  [ %s ]  First." cut
   fi
 
 }

@@ -29,7 +29,7 @@ phala_scripts_utils_gettext "Usage:\n"\
 "	update					update all containers without cleaning up the data\n"\
 "		<clean>				update all containers, and clean up the data\n"\
 "		<script>			update the script\n"\
-"   <headers>     下载headers\n"\
+"		<headers>			download headers\n"\
 "	logs					print all container logs information\n"\
 "		<node | pruntime | pherry>\n"\
 "		<clean>				clean log\n"\
