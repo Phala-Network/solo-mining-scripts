@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 function phala_scripts_headers_get() {
-  phala_scripts_log info "Download header filelist" cut
+  phala_scripts_log info "Download the header file index" cut
   local _headers_get_path=${HEADERS_VOLUMES%:*}
   set +e
   local _headers_get_uri=($(curl --connect-timeout 10 -sSLf ${phala_scripts_headers_geturl}));res_status=$?
   set -e
   if [ ${res_status} -ne 0 ];then
     _phala_scripts_utils_printf_value=${phala_scripts_headers_geturl}
-    phala_scripts_log error "%s \nDownload header filelist failed, check your network connecting." cut
+    phala_scripts_log error "%s \nFailed to download the header index. Please check your network connection." cut
   fi
   for uri in ${_headers_get_uri[@]}
   do
@@ -19,7 +19,7 @@ function phala_scripts_headers_get() {
     if [ -f ${_headers_get_path}/${fname} ];then
       if [ "${fmd5}" == "$(md5sum ${_headers_get_path}/${fname}|awk '{print $1}')" ];then
         _phala_scripts_utils_printf_value=${_headers_get_path}/${fname}
-        phala_scripts_log info "find %s, checked."
+        phala_scripts_log info "Found %s. Check passed."
         continue
       else
         rm -rf ${_headers_get_path}/${fname}
@@ -30,20 +30,20 @@ function phala_scripts_headers_get() {
     set -e
     if [ ${res_status} -ne 0 ];then
       _phala_scripts_utils_printf_value=${phala_scripts_headers_gethost}/${findex}
-      phala_scripts_log error "%s Download header files failed, check your network connecting."
+      phala_scripts_log error "%s Failed to download the header file. Please check your network connection."
     fi
     if [ "${fmd5}" != "$(md5sum ${_headers_get_path}/${fname}|awk '{print $1}')" ];then
       _phala_scripts_utils_printf_value="${phala_scripts_headers_gethost}/${findex}\n${_headers_get_path}/${fname}\n${fmd5}"
-      phala_scripts_log error "%s Check header files failed, run manually."
+      phala_scripts_log error "%s Header file checksum failed. Please run manually."
     else
       _phala_scripts_utils_printf_value=${_headers_get_path}/${fname}
-      phala_scripts_log info "%s Download success, Checked."
+      phala_scripts_log info "%s Download succeeded. Check passed."
     fi
   done
 }
 
 function phala_scripts_headers_import() {
-  phala_scripts_log warn "Must stop headers-cache & pherry befor import headers." cut
+  phala_scripts_log warn "Need to stop headers-cache & pherry before importing headers" cut
   local _stop_yn=$(phala_scripts_utils_read "Continue? (y/n)")
   local _headers_get_path=${HEADERS_VOLUMES%:*}
   if [ "${_stop_yn}" == "y" ] || [ "${_stop_yn}" == "Y" ];then
@@ -72,7 +72,7 @@ function phala_scripts_headers_import() {
     set -e
     if [ ${_run_status} -ne 0 ];then
       _phala_scripts_utils_printf_value=${fname}
-      phala_scripts_log error "%s Import failed, try again."
+      phala_scripts_log error "%s Import failed. Please try again."
     else
       _phala_scripts_utils_printf_value=${fname}
       phala_scripts_log info "%s Import successed."

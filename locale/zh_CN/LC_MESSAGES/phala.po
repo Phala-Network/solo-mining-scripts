@@ -123,44 +123,47 @@ msgstr "输入抵押池账户地址"
 msgid "Please enter a valid pool owner's address, and it cannot be empty!"
 msgstr "请输入合法抵押池账户地址，且不能为空！"
 
+msgid "mode select ( full | prune )"
+msgstr "选择模式 ( full | prune )"
+
 msgid "Must delete Kusama database when switch to prune mode %s"
 msgstr "首次切换PRUNE 需要删除数据 %s"
 
 msgid "%s Deleting"
 msgstr "%s 删除中"
 
-msgid "%s Kusama database have deleted"
+msgid "%s Kusama database has been deleted"
 msgstr "%s 文件已删除"
 
-msgid "Cancled, switch to full mode"
+msgid "Canceled. Switch to full mode"
 msgstr "用户取消切换，模式恢复为FULL模式"
 
-msgid "This is first time to run prune mode, run  [ %s ]  First."
+msgid "If this is the first time to run the Kusama prune mode, you need to run  [ %s ]  First."
 msgstr "如果是首次运行prune模式，请手工执行 [ %s ] 进行同步"
 
 ##########################################
 #####          headers.sh            #####
 #####                                #####
 ##########################################
-msgid "Download header filelist"
+msgid "Download the header file index"
 msgstr "获取headers列表"
 
-msgid "%s \nDownload header filelist failed, check your network connecting."
+msgid "%s \nFailed to download the header index. Please check your network connection."
 msgstr "%s \n获取headers列表错误，请排查网络问题."
 
-msgid "find %s, checked."
+msgid "Found %s. Check passed."
 msgstr "%s 文件已存在, 校验通过."
 
-msgid "%s Download header files failed, check your network connecting."
+msgid "%s Failed to download the header file. Please check your network connection."
 msgstr "%s 下载headers文件错误，请排查网络问题."
 
-msgid "%s Check header files failed, run manually."
+msgid "%s Header file checksum failed. Please run manually."
 msgstr "%s 下载headers文件校验错误，请手动重试."
 
-msgid "%s Download success, Checked."
+msgid "%s Download succeeded. Check passed."
 msgstr "%s 下载成功, 校验通过."
 
-msgid "Must stop headers-cache & pherry befor import headers."
+msgid "Need to stop headers-cache & pherry before importing headers"
 msgstr "导入需要停止 headers-cache & pherry"
 
 msgid "Continue? (y/n)"
@@ -172,7 +175,7 @@ msgstr "退出，任务结束."
 msgid "Importing [ %s ]."
 msgstr "导入 [ %s ] 文件."
 
-msgid "%s Import failed, try again."
+msgid "%s Import failed. Please try again."
 msgstr "%s 导入失败，请重试."
 
 msgid "%s Import successed."
@@ -203,7 +206,7 @@ msgid "Usage:\n"
 "	update					update all containers without cleaning up the data\n"
 "		<clean>				update all containers, and clean up the data\n"
 "		<script>			update the script\n"
-"		<headers>			download headers\n"
+"		<headers>			download headers filers\n"
 "	logs					print all container logs information\n"
 "		<node | pruntime | pherry>\n"
 "		<clean>				clean log\n"

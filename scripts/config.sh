@@ -46,7 +46,7 @@ phala_scripts_install_intel_old_device="https://download.01.org/intel-sgx/latest
 phala_scripts_install_intel_old_device_2_11="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.054c9c4c.bin"
 phala_scripts_install_setupnode="https://deb.nodesource.com/setup_lts.x"
 phala_scripts_headers_gethost="https://arweave.net"
-phala_scripts_headers_geturl="https://raw.githubusercontent.com/mailbad/runtest/main/arindex.csv"
+phala_scripts_headers_geturl="https://raw.githubusercontent.com/Phala-Network/solo-mining-scripts/main/arindex.csv"
 
 export phala_scripts_version \
        phala_scripts_support_system \
@@ -74,8 +74,9 @@ phala_scripts_config_default() {
   phala_node_dev_image=phalanetwork/khala-pt3-node
   phala_pruntime_image=phalanetwork/phala-pruntime
   # phala_pherry_image=phalanetwork/phala-pherry
-  phala_pherry_image=jasl123/phala-pherry
-  phala_headers_image=jasl123/phala-headers-cache
+  phala_headers_image=phalanetwork/phala-headers-cache
+  # phala_pherry_image=jasl123/phala-pherry
+  # phala_headers_image=jasl123/phala-headers-cache
 
   phala_scripts_public_ws="wss://khala.api.onfinality.io/public-ws"
   phala_scripts_public_ws_dev="wss://pc-test-3.phala.network/khala/ws"
@@ -291,8 +292,13 @@ function phala_scripts_config_set() {
   else
     local _full_model=2
   fi
-  local _input_model=$(phala_scripts_utils_read "model select ( full | prune )"  "${PHALA_MODEL}")
-  export PHALA_MODEL=$(echo -en ${_input_model}|tr a-z A-Z)
+  # add TESTNET skip mode select; mode full!
+  if [ "${_phala_env}" == "${phala_dev_msg}" ];then
+    export PHALA_MODEL="FULL"
+  else
+    local _input_model=$(phala_scripts_utils_read "mode select ( full | prune )"  "${PHALA_MODEL}")
+    export PHALA_MODEL=$(echo -en ${_input_model}|tr a-z A-Z)
+  fi
   if [ "${PHALA_MODEL}" == "PRUNE" ];then
     if [ ${_full_model} -eq 0 ];then
       _phala_scripts_utils_printf_value=${khala_data_path_default}/node-data/polkadot
@@ -304,9 +310,9 @@ function phala_scripts_config_set() {
         phala_scripts_log warn "%s Deleting"
         rm -rf ${khala_data_path_default}/node-data/polkadot
         _phala_scripts_utils_printf_value=${khala_data_path_default}/node-data/polkadot
-        phala_scripts_log info "%s Kusama database have deleted"
+        phala_scripts_log info "%s Kusama database has been deleted"
       else
-        phala_scripts_log info "Cancled, switch to full mode"
+        phala_scripts_log info "Canceled. Switch to full mode"
         export PHALA_MODEL=FULL
       fi
     fi
@@ -459,7 +465,7 @@ function phala_scripts_config_set() {
   # add model message
   if [ "${PHALA_MODEL}" == "PRUNE" ];then
     _phala_scripts_utils_printf_value="sudo phala update headers"
-    phala_scripts_log info "This is first time to run prune mode, run  [ %s ]  First." cut
+    phala_scripts_log info "If this is the first time to run the Kusama prune mode, you need to run  [ %s ]  First." cut
   fi
 
 }
