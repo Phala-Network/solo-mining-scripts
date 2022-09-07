@@ -31,7 +31,7 @@ services:
    volumes:
     - ${HEADERS_VOLUMES}
    entrypoint:
-    - "/root/headers-cache"
+    - "/opt/headers-cache/headers-cache"
     - "serve"
 
  phala-pruntime:
