@@ -34,7 +34,7 @@ phala_scripts_dependencies_other_soft=(
 phala_pro_msg="MAINNET"
 phala_dev_msg="TESTNET"
 # full & prune || FULL & PRUNE
-PHALA_MODEL="FULL"
+PHALA_MODEL="PRUNE"
 
 phala_scripts_utils_apt_source_cn="https://mirrors.163.com"
 phala_scripts_install_docker_compose_cn="https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
@@ -73,7 +73,7 @@ phala_scripts_config_default() {
   phala_node_image=phalanetwork/khala-node
   phala_node_dev_image=phalanetwork/khala-pt3-node
   phala_pruntime_image=phalanetwork/phala-pruntime
-  # phala_pherry_image=phalanetwork/phala-pherry
+  phala_pherry_image=phalanetwork/phala-pherry
   phala_headers_image=phalanetwork/phala-headers-cache
   # phala_pherry_image=jasl123/phala-pherry
   # phala_headers_image=jasl123/phala-headers-cache
