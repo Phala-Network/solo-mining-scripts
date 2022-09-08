@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-phala_scripts_version=v0.2.5
+phala_scripts_version=v0.2.6
 phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip"
 # phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/v2.zip"
 
@@ -33,6 +33,8 @@ phala_scripts_dependencies_other_soft=(
 
 phala_pro_msg="MAINNET"
 phala_dev_msg="TESTNET"
+# full & prune || FULL & PRUNE
+PHALA_MODEL="PRUNE"
 
 phala_scripts_utils_apt_source_cn="https://mirrors.163.com"
 phala_scripts_install_docker_compose_cn="https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
@@ -43,6 +45,8 @@ phala_scripts_install_intel_old_device="https://download.01.org/intel-sgx/latest
 # phala_scripts_install_intel_old_device_2_11="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.0_2d2b795.bin"
 phala_scripts_install_intel_old_device_2_11="https://download.01.org/intel-sgx/latest/linux-latest/distro/ubuntu20.04-server/sgx_linux_x64_driver_2.11.054c9c4c.bin"
 phala_scripts_install_setupnode="https://deb.nodesource.com/setup_lts.x"
+phala_scripts_headers_gethost="https://arweave.net"
+phala_scripts_headers_geturl="https://raw.githubusercontent.com/Phala-Network/solo-mining-scripts/main/arindex.csv"
 
 export phala_scripts_version \
        phala_scripts_support_system \
@@ -58,7 +62,10 @@ export phala_scripts_version \
        phala_scripts_install_intel_addapt_deb \
        phala_scripts_install_intel_old_device \
        phala_scripts_install_intel_old_device_2_11 \
-       phala_scripts_install_setupnode
+       phala_scripts_install_setupnode \
+       phala_scripts_headers_gethost \
+       phala_scripts_headers_geturl \
+       PHALA_MODEL
 
 phala_scripts_config_default() {
 
@@ -67,6 +74,9 @@ phala_scripts_config_default() {
   phala_node_dev_image=phalanetwork/khala-pt3-node
   phala_pruntime_image=phalanetwork/phala-pruntime
   phala_pherry_image=phalanetwork/phala-pherry
+  phala_headers_image=phalanetwork/phala-headers-cache
+  # phala_pherry_image=jasl123/phala-pherry
+  # phala_headers_image=jasl123/phala-headers-cache
 
   phala_scripts_public_ws="wss://khala.api.onfinality.io/public-ws"
   phala_scripts_public_ws_dev="wss://pc-test-3.phala.network/khala/ws"
@@ -108,6 +118,7 @@ phala_scripts_config_default() {
          phala_node_dev_image \
          phala_pruntime_image \
          phala_pherry_image \
+         phala_headers_image \
          phala_scripts_public_ws \
          phala_scripts_public_ws_dev \
          phala_scripts_kusama_ws \
@@ -124,6 +135,11 @@ phala_scripts_config_default() {
 }
 
 function phala_scripts_config_dockeryml() {
+  # add prune model
+  if [ "${PHALA_MODEL}" == "PRUNE" ];then
+    phala_scripts_temp_ymlf="${phala_scripts_temp_dir}/docker-compose_prune.yml.template"
+  fi
+
   if [ ! -f ${phala_scripts_temp_ymlf} ];then
     _phala_scripts_utils_printf_value="${phala_scripts_temp_ymlf}"
     phala_scripts_log error "%s\nTemplate file not found!" cut
@@ -268,6 +284,40 @@ function phala_scripts_config_set() {
     phala_scripts_log info "Your confidenceLevel is：%s" cut
   fi
 
+  # add model
+  if [ "${PHALA_MODEL}" == "FULL" ] && [ -d ${khala_data_path_default}/node-data/polkadot ];then
+    local _full_model=0
+  elif [ "${PHALA_MODEL}" == "PRUNE" ] && [ -d ${khala_data_path_default}/node-data/polkadot ];then
+    local _full_model=1
+  else
+    local _full_model=2
+  fi
+  # add TESTNET skip mode select; mode full!
+  if [ "${_phala_env}" == "${phala_dev_msg}" ];then
+    export PHALA_MODEL="FULL"
+  else
+    local _input_model=$(phala_scripts_utils_read "mode select ( full | prune )"  "${PHALA_MODEL}")
+    export PHALA_MODEL=$(echo -en ${_input_model}|tr a-z A-Z)
+  fi
+  if [ "${PHALA_MODEL}" == "PRUNE" ];then
+    if [ ${_full_model} -eq 0 ];then
+      _phala_scripts_utils_printf_value=${khala_data_path_default}/node-data/polkadot
+      phala_scripts_log warn "Must delete Kusama database when switch to prune mode %s" cut
+      local _del_yn=$(phala_scripts_utils_read "Continue? (y/n)"|tr a-z A-Z)
+      if [ ${_del_yn} == "Y" ];then
+        phala_scripts_stop_container node
+        _phala_scripts_utils_printf_value=${khala_data_path_default}/node-data/polkadot
+        phala_scripts_log warn "%s Deleting"
+        rm -rf ${khala_data_path_default}/node-data/polkadot
+        _phala_scripts_utils_printf_value=${khala_data_path_default}/node-data/polkadot
+        phala_scripts_log info "%s Kusama database has been deleted"
+      else
+        phala_scripts_log info "Canceled. Switch to full mode"
+        export PHALA_MODEL=FULL
+      fi
+    fi
+  fi
+
   # skip input err quit
   set +e
 
@@ -379,6 +429,7 @@ function phala_scripts_config_set() {
   sed -e "s#NODE_IMAGE=.*#NODE_IMAGE=${phala_node_image}#g" \
       -e "s#PRUNTIME_IMAGE=.*#PRUNTIME_IMAGE=${phala_pruntime_image}#g" \
       -e "s#PHERRY_IMAGE=.*#PHERRY_IMAGE=${phala_pherry_image}#g" \
+      -e "s#HEADERS_IMAGE=.*#HEADERS_IMAGE=${phala_headers_image}#g" \
       -e "s#CORES=.*#CORES=${phala_scripts_config_input_cores}#g" \
       -e "s#NODE_NAME=.*#NODE_NAME=${phala_scripts_config_input_nodename}#g" \
       -e "s#MNEMONIC=.*#MNEMONIC=${phala_scripts_config_input_mnemonic}#g" \
@@ -387,6 +438,7 @@ function phala_scripts_config_set() {
       -e "s#phala_template_data_value#${khala_data_path_default}#g" \
       -e "s#PHALA_ENV=.*#PHALA_ENV=${_phala_env}#g" \
       -e "s#PHALA_LANG=.*#PHALA_LANG=${phala_scripts_config_input_lang}#g" \
+      -e "s#PHALA_MODEL=.*#PHALA_MODEL=${PHALA_MODEL}#g" \
       ${phala_scripts_temp_envf} > ${phala_scripts_docker_envf}
   chattr +i ${phala_scripts_docker_envf}
 
@@ -409,6 +461,12 @@ function phala_scripts_config_set() {
   
   # print sucess
   phala_scripts_log info "Set successful" cut
+
+  # add model message
+  if [ "${PHALA_MODEL}" == "PRUNE" ];then
+    _phala_scripts_utils_printf_value="sudo phala update headers"
+    phala_scripts_log info "If this is the first time to run the Kusama prune mode, you need to run  [ %s ]  First." cut
+  fi
 
 }
 

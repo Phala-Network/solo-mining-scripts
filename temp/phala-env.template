@@ -1,8 +1,10 @@
 NODE_IMAGE=
 PRUNTIME_IMAGE=
 PHERRY_IMAGE=
+HEADERS_IMAGE=
 NODE_VOLUMES=phala_template_data_value/node-data:/root/data
 PRUNTIME_VOLUMES=phala_template_data_value/pruntime-data:/root/data
+HEADERS_VOLUMES=phala_template_data_value/phala-headers-cache:/opt/headers-cache/data
 CORES=
 NODE_NAME=
 MNEMONIC=
@@ -10,3 +12,4 @@ GAS_ACCOUNT_ADDRESS=
 OPERATOR=
 PHALA_ENV=
 PHALA_LANG=
+PHALA_MODEL=
