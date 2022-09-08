@@ -98,6 +98,14 @@ sudo ./phala.sh install
     sudo phala sgx-test
     ```
 
+-   #### Installation mode
+    - You can choose to install "Full" mode or "Prune" mode based on the size of your hard disk.
+    - In “Prune” mode, after the configuration for the first time.
+    
+    ```bash
+    sudo phala update headers
+    ```
+
 ##### Get Logs
 
 ```bash
