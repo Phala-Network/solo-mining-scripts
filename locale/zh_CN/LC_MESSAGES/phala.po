@@ -184,6 +184,24 @@ msgstr "%s 导入成功."
 msgid "Model is FULL, Stoped."
 msgstr "模式为FULL, 停止."
 
+msgid "Need to stop node before importing snapshot."
+msgstr "导入需要停止node"
+
+msgid "Will Delete All Your Kusama DATA!"
+msgstr "需要删除Kusama所有数据!"
+
+msgid "%s Delete succeeded."
+msgstr "%s 删除成功."
+
+msgid "Start downloading..."
+msgstr "开始下载..."
+
+msgid "Download succeeded."
+msgstr "下载成功."
+
+msgid "Download failed. Please try again."
+msgstr "下载失败，请重试."
+
 ##########################################
 #####             main.sh            #####
 #####       phala_scripts_help       #####
@@ -207,6 +225,7 @@ msgid "Usage:\n"
 "		<clean>				update all containers, and clean up the data\n"
 "		<script>			update the script\n"
 "		<headers>			download headers filers\n"
+"		<snapshot>			download snapshot\n"
 "	logs					print all container logs information\n"
 "		<node | pruntime | pherry>\n"
 "		<clean>				clean log\n"
@@ -231,6 +250,7 @@ msgstr "Usage:\n"
 "		<clean>				清理容器数据，更新容器\n"
 "		<script>			更新脚本\n"
 "		<headers>			下载headers\n"
+"		<snapshot>			下载snapshot\n"
 "	logs					打印所有容器日志信息\n"
 "		<clean>				清理日志\n"
 "		<node | pruntime | pherry>\n"
