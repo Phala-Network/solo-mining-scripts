@@ -89,3 +89,41 @@ function phala_scripts_headers() {
   phala_scripts_headers_get
   phala_scripts_headers_import
 }
+
+function phala_scripts_headers_snapshot() {
+  phala_scripts_log warn "Need to stop node before importing snapshot."
+  local _stop_yn=$(phala_scripts_utils_read "Continue? (y/n)")
+  if [ "${_stop_yn}" == "Y" ] || [ "${_stop_yn}" == "y" ];then
+    :
+  else
+    phala_scripts_log info "Stoped."
+    return 0
+  fi
+  phala_scripts_stop_container node
+  unset _stop_yn
+
+  local _kusama_data_path=${NODE_VOLUMES%:*}/polkadot/chains/ksmcc3
+  phala_scripts_log warn "Will Delete All Your Kusama DATA!"
+  phala_scripts_log warn "Delete ${_kusama_data_path}"
+  local _stop_yn=$(phala_scripts_utils_read "Continue? (y/n)")
+  if [ "${_stop_yn}" == "Y" ] || [ "${_stop_yn}" == "y" ];then
+    if [ -d ${_kusama_data_path} ];then
+      rm -rf ${_kusama_data_path}
+      _phala_scripts_utils_printf_value=${_kusama_data_path}
+      phala_scripts_log info "%s Delete succeeded."
+    fi
+  else  
+    phala_scripts_log info "Stoped."
+    return 0
+  fi
+  phala_scripts_log info "Start downloading..."
+  set +e
+  [ -d ${_kusama_data_path} ] || mkdir -p ${_kusama_data_path}
+  curl -o - -L ${phala_scripts_headers_snapshot_url} | lz4 -c -d - | tar -x -C ${_kusama_data_path};_run_status=$?
+  if [ ${_run_status} -eq 0 ];then
+    phala_scripts_log info "Download succeeded."
+    phala_scripts_utils_docker up -d
+  else 
+    phala_scripts_log error "Download failed. Please try again."
+  fi
+}
