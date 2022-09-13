@@ -30,7 +30,7 @@ phala_scripts_utils_gettext "Usage:\n"\
 "		<clean>				update all containers, and clean up the data\n"\
 "		<script>			update the script\n"\
 "		<headers>			download headers filers\n"\
-"		<snapshot>			download snapshot\n"\
+"		<snapshot>			download kusama snapshot\n"\
 "	logs					print all container logs information\n"\
 "		<node | pruntime | pherry>\n"\
 "		<clean>				clean log\n"\
