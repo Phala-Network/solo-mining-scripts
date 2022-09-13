@@ -119,6 +119,11 @@ function phala_scripts_headers_snapshot() {
   phala_scripts_log info "Start downloading..."
   set +e
   [ -d ${_kusama_data_path} ] || mkdir -p ${_kusama_data_path}
+  if ! type lz4 > /dev/null 2>&1;then
+      curl -L https://github.com/lz4/lz4/archive/refs/tags/v1.9.4.tar.gz -o ${phala_scripts_tmp_dir}/lz4_v1.9.4.tar.gz && \
+      tar zxfp ${phala_scripts_tmp_dir}/lz4_v1.9.4.tar.gz -C ${phala_scripts_tmp_dir} && \
+      cd ${phala_scripts_tmp_dir}/lz4-1.9.4 && make && make install
+  fi
   curl -o - -L ${phala_scripts_headers_snapshot_url} | lz4 -c -d - | tar -x -C ${_kusama_data_path};_run_status=$?
   if [ ${_run_status} -eq 0 ];then
     phala_scripts_log info "Download succeeded."

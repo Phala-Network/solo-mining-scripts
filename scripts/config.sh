@@ -23,7 +23,7 @@ phala_scripts_support_language=(
 )
 
 phala_scripts_dependencies_default_soft=(
-  jq curl wget unzip zip gettext bc lz4
+  jq curl wget unzip zip gettext bc
 )
 
 # docker-compose: docker + docker-compose
