@@ -112,7 +112,7 @@ function phala_scripts_headers_snapshot() {
       _phala_scripts_utils_printf_value=${_kusama_data_path}
       phala_scripts_log info "%s Delete succeeded."
     fi
-  else  
+  else
     phala_scripts_log info "Stoped."
     return 0
   fi
@@ -123,7 +123,7 @@ function phala_scripts_headers_snapshot() {
   if [ ${_run_status} -eq 0 ];then
     phala_scripts_log info "Download succeeded."
     phala_scripts_utils_docker up -d
-  else 
+  else
     phala_scripts_log error "Download failed. Please try again."
   fi
 }
