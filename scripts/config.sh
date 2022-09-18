@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-phala_scripts_version=v0.2.6
+phala_scripts_version=v0.2.7
 phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip"
 # phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/v2.zip"
 
@@ -47,6 +47,7 @@ phala_scripts_install_intel_old_device_2_11="https://download.01.org/intel-sgx/l
 phala_scripts_install_setupnode="https://deb.nodesource.com/setup_lts.x"
 phala_scripts_headers_gethost="https://arweave.net"
 phala_scripts_headers_geturl="https://raw.githubusercontent.com/Phala-Network/solo-mining-scripts/main/arindex.csv"
+phala_scripts_headers_snapshot_url="https://ksm-rocksdb.polkashots.io/snapshot"
 
 export phala_scripts_version \
        phala_scripts_support_system \

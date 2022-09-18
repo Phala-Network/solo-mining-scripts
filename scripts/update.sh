@@ -64,6 +64,9 @@ function phala_scripts_update() {
     headers)
       phala_scripts_headers
     ;;
+    snapshot)
+      phala_scripts_headers_snapshot
+    ;;
     *)
       phala_scripts_update_container $*
     ;;
