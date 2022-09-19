@@ -104,6 +104,7 @@ sudo ./phala.sh install
     
     ```bash
     sudo phala update headers
+    sudo phala update snapshot
     ```
 
 ##### Get Logs
