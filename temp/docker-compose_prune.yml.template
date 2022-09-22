@@ -14,7 +14,7 @@ services:
    environment:
     - NODE_NAME=${NODE_NAME}
     - NODE_ROLE=ARCHIVE
-    - PARACHAIN_EXTRA_ARGS=--rpc-max-request-size 30 --rpc-max-response-size 32 --rpc-methods Unsafe --state-cache-size 0 --max-runtime-instances 16
+    - PARACHAIN_EXTRA_ARGS=--rpc-max-request-size 30 --rpc-max-response-size 32 --rpc-methods Unsafe --max-runtime-instances 16
     - RELAYCHAIN_EXTRA_ARGS=--rpc-max-request-size 30 --rpc-max-response-size 32 --rpc-external --rpc-methods Unsafe --pruning 108000 --max-runtime-instances 16
    volumes:
     - ${NODE_VOLUMES}
