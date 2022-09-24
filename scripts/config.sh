@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-phala_scripts_version=v0.2.8
+phala_scripts_version=v0.2.9
 phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/main.zip"
 # phala_scripts_update_url="https://github.com/Phala-Network/solo-mining-scripts/archive/v2.zip"
 
@@ -34,7 +34,7 @@ phala_scripts_dependencies_other_soft=(
 phala_pro_msg="MAINNET"
 phala_dev_msg="TESTNET"
 # full & prune || FULL & PRUNE
-PHALA_MODEL="PRUNE"
+PHALA_MODEL="FULL"
 
 phala_scripts_utils_apt_source_cn="https://mirrors.163.com"
 phala_scripts_install_docker_compose_cn="https://get.daocloud.io/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)"
@@ -297,7 +297,7 @@ function phala_scripts_config_set() {
   if [ "${_phala_env}" == "${phala_dev_msg}" ];then
     export PHALA_MODEL="FULL"
   else
-    local _input_model=$(phala_scripts_utils_read "mode select ( full | prune )"  "${PHALA_MODEL}")
+    local _input_model=$(phala_scripts_utils_read "mode select ( full | prune )"  "PRUNE")
     export PHALA_MODEL=$(echo -en ${_input_model}|tr a-z A-Z)
   fi
   if [ "${PHALA_MODEL}" == "PRUNE" ];then
