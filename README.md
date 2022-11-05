@@ -68,7 +68,7 @@ rm -r main.zip #cleaning up the installation
 -   Run the **egx_enable** if your SGX setting in BIOS is **Software Controlled**
 
 ```bash
-cd solo-mining-scripts-main/ #note this depends on your current directory
+cd solo-mining-scripts-main/tools/ #note this depends on your current directory
 sudo chmod +x sgx_enable
 sudo ./sgx_enable
 ```
