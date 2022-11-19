@@ -8,6 +8,7 @@ phala_scripts_support_system=(
   "Ubuntu 20.04"
   "Ubuntu 21.04"
   "Ubuntu 21.10"
+  "Ubuntu 22.04"
 )
 phala_scripts_support_kernel=(
   "4.15"
@@ -15,6 +16,7 @@ phala_scripts_support_kernel=(
   "5.8"
   "5.11"
   "5.13"
+  "5.15"
 )
 
 phala_scripts_support_language=(
