@@ -67,6 +67,15 @@ function phala_scripts_check_dependencies(){
 function phala_scripts_check_sgxdevice() {
   _sgx_msg_file=${phala_scripts_tmp_dir}/sgx-detect.msg
   [ -x ${phala_scripts_tools_dir}/sgx-detect ] || chmod +x ${phala_scripts_tools_dir}/sgx-detect
+  # ubuntu22.04 add openssl lib
+  if [ "${DISTRIB_RELEASE}" == "22.04" ];then
+    tar zxfp ${phala_scripts_tools_dir}/libssl.tar.gz -C ${phala_scripts_tmp_dir}
+    chown root.root ${phala_scripts_tmp_dir}/lib*
+    [ $(find /lib/ -type f -name libssl.so.1.1|wc -l) -eq 0 ] && mv ${phala_scripts_tmp_dir}/libssl.so.1.1 /lib/ || rm -rf ${phala_scripts_tmp_dir}/libssl.so.1.1
+    [ $(find /lib/ -type f -name libcrypto.so.1.1|wc -l) -eq 0 ] && mv ${phala_scripts_tmp_dir}/libcrypto.so.1.1 /lib/ || rm -rf ${phala_scripts_tmp_dir}/libcrypto.so.1.1
+    ldconfig
+  fi
+
   ${phala_scripts_tools_dir}/sgx-detect > ${_sgx_msg_file} 2>&1
   _sgx_cpu_support_number=$(awk '/CPU support/ {print $1}' ${_sgx_msg_file}|wc -l)
   _sgx_libsgx_encalve=$(awk '/libsgx_enclave_common/ {print $1}' ${_sgx_msg_file})
