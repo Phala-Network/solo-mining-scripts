@@ -60,11 +60,11 @@ function phala_scripts_status(){
 
   local khala_head_block=$(phala_scripts_status_khala sync-state |grep -oE "currentBlock: [0-9]{1,9}")
   local khala_head_block=${khala_head_block#*:}
-  local khala_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9933 | jq '.result.currentBlock')
+  local khala_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9944 | jq '.result.currentBlock')
 
   local kusama_head_block=$(phala_scripts_status_kusama |grep -oE "currentBlock: [0-9]{1,9}")
   local kusama_head_block=${kusama_head_block#*:}
-  local kusama_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9934 | jq '.result.currentBlock')
+  local kusama_node_block=$(curl -sH "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_syncState", "params":[]}' http://0.0.0.0:9945 | jq '.result.currentBlock')
 
   local get_info=$(curl -sH "Content-Type: application/json" -d '{"input": {}, "nonce": {}}' http://0.0.0.0:8000/get_info -X POST)
   local publickey=$(echo $get_info | jq -r '.payload|fromjson.public_key'|sed 's/\"//g' | sed 's/^/0x/')
