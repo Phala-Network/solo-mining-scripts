@@ -5,8 +5,6 @@ services:
    container_name: phala-node
    hostname: phala-node
    ports:
-    - "9933:9933"
-    - "9934:9934"
     - "9944:9944"
     - "9945:9945"
     - "30333:30333"
